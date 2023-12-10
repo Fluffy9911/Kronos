@@ -1,0 +1,13 @@
+20:06:19.127 [main] INFO  com.kronos.Kronos - Dubugger created
+20:06:19.156 [main] INFO  com.kronos.Kronos - Path Already Exists: /kronos/out Skipping
+20:06:19.156 [main] DEBUG com.kronos.Kronos - Starting OPENGL
+20:06:19.270 [main] DEBUG com.kronos.Kronos - GL Version: 3.4.0 Win32 WGL Null EGL OSMesa VisualC DLL 
+20:06:19.271 [main] DEBUG com.kronos.Kronos - GL Started
+20:06:19.290 [main] INFO  com.kronos.Kronos - Set Current ScreenConfig to {Width=[500], Height=[500], Title=[KronosTesting], ClearColor=[Color [r=1.0, g=1.0, b=1.0, a=1.0]], UpdateTime=[60], Hints=[{131075=1, 131076=0}]}
+20:06:19.696 [main] ERROR com.kronos.Kronos - Error compiling Fragment Shader:
+20:06:19.698 [main] ERROR com.kronos.Kronos - 0(13) : error C1503: undefined variable "view"
+0(14) : error C1503: undefined variable "view"
+0(21) : error C1503: undefined variable "sceneTex"
+
+20:06:19.740 [main] INFO  com.kronos.Kronos - Status: 36053 
+20:06:19.743 [main] DEBUG com.kronos.Kronos - Color Color [r=1.0, g=1.0, b=1.0, a=1.0] 

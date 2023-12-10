@@ -1,0 +1,8 @@
+18:17:36.398 [main] INFO  com.kronos.Kronos - Dubugger created
+18:17:36.424 [main] INFO  com.kronos.Kronos - Path Already Exists: /kronos/out Skipping
+18:17:36.424 [main] DEBUG com.kronos.Kronos - Starting OPENGL
+18:17:36.500 [main] DEBUG com.kronos.Kronos - GL Version: 3.4.0 Win32 WGL Null EGL OSMesa VisualC DLL 
+18:17:36.500 [main] DEBUG com.kronos.Kronos - GL Started
+18:17:36.516 [main] INFO  com.kronos.Kronos - Set Current ScreenConfig to {Width=[770], Height=[770], Title=[KronosTesting], ClearColor=[Color [r=1.0, g=1.0, b=1.0, a=1.0]], UpdateTime=[60], Hints=[{131076=0, 131075=1}]}
+18:17:36.845 [main] INFO  com.kronos.Kronos - Frame Buffer Status Status: 36053 
+18:17:36.886 [main] DEBUG com.kronos.Kronos - Verts: [8.0, 1.0, 1.0, 0.7292558, 0.978602, 0.28557736, 0.0, 1.0, 0.0, 8.0, 1.0, 8.0, 0.7292558, 0.978602, 0.28557736, 0.0, 1.0, 0.0, 1.0, 1.0, 8.0, 0.7292558, 0.978602, 0.28557736, 0.0, 1.0, 0.0, 1.0, 1.0, 1.0, 0.7292558, 0.978602, 0.28557736, 0.0, 1.0, 0.0, 8.0, 8.0, 1.0, 0.7292558, 0.978602, 0.28557736, 0.0, 0.0, 1.0, 8.0, 8.0, 8.0, 0.7292558, 0.978602, 0.28557736, 0.0, 0.0, 1.0, 1.0, 8.0, 8.0, 0.7292558, 0.978602, 0.28557736, 0.0, 0.0, 1.0, 1.0, 8.0, 1.0, 0.7292558, 0.978602, 0.28557736, 0.0, 0.0, 1.0] indices: [0, 1, 2, 2, 3, 0, 1, 5, 6, 6, 2, 1, 5, 4, 7, 7, 6, 5, 4, 0, 3, 3, 7, 4, 3, 2, 6, 6, 7, 3, 4, 5, 1, 1, 0, 4]

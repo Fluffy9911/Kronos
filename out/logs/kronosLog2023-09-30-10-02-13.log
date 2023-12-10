@@ -1,0 +1,5 @@
+10:02:13.881 [main] INFO  com.kronos.Kronos - Dubugger created
+10:02:13.905 [main] INFO  com.kronos.Kronos - Path Already Exists: /kronos/out Skipping
+10:02:13.905 [main] DEBUG com.kronos.Kronos - Starting OPENGL
+10:02:13.989 [main] DEBUG com.kronos.Kronos - GL Version: 3.4.0 Win32 WGL Null EGL OSMesa VisualC DLL 
+10:02:13.989 [main] DEBUG com.kronos.Kronos - GL Started

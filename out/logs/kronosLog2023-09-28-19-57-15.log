@@ -1,0 +1,6 @@
+19:57:15.329 [main] INFO  com.kronos.Kronos - Dubugger created
+19:57:15.370 [main] INFO  com.kronos.Kronos - Path Already Exists: /kronos/out Skipping
+19:57:15.370 [main] DEBUG com.kronos.Kronos - Starting OPENGL
+19:57:15.503 [main] DEBUG com.kronos.Kronos - GL Version: 3.4.0 Win32 WGL Null EGL OSMesa VisualC DLL 
+19:57:15.503 [main] DEBUG com.kronos.Kronos - GL Started
+19:57:15.526 [main] INFO  com.kronos.Kronos - Set Current ScreenConfig to {Width=[500], Height=[500], Title=[KronosTesting], ClearColor=[Color [r=1.0, g=1.0, b=1.0, a=1.0]], UpdateTime=[60], Hints=[{131076=0, 131075=1}]}

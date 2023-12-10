@@ -1,0 +1,22 @@
+18:53:04.199 [main] INFO  com.kronos.Kronos - Dubugger created
+18:53:04.229 [main] INFO  com.kronos.Kronos - Path Already Exists: /kronos/out Skipping
+18:53:04.230 [main] DEBUG com.kronos.Kronos - Starting OPENGL
+18:53:04.332 [main] DEBUG com.kronos.Kronos - GL Version: 3.4.0 Win32 WGL Null EGL OSMesa VisualC DLL 
+18:53:04.332 [main] DEBUG com.kronos.Kronos - GL Started
+18:53:04.352 [main] INFO  com.kronos.Kronos - Set Current ScreenConfig to {Width=[500], Height=[500], Title=[KronosTesting], ClearColor=[Color [r=1.0, g=1.0, b=1.0, a=1.0]], UpdateTime=[60], Hints=[{131076=0, 131075=1}]}
+18:53:04.735 [main] INFO  com.kronos.Kronos - Frame Buffer Status Status: 36053 
+18:53:04.775 [main] DEBUG com.kronos.Kronos - Color Color [r=1.0, g=1.0, b=1.0, a=1.0] 
+18:53:04.780 [main] ERROR com.kronos.Kronos - Uniform use not found in shader.
+18:53:04.795 [main] ERROR com.kronos.Kronos - Uniform use not found in shader.
+18:53:04.810 [main] ERROR com.kronos.Kronos - Uniform use not found in shader.
+18:53:04.828 [main] ERROR com.kronos.Kronos - Uniform use not found in shader.
+18:53:04.845 [main] ERROR com.kronos.Kronos - Uniform use not found in shader.
+18:53:04.863 [main] ERROR com.kronos.Kronos - Uniform use not found in shader.
+18:53:04.877 [main] ERROR com.kronos.Kronos - Uniform use not found in shader.
+18:53:04.897 [main] ERROR com.kronos.Kronos - Uniform use not found in shader.
+18:53:04.910 [main] ERROR com.kronos.Kronos - Uniform use not found in shader.
+18:53:04.929 [main] ERROR com.kronos.Kronos - Uniform use not found in shader.
+18:53:04.946 [main] ERROR com.kronos.Kronos - Uniform use not found in shader.
+18:53:04.963 [main] ERROR com.kronos.Kronos - Uniform use not found in shader.
+18:53:04.978 [main] ERROR com.kronos.Kronos - Uniform use not found in shader.
+18:53:04.995 [main] ERROR com.kronos.Kronos - Uniform use not found in shader.

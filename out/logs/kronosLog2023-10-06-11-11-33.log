@@ -1,0 +1,37 @@
+11:11:33.408 [main] INFO  com.kronos.Kronos - Frame Buffer Status Status: 36053 
+11:11:33.417 [main] INFO  com.kronos.Kronos - Frame Buffer Status Status: 36053 
+11:11:33.461 [main] DEBUG com.kronos.Kronos - Verts: [8.0, 8.0, 1.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 8.0, 8.0, 8.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 1.0, 8.0, 8.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 1.0, 8.0, 1.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 8.0, 1.0, 1.0, 0.0, 1.0, 0.0, 0.0, -1.0, 0.0, 8.0, 1.0, 8.0, 0.0, 1.0, 0.0, 0.0, -1.0, 0.0, 1.0, 1.0, 8.0, 0.0, 1.0, 0.0, 0.0, -1.0, 0.0, 1.0, 1.0, 1.0, 0.0, 1.0, 0.0, 0.0, -1.0, 0.0, 8.0, 8.0, 8.0, 0.0, 1.0, 0.0, 1.0, 0.0, 0.0, 8.0, 1.0, 8.0, 0.0, 1.0, 0.0, 1.0, 0.0, 0.0, 8.0, 1.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 0.0, 8.0, 8.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 0.0, 1.0, 8.0, 8.0, 0.0, 1.0, 0.0, -1.0, 0.0, 0.0, 1.0, 1.0, 8.0, 0.0, 1.0, 0.0, -1.0, 0.0, 0.0, 1.0, 1.0, 1.0, 0.0, 1.0, 0.0, -1.0, 0.0, 0.0, 1.0, 8.0, 1.0, 0.0, 1.0, 0.0, -1.0, 0.0, 0.0, 8.0, 8.0, 8.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 8.0, 1.0, 8.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 8.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 1.0, 8.0, 8.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 8.0, 8.0, 1.0, 0.0, 1.0, 0.0, 0.0, 0.0, -1.0, 8.0, 1.0, 1.0, 0.0, 1.0, 0.0, 0.0, 0.0, -1.0, 1.0, 1.0, 1.0, 0.0, 1.0, 0.0, 0.0, 0.0, -1.0, 1.0, 8.0, 1.0, 0.0, 1.0, 0.0, 0.0, 0.0, -1.0] indices: [0, 1, 2, 2, 3, 0, 4, 5, 6, 6, 7, 4, 8, 9, 10, 10, 11, 8, 12, 13, 14, 14, 15, 12, 16, 17, 18, 18, 19, 16, 20, 21, 22, 22, 23, 20]
+11:11:33.669 [main] DEBUG com.kronos.Kronos - Verts: [15.0, 8.0, 1.0, 0.4, 0.2, 0.8, 0.0, 1.0, 0.0, 15.0, 8.0, 8.0, 0.4, 0.2, 0.8, 0.0, 1.0, 0.0, 8.0, 8.0, 8.0, 0.4, 0.2, 0.8, 0.0, 1.0, 0.0, 8.0, 8.0, 1.0, 0.4, 0.2, 0.8, 0.0, 1.0, 0.0, 15.0, 1.0, 1.0, 0.4, 0.2, 0.8, 0.0, -1.0, 0.0, 15.0, 1.0, 8.0, 0.4, 0.2, 0.8, 0.0, -1.0, 0.0, 8.0, 1.0, 8.0, 0.4, 0.2, 0.8, 0.0, -1.0, 0.0, 8.0, 1.0, 1.0, 0.4, 0.2, 0.8, 0.0, -1.0, 0.0, 15.0, 8.0, 8.0, 0.4, 0.2, 0.8, 1.0, 0.0, 0.0, 15.0, 1.0, 8.0, 0.4, 0.2, 0.8, 1.0, 0.0, 0.0, 15.0, 1.0, 1.0, 0.4, 0.2, 0.8, 1.0, 0.0, 0.0, 15.0, 8.0, 1.0, 0.4, 0.2, 0.8, 1.0, 0.0, 0.0, 8.0, 8.0, 8.0, 0.4, 0.2, 0.8, -1.0, 0.0, 0.0, 8.0, 1.0, 8.0, 0.4, 0.2, 0.8, -1.0, 0.0, 0.0, 8.0, 1.0, 1.0, 0.4, 0.2, 0.8, -1.0, 0.0, 0.0, 8.0, 8.0, 1.0, 0.4, 0.2, 0.8, -1.0, 0.0, 0.0, 15.0, 8.0, 8.0, 0.4, 0.2, 0.8, 0.0, 0.0, 1.0, 15.0, 1.0, 8.0, 0.4, 0.2, 0.8, 0.0, 0.0, 1.0, 8.0, 1.0, 8.0, 0.4, 0.2, 0.8, 0.0, 0.0, 1.0, 8.0, 8.0, 8.0, 0.4, 0.2, 0.8, 0.0, 0.0, 1.0, 15.0, 8.0, 1.0, 0.4, 0.2, 0.8, 0.0, 0.0, -1.0, 15.0, 1.0, 1.0, 0.4, 0.2, 0.8, 0.0, 0.0, -1.0, 8.0, 1.0, 1.0, 0.4, 0.2, 0.8, 0.0, 0.0, -1.0, 8.0, 8.0, 1.0, 0.4, 0.2, 0.8, 0.0, 0.0, -1.0] indices: [0, 1, 2, 2, 3, 0, 4, 5, 6, 6, 7, 4, 8, 9, 10, 10, 11, 8, 12, 13, 14, 14, 15, 12, 16, 17, 18, 18, 19, 16, 20, 21, 22, 22, 23, 20]
+11:11:33.686 [main] DEBUG com.kronos.Kronos - Color Color [r=1.0, g=1.0, b=1.0, a=1.0] 
+11:11:33.754 [main] ERROR com.kronos.Kronos - Uniform tex not found in shader.
+11:11:33.754 [main] ERROR com.kronos.Kronos - Uniform view not found in shader.
+11:11:33.766 [main] ERROR com.kronos.Kronos - Uniform tex not found in shader.
+11:11:33.766 [main] ERROR com.kronos.Kronos - Uniform view not found in shader.
+11:11:33.784 [main] ERROR com.kronos.Kronos - Uniform tex not found in shader.
+11:11:33.784 [main] ERROR com.kronos.Kronos - Uniform view not found in shader.
+11:11:33.789 [main] ERROR com.kronos.Kronos - Uniform tex not found in shader.
+11:11:33.790 [main] ERROR com.kronos.Kronos - Uniform view not found in shader.
+11:11:33.808 [main] ERROR com.kronos.Kronos - Uniform tex not found in shader.
+11:11:33.808 [main] ERROR com.kronos.Kronos - Uniform view not found in shader.
+11:11:33.822 [main] ERROR com.kronos.Kronos - Uniform tex not found in shader.
+11:11:33.822 [main] ERROR com.kronos.Kronos - Uniform view not found in shader.
+11:11:33.840 [main] ERROR com.kronos.Kronos - Uniform tex not found in shader.
+11:11:33.840 [main] ERROR com.kronos.Kronos - Uniform view not found in shader.
+11:11:33.857 [main] ERROR com.kronos.Kronos - Uniform tex not found in shader.
+11:11:33.857 [main] ERROR com.kronos.Kronos - Uniform view not found in shader.
+11:11:33.874 [main] ERROR com.kronos.Kronos - Uniform tex not found in shader.
+11:11:33.874 [main] ERROR com.kronos.Kronos - Uniform view not found in shader.
+11:11:33.890 [main] ERROR com.kronos.Kronos - Uniform tex not found in shader.
+11:11:33.891 [main] ERROR com.kronos.Kronos - Uniform view not found in shader.
+11:11:33.909 [main] ERROR com.kronos.Kronos - Uniform tex not found in shader.
+11:11:33.910 [main] ERROR com.kronos.Kronos - Uniform view not found in shader.
+11:11:33.923 [main] ERROR com.kronos.Kronos - Uniform tex not found in shader.
+11:11:33.923 [main] ERROR com.kronos.Kronos - Uniform view not found in shader.
+11:11:33.941 [main] ERROR com.kronos.Kronos - Uniform tex not found in shader.
+11:11:33.941 [main] ERROR com.kronos.Kronos - Uniform view not found in shader.
+11:11:33.957 [main] ERROR com.kronos.Kronos - Uniform tex not found in shader.
+11:11:33.958 [main] ERROR com.kronos.Kronos - Uniform view not found in shader.
+11:11:33.975 [main] ERROR com.kronos.Kronos - Uniform tex not found in shader.
+11:11:33.975 [main] ERROR com.kronos.Kronos - Uniform view not found in shader.
+11:11:33.989 [main] ERROR com.kronos.Kronos - Uniform tex not found in shader.
+11:11:33.990 [main] ERROR com.kronos.Kronos - Uniform view not found in shader.
