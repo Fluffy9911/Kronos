@@ -1,5 +1,0 @@
-18:51:24.388 [main] INFO  com.kronos.Kronos - Frame Buffer Status Status: 36053 
-18:51:24.453 [main] ERROR com.kronos.Kronos - Error compiling Fragment Shader:
-18:51:24.453 [main] ERROR com.kronos.Kronos - 0(13) : error C7011: implicit cast from "bool" to "int"
-
-18:51:24.487 [main] DEBUG com.kronos.Kronos - Color Color [r=1.0, g=1.0, b=1.0, a=1.0] 

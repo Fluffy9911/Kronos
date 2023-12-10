@@ -1,16 +1,21 @@
 package com.kronos;
 
-import com.kronos.core.Config;
+
 import com.kronos.debug.Debugger;
 import com.kronos.graphixs.Loop;
 import com.kronos.graphixs.display.Graphixs;
 import com.kronos.graphixs.display.ScreenConfig;
+import com.kronos.io.Config;
 import com.kronos.io.FileLoader;
 import com.kronos.io.ResourceIdentifier;
 
 public class Kronos {
+	
+	public static String config_loc = "configs/main";
+	
+	public static com.kronos.io.Config k_config = new Config();
 	public static Debugger debug = new Debugger();
-	public static Config config = new Config();
+
 	public static ResourceIdentifier kronos_rid = new ResourceIdentifier() {
 
 		@Override
@@ -45,8 +50,16 @@ public class Kronos {
 	public static Graphixs graphixs = new Graphixs();
 
 	private static void defaultKronosInit() {
+		Runtime.getRuntime().addShutdownHook(new Thread(()->{
+			onEnd();
+		}));
 		loader.create(kronos_out);
-
+if(loader.tryLoad(config_loc)!=null) {
+	k_config = loader.tryRead("kronos_config.json", config_loc);
+	debug.getLogger().debug("Loaded Config");
+}else {
+	k_config.appendInt("kronos_version", 1);
+}
 	}
 
 	public static void start(ScreenConfig sc) {
@@ -65,4 +78,9 @@ public class Kronos {
 		graphixs.render(l, sc.updateTime());
 	}
 
+	public static void onEnd() {
+		loader.writeConfig(k_config, "kronos_config.json", config_loc,kronos_out);
+	}
+	
+	
 }

@@ -1,9 +1,14 @@
 package com.kronos.io;
 
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 
 public class Config {
 
@@ -187,5 +192,58 @@ public class Config {
     	return g.toJson(this);
     }
     
+    public void appendStringList(String key, List<String> values) {
+        Gson g = new Gson();
+        String v = g.toJson(values);
+        appendString(key, v);
+    }
+
+    public List<String> readStringList(String key) {
+        Gson g = new Gson();
+        String[] v = g.fromJson(readString(key), String[].class);
+        if (v != null) {
+            return List.of(v);
+        }
+        return new ArrayList<>();
+    }
+
+    public boolean containsStringValue(String key, String value) {
+        List<String> stringList = readStringList(key);
+        return stringList.contains(value);
+    }
+
+    public void appendIntegerList(String key, List<Integer> values) {
+        Gson g = new Gson();
+        String v = g.toJson(values);
+        appendString(key, v);
+    }
+
+    public List<Integer> readIntegerList(String key) {
+        Gson g = new Gson();
+        Integer[] v = g.fromJson(readString(key), Integer[].class);
+        if (v != null) {
+            return List.of(v);
+        }
+        return new ArrayList<>();
+    }
+
+    public boolean containsIntegerValue(String key, int value) {
+        List<Integer> integerList = readIntegerList(key);
+        return integerList.contains(value);
+    }
+
+    public <T extends Number> void  appendNumberMap(String key,Map<T,T> data){
+    	Gson g = new Gson();
+    	String v = g.toJson(data);
+    	appendString(key, v);
+    }
+    
+    public <T extends Number> Map<T,T>  readNumberMap(String key){
+    	Gson g = new Gson();
+    	String v= readString(key);
+    	Type mapType = new TypeToken<Map<T, T>>() {}.getType();
+    	return g.fromJson(v, mapType);
+
+    }
     
 }

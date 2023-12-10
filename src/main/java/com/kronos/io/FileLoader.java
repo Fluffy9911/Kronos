@@ -14,6 +14,7 @@ import java.nio.file.Paths;
 
 import javax.imageio.ImageIO;
 
+import com.google.gson.Gson;
 import com.kronos.Kronos;
 
 public class FileLoader {
@@ -226,4 +227,20 @@ public class FileLoader {
 		return rid.getBasePath() + "/" + path + "/" + name;
 	}
 
+	public void writeConfig(Config c,String name,String path) {
+		createAt(path, name);
+		tryWriteNamed(name, c.writeOut());
+	}
+	
+	public void writeConfig(Config c,String name,String path,ResourceIdentifier rd) {
+		createAt(path,name, rd);
+		tryWriteNamed(name, c.writeOut());
+	}
+	
+	public Config tryRead(String name,String path) {
+		String d = tryLoad(path+"/"+name);
+		Gson g = new Gson();
+		return g.fromJson(d, Config.class);
+	}
+	
 }
