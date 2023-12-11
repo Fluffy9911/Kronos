@@ -234,11 +234,18 @@ public class FileLoader {
 	
 	public void writeConfig(Config c,String name,String path,ResourceIdentifier rd) {
 		createAt(path,name, rd);
-		tryWriteNamed(name, c.writeOut());
+		tryWriteNamed(path+"/"+name,c.writeOut(), rd);
 	}
 	
 	public Config tryRead(String name,String path) {
 		String d = tryLoad(path+"/"+name);
+		Gson g = new Gson();
+		return g.fromJson(d, Config.class);
+	}
+
+	public Config tryRead(String name, String path, ResourceIdentifier rd) {
+		
+		String d = tryLoad(path+"/"+name,rd);
 		Gson g = new Gson();
 		return g.fromJson(d, Config.class);
 	}

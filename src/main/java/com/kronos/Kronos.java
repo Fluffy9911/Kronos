@@ -54,8 +54,8 @@ public class Kronos {
 			onEnd();
 		}));
 		loader.create(kronos_out);
-if(loader.tryLoad(config_loc)!=null) {
-	k_config = loader.tryRead("kronos_config.json", config_loc);
+if(loader.tryLoad(config_loc+"\\kronos_config.json",kronos_out)!=null) {
+	k_config = loader.tryRead("kronos_config.json", config_loc,kronos_out);
 	debug.getLogger().debug("Loaded Config");
 }else {
 	k_config.appendInt("kronos_version", 1);
