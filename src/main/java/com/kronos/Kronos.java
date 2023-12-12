@@ -1,7 +1,9 @@
 package com.kronos;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.kronos.core.event.EngineListener;
 import com.kronos.debug.Debugger;
@@ -16,17 +18,29 @@ public class Kronos {
 
 	private static List<EngineListener> listeners;
 
+	private static HashMap<String, Config> registeredConfig;
+
 	public static String config_loc = "configs/main";
 
 	public static Config k_config = new Config();
 	public static Debugger debug = new Debugger();
 
+	public static boolean debg = false, logdebug = false, extensivedebug = false;
+	public static int max_threads = 2;
+
+	public static String kronos_id = "kronos";
+
 	public static ResourceIdentifier kronos_rid = new ResourceIdentifier() {
+
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
 
 		@Override
 		public String getNameid() {
 			// TODO Auto-generated method stub
-			return "Kronos-Main";
+			return kronos_id + "-Main";
 		}
 
 		@Override
@@ -38,16 +52,21 @@ public class Kronos {
 
 	public static ResourceIdentifier kronos_out = new ResourceIdentifier() {
 
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
 		@Override
 		public String getNameid() {
 			// TODO Auto-generated method stub
-			return "Kronos-out";
+			return kronos_id + "-out";
 		}
 
 		@Override
 		public String getBasePath() {
 			// TODO Auto-generated method stub
-			return "kronos/out";
+			return kronos_id + "/out";
 		}
 	};
 
@@ -56,13 +75,22 @@ public class Kronos {
 
 	private static void defaultKronosInit() {
 		listeners = new ArrayList<>();
+		registeredConfig = new HashMap<>();
+		Config cf = new Config();
+		cf.appendBoolean("tb", true);
+		cf.appendLong("try", 1213455);
+
+		cf.appendIntegerArray("keyyy", new Integer[] { 0, 7, 5, 7, 3, 7, 998, 46 });
+
+		registerConfig("Test Config", cf);
 		Runtime.getRuntime().addShutdownHook(new Thread(() -> {
 			onEnd();
 		}));
 		loader.create(kronos_out);
-		if (loader.tryLoad(config_loc + "\\kronos_config.json", kronos_out) != null) {
-			k_config = loader.tryRead("kronos_config.json", config_loc, kronos_out);
+		if (loader.tryLoad(config_loc + "\\" + kronos_id + "_config.json", kronos_out) != null) {
+			k_config = loader.tryRead(kronos_id + "_config.json", config_loc, kronos_out);
 			debug.getLogger().debug("Loaded Config");
+			buildConfig(k_config);
 		} else {
 			buildConfig(k_config);
 		}
@@ -85,7 +113,8 @@ public class Kronos {
 	}
 
 	public static void onEnd() {
-		loader.writeConfig(k_config, "kronos_config.json", config_loc, kronos_out);
+
+		loader.writeConfig(k_config, kronos_id + "_config.json", config_loc, kronos_out);
 	}
 
 	public static void registerListener(EngineListener el) {
@@ -93,11 +122,30 @@ public class Kronos {
 	}
 
 	public static void buildConfig(Config c) {
-		c.appendBoolean("use_debug", false);
+		debg = c.readOrWriteBoolean("use_debug", false);
 
-		c.appendBoolean("log_debug", false);
+		logdebug = c.readOrWriteBoolean("log_debug", false);
 
-		c.appendBoolean("extensive_logging", false);
+		extensivedebug = c.readOrWriteBoolean("extensive_logging", false);
+
+		max_threads = c.readOrWriteInt("max_usable_threads", 2);
+
+		kronos_id = c.readOrWriteString("kronos_id", "Kronos");
+
+		for (Map.Entry<String, Config> entry : registeredConfig.entrySet()) {
+			String key = entry.getKey();
+			Config val = entry.getValue();
+			registeredConfig.put(key, c.readOrWriteConfig(key, val));
+		}
+
+	}
+
+	public static void registerConfig(String key, Config val) {
+		registeredConfig.put(key, val);
+	}
+
+	public Config get(String key) {
+		return registeredConfig.get(key);
 	}
 
 }

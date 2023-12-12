@@ -1,6 +1,8 @@
 package com.kronos.io;
 
-public interface ResourceIdentifier {
+import java.io.Serializable;
+
+public interface ResourceIdentifier extends Serializable {
 
 	public String getBasePath();
 
