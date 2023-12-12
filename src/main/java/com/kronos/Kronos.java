@@ -1,6 +1,9 @@
 package com.kronos;
 
+import java.util.ArrayList;
+import java.util.List;
 
+import com.kronos.core.event.EngineListener;
 import com.kronos.debug.Debugger;
 import com.kronos.graphixs.Loop;
 import com.kronos.graphixs.display.Graphixs;
@@ -10,10 +13,12 @@ import com.kronos.io.FileLoader;
 import com.kronos.io.ResourceIdentifier;
 
 public class Kronos {
-	
+
+	private static List<EngineListener> listeners;
+
 	public static String config_loc = "configs/main";
-	
-	public static com.kronos.io.Config k_config = new Config();
+
+	public static Config k_config = new Config();
 	public static Debugger debug = new Debugger();
 
 	public static ResourceIdentifier kronos_rid = new ResourceIdentifier() {
@@ -50,16 +55,17 @@ public class Kronos {
 	public static Graphixs graphixs = new Graphixs();
 
 	private static void defaultKronosInit() {
-		Runtime.getRuntime().addShutdownHook(new Thread(()->{
+		listeners = new ArrayList<>();
+		Runtime.getRuntime().addShutdownHook(new Thread(() -> {
 			onEnd();
 		}));
 		loader.create(kronos_out);
-if(loader.tryLoad(config_loc+"\\kronos_config.json",kronos_out)!=null) {
-	k_config = loader.tryRead("kronos_config.json", config_loc,kronos_out);
-	debug.getLogger().debug("Loaded Config");
-}else {
-	k_config.appendInt("kronos_version", 1);
-}
+		if (loader.tryLoad(config_loc + "\\kronos_config.json", kronos_out) != null) {
+			k_config = loader.tryRead("kronos_config.json", config_loc, kronos_out);
+			debug.getLogger().debug("Loaded Config");
+		} else {
+			buildConfig(k_config);
+		}
 	}
 
 	public static void start(ScreenConfig sc) {
@@ -79,8 +85,19 @@ if(loader.tryLoad(config_loc+"\\kronos_config.json",kronos_out)!=null) {
 	}
 
 	public static void onEnd() {
-		loader.writeConfig(k_config, "kronos_config.json", config_loc,kronos_out);
+		loader.writeConfig(k_config, "kronos_config.json", config_loc, kronos_out);
 	}
-	
-	
+
+	public static void registerListener(EngineListener el) {
+		listeners.add(el);
+	}
+
+	public static void buildConfig(Config c) {
+		c.appendBoolean("use_debug", false);
+
+		c.appendBoolean("log_debug", false);
+
+		c.appendBoolean("extensive_logging", false);
+	}
+
 }
