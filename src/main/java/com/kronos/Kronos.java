@@ -76,13 +76,7 @@ public class Kronos {
 	private static void defaultKronosInit() {
 		listeners = new ArrayList<>();
 		registeredConfig = new HashMap<>();
-		Config cf = new Config();
-		cf.appendBoolean("tb", true);
-		cf.appendLong("try", 1213455);
 
-		cf.appendIntegerArray("keyyy", new Integer[] { 0, 7, 5, 7, 3, 7, 998, 46 });
-
-		registerConfig("Test Config", cf);
 		Runtime.getRuntime().addShutdownHook(new Thread(() -> {
 			onEnd();
 		}));

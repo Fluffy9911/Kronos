@@ -1,4 +1,0 @@
-18:27:21.173 [main] INFO  com.kronos.Kronos - Dubugger created
-18:27:21.185 [main] INFO  com.kronos.Kronos - Path Already Exists: /kronos/out Skipping
-18:27:21.203 [main] DEBUG com.kronos.Kronos - Loaded Config
-18:27:21.219 [main] FATAL com.kronos.Kronos - Wrote Object {"m00":70.0,"m01":0.0,"m02":0.0,"m03":0.0,"m10":0.0,"m11":70.0,"m12":0.0,"m13":0.0,"m20":0.0,"m21":0.0,"m22":70.0,"m23":0.0,"m30":0.0,"m31":0.0,"m32":0.0,"m33":1.0,"properties":2} to key matrix
