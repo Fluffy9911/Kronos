@@ -282,8 +282,17 @@ public class Graphixs {
 
 	public void glErrors() {
 		int gl = GL46.glGetError();
-		Kronos.debug.getLogger().debug("GL Error: {}", gl);
+		if (gl != 0)
+			Kronos.debug.getLogger().debug("GL Error: {}", gl);
 
+	}
+
+	public void logChanges(String i) {
+		l.debug("Graphixs Config has changed: {}", i);
+	}
+
+	public void logErrors(String e) {
+		l.error("The Program Has Reported Graphixs Errors: {}", e);
 	}
 
 }

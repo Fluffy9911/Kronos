@@ -19,6 +19,7 @@ public class Graphixs2D {
 	ScreenProvider provider;
 
 	ShaderProgram shader;
+	int rendered_textures = 0;
 
 	public Graphixs2D(FrameBuffer graphixs_pane, ScreenProvider provider, ShaderProgram shader) {
 		super();
@@ -28,6 +29,7 @@ public class Graphixs2D {
 	}
 
 	public void batchRender(List<TexturedMesh> meshes) {
+		rendered_textures = 0;
 		GL40.glUseProgram(shader.getProgram_id());
 		shader.addUniform("proj", provider.collectTransform());
 		// graphixs_pane.start();
@@ -37,9 +39,11 @@ public class Graphixs2D {
 		for (Iterator iterator = meshes.iterator(); iterator.hasNext();) {
 			TexturedMesh tm = (TexturedMesh) iterator.next();
 			tm.render(shader);
+			rendered_textures++;
 		}
 		// graphixs_pane.end();
 		GL40.glUseProgram(0);
+
 	}
 
 	public TextureBatch createBatch() {
