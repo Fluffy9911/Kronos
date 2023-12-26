@@ -94,7 +94,7 @@ public class Mesh {
 		// Bind the VAO and draw the mesh
 		GL40.glUseProgram(shader.getProgram_id());
 		fb.bindTexture();
-		shader.addUniform("tex", fb.getTextureID());
+		shader.addUniform("tex", 0);
 		GL30.glBindVertexArray(vaoID);
 
 		GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, eboID);

@@ -1,18 +1,16 @@
 #version 400 core
 
 in vec3 in_pos;
-in vec3 color;
-in vec3 normal;
+
+in vec2 uv;
+
 out vec3 f_color;
-uniform mat4 proj;
-uniform mat4 view;
-uniform vec3 lightDirection;  // Direction to the light source
-uniform vec3 lightColor;     // Color of the light
-uniform vec3 ambientColor;   // Ambient color
+out vec2 uv_p;
 
 void main() {
     
-    f_color = color;
-
-    gl_Position = proj * view * vec4(in_pos, 1.0);
+    
+uv_p = uv;
+    gl_Position = vec4(in_pos, 1.0);
+    
 }

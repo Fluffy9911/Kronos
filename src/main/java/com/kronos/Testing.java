@@ -62,11 +62,11 @@ public class Testing {
 		BufferedImage img = Kronos.loader.tryLoadImage("texture/test.png");
 		Kronos.startDrawing((a) -> {
 			g.clearScreen(Colors.White);
-			tb.drawTexture(50, 50, 50, 50, img);
+			tb.drawTexture(0, 0, 500, 500, img);
 			tb.render();
 			tb.end();
 
-			// g.drawPPQuad(g.getShader("texture"));
+			g2d.renderQuad();
 			g.glErrors();
 			InputHandler.nextFrame();
 		});

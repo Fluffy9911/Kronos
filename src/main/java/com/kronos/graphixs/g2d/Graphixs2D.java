@@ -5,12 +5,16 @@ import java.util.List;
 
 import org.lwjgl.opengl.GL40;
 
+import com.kronos.Kronos;
+import com.kronos.core.util.SListener;
 import com.kronos.graphixs.FrameBuffer;
+import com.kronos.graphixs.color.Colors;
+import com.kronos.graphixs.display.ScreenConfig;
 import com.kronos.graphixs.geometry.meshing.TexturedMesh;
 import com.kronos.graphixs.shaders.ShaderProgram;
 import com.kronos.io.Config;
 
-public class Graphixs2D {
+public class Graphixs2D implements SListener {
 
 	Config g_config;
 
@@ -32,8 +36,9 @@ public class Graphixs2D {
 		rendered_textures = 0;
 		GL40.glUseProgram(shader.getProgram_id());
 		shader.addUniform("proj", provider.collectTransform());
-		// graphixs_pane.start();
 
+		graphixs_pane.start();
+		Kronos.graphixs.clearScreen(Colors.White);
 		// render
 
 		for (Iterator iterator = meshes.iterator(); iterator.hasNext();) {
@@ -41,7 +46,7 @@ public class Graphixs2D {
 			tm.render(shader);
 			rendered_textures++;
 		}
-		// graphixs_pane.end();
+		graphixs_pane.end();
 		GL40.glUseProgram(0);
 
 	}
@@ -50,6 +55,17 @@ public class Graphixs2D {
 		TextureBatch tb = new TextureBatch();
 		tb.begin(this);
 		return tb;
+	}
+
+	public void renderQuad() {
+		Kronos.graphixs.drawPPQuad(Kronos.graphixs.getShader("pp_tex"));
+	}
+
+	@Override
+	public void updateSC(ScreenConfig sc) {
+		Kronos.graphixs.buffers.put("graphixs2d_pane", new FrameBuffer(sc.width(), sc.height(), true));
+		graphixs_pane = Kronos.graphixs.getBuffer("graphixs2d_pane");
+
 	}
 
 }

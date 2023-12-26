@@ -1,0 +1,105 @@
+23:14:22.482 [main] INFO  com.kronos.Kronos - Set Current ScreenConfig to {Width=[439], Height=[770], Title=[KronosTesting], ClearColor=[Color [r=1.0, g=1.0, b=1.0, a=1.0]], UpdateTime=[60], Hints=[{131076=0, 131075=1}]}
+23:14:22.484 [main] DEBUG com.kronos.Kronos - Camera Updated To: 439.0 770.0
+23:14:22.484 [main] DEBUG com.kronos.Kronos - Screen Resized To: W439 H770
+23:14:22.487 [main] INFO  com.kronos.Kronos - Set Current ScreenConfig to {Width=[459], Height=[770], Title=[KronosTesting], ClearColor=[Color [r=1.0, g=1.0, b=1.0, a=1.0]], UpdateTime=[60], Hints=[{131076=0, 131075=1}]}
+23:14:22.487 [main] DEBUG com.kronos.Kronos - Camera Updated To: 459.0 770.0
+23:14:22.488 [main] DEBUG com.kronos.Kronos - Screen Resized To: W459 H770
+23:14:22.504 [main] INFO  com.kronos.Kronos - Set Current ScreenConfig to {Width=[497], Height=[770], Title=[KronosTesting], ClearColor=[Color [r=1.0, g=1.0, b=1.0, a=1.0]], UpdateTime=[60], Hints=[{131076=0, 131075=1}]}
+23:14:22.504 [main] DEBUG com.kronos.Kronos - Camera Updated To: 497.0 770.0
+23:14:22.504 [main] DEBUG com.kronos.Kronos - Screen Resized To: W497 H770
+23:14:22.511 [main] INFO  com.kronos.Kronos - Set Current ScreenConfig to {Width=[515], Height=[770], Title=[KronosTesting], ClearColor=[Color [r=1.0, g=1.0, b=1.0, a=1.0]], UpdateTime=[60], Hints=[{131076=0, 131075=1}]}
+23:14:22.511 [main] DEBUG com.kronos.Kronos - Camera Updated To: 515.0 770.0
+23:14:22.511 [main] DEBUG com.kronos.Kronos - Screen Resized To: W515 H770
+23:14:22.518 [main] INFO  com.kronos.Kronos - Set Current ScreenConfig to {Width=[531], Height=[770], Title=[KronosTesting], ClearColor=[Color [r=1.0, g=1.0, b=1.0, a=1.0]], UpdateTime=[60], Hints=[{131076=0, 131075=1}]}
+23:14:22.518 [main] DEBUG com.kronos.Kronos - Camera Updated To: 531.0 770.0
+23:14:22.518 [main] DEBUG com.kronos.Kronos - Screen Resized To: W531 H770
+23:14:22.526 [main] INFO  com.kronos.Kronos - Set Current ScreenConfig to {Width=[543], Height=[770], Title=[KronosTesting], ClearColor=[Color [r=1.0, g=1.0, b=1.0, a=1.0]], UpdateTime=[60], Hints=[{131076=0, 131075=1}]}
+23:14:22.526 [main] DEBUG com.kronos.Kronos - Camera Updated To: 543.0 770.0
+23:14:22.526 [main] DEBUG com.kronos.Kronos - Screen Resized To: W543 H770
+23:14:22.533 [main] INFO  com.kronos.Kronos - Set Current ScreenConfig to {Width=[555], Height=[770], Title=[KronosTesting], ClearColor=[Color [r=1.0, g=1.0, b=1.0, a=1.0]], UpdateTime=[60], Hints=[{131076=0, 131075=1}]}
+23:14:22.533 [main] DEBUG com.kronos.Kronos - Camera Updated To: 555.0 770.0
+23:14:22.533 [main] DEBUG com.kronos.Kronos - Screen Resized To: W555 H770
+23:14:22.539 [main] INFO  com.kronos.Kronos - Set Current ScreenConfig to {Width=[565], Height=[770], Title=[KronosTesting], ClearColor=[Color [r=1.0, g=1.0, b=1.0, a=1.0]], UpdateTime=[60], Hints=[{131076=0, 131075=1}]}
+23:14:22.540 [main] DEBUG com.kronos.Kronos - Camera Updated To: 565.0 770.0
+23:14:22.540 [main] DEBUG com.kronos.Kronos - Screen Resized To: W565 H770
+23:14:22.547 [main] INFO  com.kronos.Kronos - Set Current ScreenConfig to {Width=[575], Height=[770], Title=[KronosTesting], ClearColor=[Color [r=1.0, g=1.0, b=1.0, a=1.0]], UpdateTime=[60], Hints=[{131076=0, 131075=1}]}
+23:14:22.547 [main] DEBUG com.kronos.Kronos - Camera Updated To: 575.0 770.0
+23:14:22.547 [main] DEBUG com.kronos.Kronos - Screen Resized To: W575 H770
+23:14:22.554 [main] INFO  com.kronos.Kronos - Set Current ScreenConfig to {Width=[583], Height=[770], Title=[KronosTesting], ClearColor=[Color [r=1.0, g=1.0, b=1.0, a=1.0]], UpdateTime=[60], Hints=[{131076=0, 131075=1}]}
+23:14:22.554 [main] DEBUG com.kronos.Kronos - Camera Updated To: 583.0 770.0
+23:14:22.554 [main] DEBUG com.kronos.Kronos - Screen Resized To: W583 H770
+23:14:22.563 [main] INFO  com.kronos.Kronos - Set Current ScreenConfig to {Width=[590], Height=[770], Title=[KronosTesting], ClearColor=[Color [r=1.0, g=1.0, b=1.0, a=1.0]], UpdateTime=[60], Hints=[{131076=0, 131075=1}]}
+23:14:22.564 [main] DEBUG com.kronos.Kronos - Camera Updated To: 590.0 770.0
+23:14:22.564 [main] DEBUG com.kronos.Kronos - Screen Resized To: W590 H770
+23:14:22.568 [main] INFO  com.kronos.Kronos - Set Current ScreenConfig to {Width=[596], Height=[770], Title=[KronosTesting], ClearColor=[Color [r=1.0, g=1.0, b=1.0, a=1.0]], UpdateTime=[60], Hints=[{131076=0, 131075=1}]}
+23:14:22.568 [main] DEBUG com.kronos.Kronos - Camera Updated To: 596.0 770.0
+23:14:22.568 [main] DEBUG com.kronos.Kronos - Screen Resized To: W596 H770
+23:14:22.576 [main] INFO  com.kronos.Kronos - Set Current ScreenConfig to {Width=[602], Height=[770], Title=[KronosTesting], ClearColor=[Color [r=1.0, g=1.0, b=1.0, a=1.0]], UpdateTime=[60], Hints=[{131076=0, 131075=1}]}
+23:14:22.577 [main] DEBUG com.kronos.Kronos - Camera Updated To: 602.0 770.0
+23:14:22.577 [main] DEBUG com.kronos.Kronos - Screen Resized To: W602 H770
+23:14:22.584 [main] INFO  com.kronos.Kronos - Set Current ScreenConfig to {Width=[608], Height=[770], Title=[KronosTesting], ClearColor=[Color [r=1.0, g=1.0, b=1.0, a=1.0]], UpdateTime=[60], Hints=[{131076=0, 131075=1}]}
+23:14:22.584 [main] DEBUG com.kronos.Kronos - Camera Updated To: 608.0 770.0
+23:14:22.584 [main] DEBUG com.kronos.Kronos - Screen Resized To: W608 H770
+23:14:22.590 [main] INFO  com.kronos.Kronos - Set Current ScreenConfig to {Width=[613], Height=[770], Title=[KronosTesting], ClearColor=[Color [r=1.0, g=1.0, b=1.0, a=1.0]], UpdateTime=[60], Hints=[{131076=0, 131075=1}]}
+23:14:22.590 [main] DEBUG com.kronos.Kronos - Camera Updated To: 613.0 770.0
+23:14:22.590 [main] DEBUG com.kronos.Kronos - Screen Resized To: W613 H770
+23:14:22.597 [main] INFO  com.kronos.Kronos - Set Current ScreenConfig to {Width=[619], Height=[770], Title=[KronosTesting], ClearColor=[Color [r=1.0, g=1.0, b=1.0, a=1.0]], UpdateTime=[60], Hints=[{131076=0, 131075=1}]}
+23:14:22.598 [main] DEBUG com.kronos.Kronos - Camera Updated To: 619.0 770.0
+23:14:22.598 [main] DEBUG com.kronos.Kronos - Screen Resized To: W619 H770
+23:14:22.605 [main] INFO  com.kronos.Kronos - Set Current ScreenConfig to {Width=[625], Height=[770], Title=[KronosTesting], ClearColor=[Color [r=1.0, g=1.0, b=1.0, a=1.0]], UpdateTime=[60], Hints=[{131076=0, 131075=1}]}
+23:14:22.605 [main] DEBUG com.kronos.Kronos - Camera Updated To: 625.0 770.0
+23:14:22.605 [main] DEBUG com.kronos.Kronos - Screen Resized To: W625 H770
+23:14:22.613 [main] INFO  com.kronos.Kronos - Set Current ScreenConfig to {Width=[631], Height=[770], Title=[KronosTesting], ClearColor=[Color [r=1.0, g=1.0, b=1.0, a=1.0]], UpdateTime=[60], Hints=[{131076=0, 131075=1}]}
+23:14:22.613 [main] DEBUG com.kronos.Kronos - Camera Updated To: 631.0 770.0
+23:14:22.613 [main] DEBUG com.kronos.Kronos - Screen Resized To: W631 H770
+23:14:22.619 [main] INFO  com.kronos.Kronos - Set Current ScreenConfig to {Width=[638], Height=[770], Title=[KronosTesting], ClearColor=[Color [r=1.0, g=1.0, b=1.0, a=1.0]], UpdateTime=[60], Hints=[{131076=0, 131075=1}]}
+23:14:22.619 [main] DEBUG com.kronos.Kronos - Camera Updated To: 638.0 770.0
+23:14:22.620 [main] DEBUG com.kronos.Kronos - Screen Resized To: W638 H770
+23:14:22.627 [main] INFO  com.kronos.Kronos - Set Current ScreenConfig to {Width=[644], Height=[770], Title=[KronosTesting], ClearColor=[Color [r=1.0, g=1.0, b=1.0, a=1.0]], UpdateTime=[60], Hints=[{131076=0, 131075=1}]}
+23:14:22.628 [main] DEBUG com.kronos.Kronos - Camera Updated To: 644.0 770.0
+23:14:22.628 [main] DEBUG com.kronos.Kronos - Screen Resized To: W644 H770
+23:14:22.634 [main] INFO  com.kronos.Kronos - Set Current ScreenConfig to {Width=[650], Height=[770], Title=[KronosTesting], ClearColor=[Color [r=1.0, g=1.0, b=1.0, a=1.0]], UpdateTime=[60], Hints=[{131076=0, 131075=1}]}
+23:14:22.634 [main] DEBUG com.kronos.Kronos - Camera Updated To: 650.0 770.0
+23:14:22.634 [main] DEBUG com.kronos.Kronos - Screen Resized To: W650 H770
+23:14:22.642 [main] INFO  com.kronos.Kronos - Set Current ScreenConfig to {Width=[658], Height=[770], Title=[KronosTesting], ClearColor=[Color [r=1.0, g=1.0, b=1.0, a=1.0]], UpdateTime=[60], Hints=[{131076=0, 131075=1}]}
+23:14:22.642 [main] DEBUG com.kronos.Kronos - Camera Updated To: 658.0 770.0
+23:14:22.642 [main] DEBUG com.kronos.Kronos - Screen Resized To: W658 H770
+23:14:22.650 [main] INFO  com.kronos.Kronos - Set Current ScreenConfig to {Width=[665], Height=[770], Title=[KronosTesting], ClearColor=[Color [r=1.0, g=1.0, b=1.0, a=1.0]], UpdateTime=[60], Hints=[{131076=0, 131075=1}]}
+23:14:22.650 [main] DEBUG com.kronos.Kronos - Camera Updated To: 665.0 770.0
+23:14:22.650 [main] DEBUG com.kronos.Kronos - Screen Resized To: W665 H770
+23:14:22.655 [main] INFO  com.kronos.Kronos - Set Current ScreenConfig to {Width=[673], Height=[770], Title=[KronosTesting], ClearColor=[Color [r=1.0, g=1.0, b=1.0, a=1.0]], UpdateTime=[60], Hints=[{131076=0, 131075=1}]}
+23:14:22.656 [main] DEBUG com.kronos.Kronos - Camera Updated To: 673.0 770.0
+23:14:22.656 [main] DEBUG com.kronos.Kronos - Screen Resized To: W673 H770
+23:14:22.670 [main] INFO  com.kronos.Kronos - Set Current ScreenConfig to {Width=[687], Height=[770], Title=[KronosTesting], ClearColor=[Color [r=1.0, g=1.0, b=1.0, a=1.0]], UpdateTime=[60], Hints=[{131076=0, 131075=1}]}
+23:14:22.670 [main] DEBUG com.kronos.Kronos - Camera Updated To: 687.0 770.0
+23:14:22.670 [main] DEBUG com.kronos.Kronos - Screen Resized To: W687 H770
+23:14:22.677 [main] INFO  com.kronos.Kronos - Set Current ScreenConfig to {Width=[694], Height=[770], Title=[KronosTesting], ClearColor=[Color [r=1.0, g=1.0, b=1.0, a=1.0]], UpdateTime=[60], Hints=[{131076=0, 131075=1}]}
+23:14:22.677 [main] DEBUG com.kronos.Kronos - Camera Updated To: 694.0 770.0
+23:14:22.677 [main] DEBUG com.kronos.Kronos - Screen Resized To: W694 H770
+23:14:22.684 [main] INFO  com.kronos.Kronos - Set Current ScreenConfig to {Width=[698], Height=[770], Title=[KronosTesting], ClearColor=[Color [r=1.0, g=1.0, b=1.0, a=1.0]], UpdateTime=[60], Hints=[{131076=0, 131075=1}]}
+23:14:22.684 [main] DEBUG com.kronos.Kronos - Camera Updated To: 698.0 770.0
+23:14:22.684 [main] DEBUG com.kronos.Kronos - Screen Resized To: W698 H770
+23:14:22.691 [main] INFO  com.kronos.Kronos - Set Current ScreenConfig to {Width=[703], Height=[770], Title=[KronosTesting], ClearColor=[Color [r=1.0, g=1.0, b=1.0, a=1.0]], UpdateTime=[60], Hints=[{131076=0, 131075=1}]}
+23:14:22.691 [main] DEBUG com.kronos.Kronos - Camera Updated To: 703.0 770.0
+23:14:22.691 [main] DEBUG com.kronos.Kronos - Screen Resized To: W703 H770
+23:14:22.698 [main] INFO  com.kronos.Kronos - Set Current ScreenConfig to {Width=[706], Height=[770], Title=[KronosTesting], ClearColor=[Color [r=1.0, g=1.0, b=1.0, a=1.0]], UpdateTime=[60], Hints=[{131076=0, 131075=1}]}
+23:14:22.698 [main] DEBUG com.kronos.Kronos - Camera Updated To: 706.0 770.0
+23:14:22.698 [main] DEBUG com.kronos.Kronos - Screen Resized To: W706 H770
+23:14:22.706 [main] INFO  com.kronos.Kronos - Set Current ScreenConfig to {Width=[709], Height=[770], Title=[KronosTesting], ClearColor=[Color [r=1.0, g=1.0, b=1.0, a=1.0]], UpdateTime=[60], Hints=[{131076=0, 131075=1}]}
+23:14:22.706 [main] DEBUG com.kronos.Kronos - Camera Updated To: 709.0 770.0
+23:14:22.706 [main] DEBUG com.kronos.Kronos - Screen Resized To: W709 H770
+23:14:22.713 [main] INFO  com.kronos.Kronos - Set Current ScreenConfig to {Width=[712], Height=[770], Title=[KronosTesting], ClearColor=[Color [r=1.0, g=1.0, b=1.0, a=1.0]], UpdateTime=[60], Hints=[{131076=0, 131075=1}]}
+23:14:22.713 [main] DEBUG com.kronos.Kronos - Camera Updated To: 712.0 770.0
+23:14:22.713 [main] DEBUG com.kronos.Kronos - Screen Resized To: W712 H770
+23:14:22.720 [main] INFO  com.kronos.Kronos - Set Current ScreenConfig to {Width=[714], Height=[770], Title=[KronosTesting], ClearColor=[Color [r=1.0, g=1.0, b=1.0, a=1.0]], UpdateTime=[60], Hints=[{131076=0, 131075=1}]}
+23:14:22.720 [main] DEBUG com.kronos.Kronos - Camera Updated To: 714.0 770.0
+23:14:22.720 [main] DEBUG com.kronos.Kronos - Screen Resized To: W714 H770
+23:14:22.728 [main] INFO  com.kronos.Kronos - Set Current ScreenConfig to {Width=[716], Height=[770], Title=[KronosTesting], ClearColor=[Color [r=1.0, g=1.0, b=1.0, a=1.0]], UpdateTime=[60], Hints=[{131076=0, 131075=1}]}
+23:14:22.728 [main] DEBUG com.kronos.Kronos - Camera Updated To: 716.0 770.0
+23:14:22.728 [main] DEBUG com.kronos.Kronos - Screen Resized To: W716 H770
+23:14:22.734 [main] INFO  com.kronos.Kronos - Set Current ScreenConfig to {Width=[718], Height=[770], Title=[KronosTesting], ClearColor=[Color [r=1.0, g=1.0, b=1.0, a=1.0]], UpdateTime=[60], Hints=[{131076=0, 131075=1}]}
+23:14:22.735 [main] DEBUG com.kronos.Kronos - Camera Updated To: 718.0 770.0
+23:14:22.735 [main] DEBUG com.kronos.Kronos - Screen Resized To: W718 H770
+23:14:22.742 [main] INFO  com.kronos.Kronos - Set Current ScreenConfig to {Width=[719], Height=[770], Title=[KronosTesting], ClearColor=[Color [r=1.0, g=1.0, b=1.0, a=1.0]], UpdateTime=[60], Hints=[{131076=0, 131075=1}]}
+23:14:22.742 [main] DEBUG com.kronos.Kronos - Camera Updated To: 719.0 770.0
+23:14:22.742 [main] DEBUG com.kronos.Kronos - Screen Resized To: W719 H770

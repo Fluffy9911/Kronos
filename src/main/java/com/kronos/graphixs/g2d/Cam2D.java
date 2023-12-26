@@ -3,7 +3,11 @@ package com.kronos.graphixs.g2d;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
-public class Cam2D {
+import com.kronos.Kronos;
+import com.kronos.core.util.SListener;
+import com.kronos.graphixs.display.ScreenConfig;
+
+public class Cam2D implements SListener {
 	Matrix4f projection, view, model;
 
 	Vector3f position;
@@ -25,7 +29,7 @@ public class Cam2D {
 		view = new Matrix4f();
 
 		model = new Matrix4f();
-
+		registerEvent();
 	}
 
 	public void update() {
@@ -35,8 +39,6 @@ public class Cam2D {
 
 		projection.ortho2DLH(0, sw, sh, 0);
 
-		view.lookAtLH(position, new Vector3f(sw / 2, sh / 2, 0), new Vector3f(0, 1, 0));
-
 	}
 
 	public Matrix4f collectTransform() {
@@ -45,6 +47,15 @@ public class Cam2D {
 
 	public Matrix4f view() {
 		return view;
+	}
+
+	@Override
+	public void updateSC(ScreenConfig sc) {
+		sw = sc.width();
+		sh = sc.height();
+		update();
+		Kronos.debug.getLogger().debug("Camera Updated To: {} {}", sw, sh);
+
 	}
 
 }

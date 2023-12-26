@@ -1,0 +1,10 @@
+23:30:35.006 [main] DEBUG com.kronos.Kronos - GL Version: 3.4.0 Win32 WGL Null EGL OSMesa VisualC DLL 
+23:30:35.008 [main] DEBUG com.kronos.Kronos - GL Started
+23:30:35.038 [main] INFO  com.kronos.Kronos - Set Current ScreenConfig to {Width=[770], Height=[770], Title=[KronosTesting], ClearColor=[Color [r=1.0, g=1.0, b=1.0, a=1.0]], UpdateTime=[60], Hints=[{131075=1, 131076=0}]}
+23:30:35.477 [main] INFO  com.kronos.Kronos - Frame Buffer Status Status: 36053 
+23:30:35.482 [main] INFO  com.kronos.Kronos - Frame Buffer Status Status: 36053 
+23:30:35.484 [main] INFO  com.kronos.Kronos - Frame Buffer Status Status: 36053 
+23:30:35.548 [main] DEBUG com.kronos.Kronos - Shaders Loaded:
+23:30:35.549 [main] DEBUG com.kronos.Kronos - Shader: texture, status? 
+23:30:35.550 [main] DEBUG com.kronos.Kronos - Shader: pp_tex, status? 
+23:30:35.595 [main] DEBUG com.kronos.Kronos - Color Color [r=1.0, g=1.0, b=1.0, a=1.0] 

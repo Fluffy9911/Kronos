@@ -7,6 +7,7 @@ import static org.lwjgl.glfw.GLFW.glfwMakeContextCurrent;
 import static org.lwjgl.glfw.GLFW.glfwPollEvents;
 import static org.lwjgl.glfw.GLFW.glfwSetWindowPos;
 import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
+import static org.lwjgl.glfw.GLFW.glfwSetWindowSizeCallback;
 import static org.lwjgl.glfw.GLFW.glfwShowWindow;
 import static org.lwjgl.glfw.GLFW.glfwSwapBuffers;
 import static org.lwjgl.glfw.GLFW.glfwSwapInterval;
@@ -32,6 +33,7 @@ import org.lwjgl.system.MemoryUtil;
 
 import com.kronos.Kronos;
 import com.kronos.graphixs.color.Color;
+import com.kronos.graphixs.g2d.ScreenUtils;
 import com.kronos.graphixs.resources.Resource;
 import com.kronos.io.InputHandler;
 
@@ -75,6 +77,21 @@ public class Screen implements Resource {
 			}
 		});
 		InputHandler.init(id);
+		glfwSetWindowSizeCallback(id, (w, wi, h) -> {
+			resize(wi, h);
+		});
+	}
+
+	private void resize(int wi, int h) {
+		Kronos.graphixs.setConfig(ScreenUtils.updateDimensions(sc, wi, h));
+		Kronos.graphixs.runEvent("screen_listener");
+		Kronos.debug.getLogger().debug("Screen Resized To: W{} H{}", wi, h);
+		GL11.glMatrixMode(GL11.GL_PROJECTION);
+		GL11.glLoadIdentity();
+		GL11.glOrtho(0, sc.width(), sc.height(), 0, 1, -1);
+		GL11.glMatrixMode(GL11.GL_MODELVIEW);
+		GL40.glViewport(0, 0, sc.width(), sc.height());
+
 	}
 
 	private long createScreen(String name, int w, int h) {
