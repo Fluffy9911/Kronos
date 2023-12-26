@@ -187,6 +187,11 @@ public abstract class Shader implements Resource {
 		}
 	}
 
+	public String getShaderCompilationStatus() {
+		return GL20.glGetProgramInfoLog(program_id);
+
+	}
+
 	/**
 	 * @return the program_id
 	 */

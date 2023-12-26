@@ -26,6 +26,7 @@ import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
 import org.lwjgl.opengl.GL40;
+import org.lwjgl.opengl.GLUtil;
 import org.lwjgl.system.MemoryStack;
 import org.lwjgl.system.MemoryUtil;
 
@@ -54,7 +55,8 @@ public class Screen implements Resource {
 
 		closeCallback(id);
 		memory(id);
-
+		if (Kronos.extensivedebug)
+			GLUtil.setupDebugMessageCallback();
 		makeWindowVisible(id, 1);
 
 		this.id = id;

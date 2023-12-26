@@ -40,7 +40,11 @@ public class Cam2D {
 	}
 
 	public Matrix4f collectTransform() {
-		return projection.mul(view);
+		return projection;
+	}
+
+	public Matrix4f view() {
+		return view;
 	}
 
 }

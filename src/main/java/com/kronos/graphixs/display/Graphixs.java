@@ -4,6 +4,7 @@ import static org.lwjgl.glfw.GLFW.glfwInit;
 
 import java.nio.ByteBuffer;
 import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.logging.log4j.Logger;
 import org.lwjgl.BufferUtils;
@@ -12,6 +13,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 import org.lwjgl.opengl.GL40;
+import org.lwjgl.opengl.GL46;
 import org.lwjgl.stb.STBImageWrite;
 
 import com.kronos.Kronos;
@@ -19,6 +21,8 @@ import com.kronos.graphixs.FixedLoopSystem;
 import com.kronos.graphixs.FrameBuffer;
 import com.kronos.graphixs.Loop;
 import com.kronos.graphixs.color.Color;
+import com.kronos.graphixs.g2d.Graphixs2D;
+import com.kronos.graphixs.g2d.ScreenProvider;
 import com.kronos.graphixs.geometry.Mesh;
 import com.kronos.graphixs.geometry.meshing.Builtin;
 import com.kronos.graphixs.rendering.RenderManager;
@@ -39,6 +43,7 @@ public class Graphixs {
 	private HashMap<String, Shader> shaders = new HashMap<String, Shader>();
 	private long window_id = -1;
 	public RenderManager manager_render = new RenderManager(this);
+	public Graphixs2D g2d;
 
 	public void createShader(String id, Shader s) {
 		test(l);
@@ -81,6 +86,7 @@ public class Graphixs {
 		Runtime.getRuntime().addShutdownHook(new Thread(() -> {
 			manager.close();
 		}));
+
 	}
 
 	public void test(Logger l) {
@@ -95,6 +101,11 @@ public class Graphixs {
 		GL40.glClearColor(r, g, b, a);
 	}
 
+	/**
+	 * G2D is not Available until this method is called!
+	 * 
+	 * @param config
+	 */
 	public void createScreen(ScreenConfig config) {
 		this.screen = new Screen();
 		window_id = screen.init(config);
@@ -102,9 +113,21 @@ public class Graphixs {
 		screen.load();
 		buffers.put("edge_detection", new FrameBuffer(config.width(), config.height(), true));
 		buffers.put("post_proccess", new FrameBuffer(config.width(), config.height(), true));
+		buffers.put("graphixs2d_pane", new FrameBuffer(config.width(), config.height(), true));
 		post_process_quad = Builtin.screenQuad();
 		createShader("texture", new ShaderProgram(Kronos.loader.tryLoad("shaders/texture.vs"),
 				Kronos.loader.tryLoad("shaders/texture.fs")));
+
+		g2d = new Graphixs2D(buffers.get("graphixs2d_pane"), new ScreenProvider(config),
+				(ShaderProgram) shaders.get("texture"));
+		shaders.get("texture").compileShader();
+		l.debug("Shaders Loaded:");
+		for (Map.Entry<String, Shader> entry : shaders.entrySet()) {
+			String key = entry.getKey();
+			Shader val = entry.getValue();
+			l.debug("Shader: {}, status? {}", key, val.getShaderCompilationStatus());
+		}
+
 	}
 
 	public void render(Runnable r) {
@@ -255,6 +278,12 @@ public class Graphixs {
 		m.render(shaders.get("texture"));
 		t.unbind();
 		m.cleanup();
+	}
+
+	public void glErrors() {
+		int gl = GL46.glGetError();
+		Kronos.debug.getLogger().debug("GL Error: {}", gl);
+
 	}
 
 }
