@@ -7,6 +7,7 @@ import com.kronos.graphixs.color.Color;
 import com.kronos.graphixs.color.Colors;
 import com.kronos.graphixs.display.Graphixs;
 import com.kronos.graphixs.display.ScreenConfig;
+import com.kronos.graphixs.display.Texture;
 import com.kronos.graphixs.g2d.Graphixs2D;
 import com.kronos.graphixs.g2d.TextureBatch;
 import com.kronos.io.InputHandler;
@@ -21,13 +22,13 @@ public class Testing {
 			@Override
 			public int width() {
 				// TODO Auto-generated method stub
-				return 770;
+				return 900;
 			}
 
 			@Override
 			public int height() {
 				// TODO Auto-generated method stub
-				return 770;
+				return 900;
 			}
 
 			@Override
@@ -57,12 +58,13 @@ public class Testing {
 		});
 		Graphixs g = Kronos.graphixs;
 		Graphixs2D g2d = g.g2d;
-
+		Texture t = Texture.singleColor(500, 500, Colors.Salmon);
 		TextureBatch tb = g2d.createBatch();
 		BufferedImage img = Kronos.loader.tryLoadImage("texture/test.png");
 		Kronos.startDrawing((a) -> {
 			g.clearScreen(Colors.White);
 			tb.drawTexture(0, 0, 500, 500, img);
+			tb.drawTexture(50, 50, 100, 100, t);
 			tb.render();
 			tb.end();
 

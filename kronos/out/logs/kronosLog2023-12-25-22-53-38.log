@@ -1,3 +1,0 @@
-22:53:38.011 [main] INFO  com.kronos.Kronos - Set Current ScreenConfig to {Width=[985], Height=[942], Title=[KronosTesting], ClearColor=[Color [r=1.0, g=1.0, b=1.0, a=1.0]], UpdateTime=[60], Hints=[{131075=1, 131076=0}]}
-22:53:38.013 [main] DEBUG com.kronos.Kronos - Camera Updated To: 985.0 942.0
-22:53:38.013 [main] DEBUG com.kronos.Kronos - Screen Resized To: W985 H942

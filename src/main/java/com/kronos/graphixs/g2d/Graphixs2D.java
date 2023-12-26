@@ -63,7 +63,7 @@ public class Graphixs2D implements SListener {
 
 	@Override
 	public void updateSC(ScreenConfig sc) {
-		Kronos.graphixs.buffers.put("graphixs2d_pane", new FrameBuffer(sc.width(), sc.height(), true));
+//		Kronos.graphixs.buffers.put("graphixs2d_pane", new FrameBuffer(sc.width(), sc.height(), true));
 		graphixs_pane = Kronos.graphixs.getBuffer("graphixs2d_pane");
 
 	}

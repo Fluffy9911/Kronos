@@ -97,4 +97,9 @@ public class Color {
 		return builder.toString();
 	}
 
+	public int rgb() {
+		java.awt.Color co = new java.awt.Color(r, g, b);
+		return co.getRGB();
+	}
+
 }

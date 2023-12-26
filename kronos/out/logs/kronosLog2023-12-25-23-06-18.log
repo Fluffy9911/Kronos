@@ -1,6 +1,0 @@
-23:06:18.292 [main] INFO  com.kronos.Kronos - Frame Buffer Status Status: 36053 
-23:06:18.300 [main] INFO  com.kronos.Kronos - Frame Buffer Status Status: 36053 
-23:06:18.302 [main] INFO  com.kronos.Kronos - Frame Buffer Status Status: 36053 
-23:06:18.386 [main] DEBUG com.kronos.Kronos - Shaders Loaded:
-23:06:18.387 [main] DEBUG com.kronos.Kronos - Shader: texture, status? 
-23:06:18.416 [main] DEBUG com.kronos.Kronos - Color Color [r=1.0, g=1.0, b=1.0, a=1.0] 

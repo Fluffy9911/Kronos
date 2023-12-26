@@ -9,11 +9,17 @@ import javax.imageio.ImageIO;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 
+import com.kronos.graphixs.color.Color;
+
 public class Texture {
 	public int textureId = 0;
 
 	public Texture(String filePath) {
 		this(loadImage(filePath));
+	}
+
+	public Texture(int tid) {
+		textureId = tid;
 	}
 
 	public Texture(BufferedImage image) {
@@ -76,4 +82,36 @@ public class Texture {
 	public void cleanup() {
 		GL11.glDeleteTextures(textureId);
 	}
+
+	public static Texture singleColor(int w, int h, Color c) {
+		int width = w;
+		int height = h;
+
+		ByteBuffer buffer = BufferUtils.createByteBuffer(width * height * 4); // 4 for RGBA
+
+		for (int y = 0; y < height; y++) {
+			for (int x = 0; x < width; x++) {
+				int pixel = c.rgb();
+				buffer.put((byte) ((pixel >> 16) & 0xFF)); // Red component
+				buffer.put((byte) ((pixel >> 8) & 0xFF)); // Green component
+				buffer.put((byte) (pixel & 0xFF)); // Blue component
+				buffer.put((byte) ((pixel >> 24) & 0xFF)); // Alpha component
+			}
+		}
+
+		buffer.flip();
+
+		int td = GL11.glGenTextures();
+		GL11.glBindTexture(GL11.GL_TEXTURE_2D, td);
+
+		// Setup texture parameters
+		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
+		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
+
+		// Upload the texture data
+		GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA8, width, height, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE,
+				buffer);
+		return new Texture(td);
+	}
+
 }

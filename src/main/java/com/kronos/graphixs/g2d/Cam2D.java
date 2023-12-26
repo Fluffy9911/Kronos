@@ -51,9 +51,9 @@ public class Cam2D implements SListener {
 
 	@Override
 	public void updateSC(ScreenConfig sc) {
-		sw = sc.width();
-		sh = sc.height();
-		update();
+//		sw = sc.width();
+//		sh = sc.height();
+//		update();
 		Kronos.debug.getLogger().debug("Camera Updated To: {} {}", sw, sh);
 
 	}
