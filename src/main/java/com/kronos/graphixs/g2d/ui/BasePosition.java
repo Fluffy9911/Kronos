@@ -1,7 +1,10 @@
 package com.kronos.graphixs.g2d.ui;
 
+import com.kronos.graphixs.color.Colors;
+import com.kronos.graphixs.display.Texture;
 import com.kronos.graphixs.g2d.ScreenCord;
 import com.kronos.graphixs.g2d.ScreenProvider;
+import com.kronos.graphixs.g2d.TextureBatch;
 
 public class BasePosition implements ComponentPosition {
 	ScreenCord pos, ap;
@@ -52,6 +55,29 @@ public class BasePosition implements ComponentPosition {
 	public ScreenCord anchoredPos() {
 		// TODO Auto-generated method stub
 		return ap;
+	}
+
+	public void setPos(ScreenCord pos) {
+		this.pos = pos;
+	}
+
+	public void setAp(ScreenCord ap) {
+		this.ap = ap;
+	}
+
+	public void setXpad(int xpad) {
+		this.xpad = xpad;
+	}
+
+	public void setYpad(int ypad) {
+		this.ypad = ypad;
+	}
+
+	public void drawDebug(TextureBatch batch) {
+		Texture a = Texture.singleColor((int) ap.getW(), (int) ap.getH(), Colors.Lime);
+		Texture p = Texture.singleColor((int) pos.getW(), (int) pos.getH(), Colors.Red);
+		batch.drawTexture((int) ap.getX(), (int) ap.getY(), (int) ap.getW(), (int) ap.getH(), a);
+		batch.drawTexture((int) pos.getX(), (int) pos.getY(), (int) pos.getW(), (int) pos.getH(), p);
 	}
 
 }

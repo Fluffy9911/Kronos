@@ -5,13 +5,14 @@ import java.util.HashMap;
 public class BaseComponent implements Comp {
 	BasePosition bp;
 	HashMap<String, BaseComponent> children;
-	boolean cdren, moveable;
+	boolean cdren, moveable, hidden;
 
-	public BaseComponent(BasePosition bp, boolean cdren, boolean moveable) {
+	public BaseComponent(BasePosition bp, boolean cdren, boolean moveable, boolean hidden) {
 		super();
 		this.bp = bp;
 		this.cdren = cdren;
 		this.moveable = moveable;
+		this.hidden = hidden;
 	}
 
 	@Override
@@ -60,6 +61,12 @@ public class BaseComponent implements Comp {
 	public boolean movable() {
 		// TODO Auto-generated method stub
 		return moveable;
+	}
+
+	@Override
+	public boolean hidden() {
+		// TODO Auto-generated method stub
+		return hidden;
 	}
 
 }

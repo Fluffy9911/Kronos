@@ -16,6 +16,8 @@ public interface Comp {
 
 	public boolean canUpdateChildren();
 
+	public boolean hidden();
+
 	/**
 	 * if the component responds to mouse dragging
 	 * 

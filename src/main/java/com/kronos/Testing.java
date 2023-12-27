@@ -11,8 +11,13 @@ import com.kronos.graphixs.display.Graphixs;
 import com.kronos.graphixs.display.ScreenConfig;
 import com.kronos.graphixs.display.Texture;
 import com.kronos.graphixs.g2d.Graphixs2D;
+import com.kronos.graphixs.g2d.ScreenCord;
 import com.kronos.graphixs.g2d.TextureBatch;
 import com.kronos.graphixs.g2d.fonts.FontRenderer;
+import com.kronos.graphixs.g2d.ui.BaseComponent;
+import com.kronos.graphixs.g2d.ui.BasePosition;
+import com.kronos.graphixs.g2d.ui.transform.FollowMouse;
+import com.kronos.graphixs.g2d.ui.transform.KeepInBox;
 import com.kronos.io.InputHandler;
 
 public class Testing {
@@ -60,25 +65,29 @@ public class Testing {
 
 		});
 		File f = new File(Kronos.loader.createFilePath("fonts", "Blox2.ttf"));
-
-		Font fo = Kronos.loader.loadFont(f).deriveFont(50f);
-
 		Graphixs g = Kronos.graphixs;
+		Font fo = Kronos.loader.loadFont(f).deriveFont(50f);
 		Graphixs2D g2d = g.g2d;
+		BaseComponent bc = new BaseComponent(new BasePosition(new ScreenCord(10, 10, 50, 50), g2d.getProvider()), false,
+				false, false);
+
+		BasePosition test = new BasePosition(new ScreenCord(70, 70, 50, 50), new ScreenCord(50, 50, 500, 500),
+				g2d.getProvider());
+		KeepInBox kib = new KeepInBox();
+		FollowMouse fm = new FollowMouse();
 		Texture t = Texture.singleColor(500, 500, Colors.Salmon);
 		TextureBatch tb = g2d.createBatch();
 
 		FontRenderer fr = new FontRenderer(fo);
 		BufferedImage img = Kronos.loader.tryLoadImage("texture/test.png");
 		Kronos.startDrawing((a) -> {
+
 			g.clearScreen(Colors.White);
-			tb.drawTexture(0, 0, 500, 500, img);
-			tb.drawTexture(50, 50, 100, 100, t);
-			fr.renderText("this is a massive sentence that just goes on and on till i run out of things to say...", 50,
-					700, fo, java.awt.Color.BLACK, tb);
+			test.drawDebug(tb);
 			tb.render();
 			tb.end();
-
+			fm.reposition(g2d.getProvider(), test, null);
+			kib.reposition(g2d.getProvider(), test, null);
 			g2d.renderQuad();
 			g.glErrors();
 			InputHandler.nextFrame();

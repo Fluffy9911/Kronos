@@ -68,4 +68,8 @@ public class Graphixs2D implements SListener {
 
 	}
 
+	public ScreenProvider getProvider() {
+		return provider;
+	}
+
 }

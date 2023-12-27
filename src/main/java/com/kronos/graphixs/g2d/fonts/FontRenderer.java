@@ -11,6 +11,9 @@ import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.logging.log4j.Logger;
+
+import com.kronos.Kronos;
 import com.kronos.graphixs.display.Texture;
 import com.kronos.graphixs.g2d.TextureBatch;
 import com.kronos.io.Config;
@@ -23,11 +26,28 @@ import com.kronos.io.Config;
 public class FontRenderer {
 	Map<String, Texture> cached;
 	Font default_font;
+	Config config;
+	boolean cd;
+	Logger l = Kronos.debug.getLogger();
 
 	public FontRenderer(Font default_font) {
 		super();
 		this.default_font = default_font;
 		cached = new HashMap<>();
+		config = Kronos.k_config;
+		cd = config.readOrWriteBoolean("text_caching_extensive_debug", false);
+	}
+
+	public Texture get(Object key) {
+
+		return cached.get(key);
+	}
+
+	public Texture put(String key, Texture value) {
+		if (cd) {
+			l.debug("Caching Textureid: {} with data: [W:{}H:{}]", key, value.getWidth(), value.getHeight());
+		}
+		return cached.put(key, value);
 	}
 
 	public static FontRenderer createDefault() {
@@ -37,6 +57,7 @@ public class FontRenderer {
 	private BufferedImage prepareText(Font f, Color c, String text) {
 		BufferedImage img = new BufferedImage(16, 16, BufferedImage.TRANSLUCENT);
 		Graphics g = img.createGraphics();
+		g.setFont(f);
 		int width = (int) g.getFontMetrics().getStringBounds(text, g).getWidth();
 		int height = (int) g.getFontMetrics().getStringBounds(text, g).getHeight();
 		img = new BufferedImage(width, height, BufferedImage.TRANSLUCENT);
@@ -166,17 +187,26 @@ public class FontRenderer {
 	}
 
 	public void renderText(String text, int x, int y, TextureBatch batch) {
-		Texture t = createDrawTexture(default_font, Color.WHITE, text);
+		Texture t = getTexture(text, Color.WHITE);
+		if (t == null)
+			t = createDrawTexture(default_font, Color.WHITE, text);
+
 		batch.drawTexture(x, y, t.getWidth(), t.getHeight(), t);
 	}
 
 	public void renderText(String text, int x, int y, Font f, Color c, TextureBatch batch) {
-		Texture t = createDrawTexture(f, c, text);
+		Texture t = getTexture(text, c);
+		if (t == null)
+			t = createDrawTexture(f, c, text);
+
 		batch.drawTexture(x, y, t.getWidth(), t.getHeight(), t);
 	}
 
 	public void renderText(String text, int x, int y, int w, int h, TextureBatch batch) {
-		Texture t = createDrawTexture(default_font, Color.WHITE, text);
+		Texture t = getTexture(text, Color.WHITE);
+		if (t == null)
+			t = createDrawTexture(default_font, Color.WHITE, text);
+
 		batch.drawTexture(x, y, w, h, t);
 	}
 
@@ -194,7 +224,10 @@ public class FontRenderer {
 	}
 
 	public void renderText(String text, int x, int y, int w, int h, Font f, Color c, TextureBatch batch) {
-		Texture t = createDrawTexture(f, c, text);
+		Texture t = getTexture(text, c);
+		if (t == null)
+			t = createDrawTexture(f, c, text);
+
 		batch.drawTexture(x, y, w, h, t);
 	}
 
@@ -205,4 +238,9 @@ public class FontRenderer {
 
 		return font;
 	}
+
+	public void createTextCache(String text, Font f, Color c) {
+		createDrawTexture(f, c, text);
+	}
+
 }

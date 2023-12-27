@@ -98,7 +98,12 @@ public class Texture {
 	public static Texture singleColor(int w, int h, Color c) {
 		int width = w;
 		int height = h;
-
+		if (width < 0) {
+			width = 1;
+		}
+		if (height < 0) {
+			height = 1;
+		}
 		ByteBuffer buffer = BufferUtils.createByteBuffer(width * height * 4); // 4 for RGBA
 
 		for (int y = 0; y < height; y++) {
