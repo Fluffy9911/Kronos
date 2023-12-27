@@ -13,6 +13,7 @@ import com.kronos.graphixs.color.Color;
 
 public class Texture {
 	public int textureId = 0;
+	int width = 0, height = 0;
 
 	public Texture(String filePath) {
 		this(loadImage(filePath));
@@ -20,6 +21,13 @@ public class Texture {
 
 	public Texture(int tid) {
 		textureId = tid;
+	}
+
+	public Texture(int textureId, int width, int height) {
+		super();
+		this.textureId = textureId;
+		this.width = width;
+		this.height = height;
 	}
 
 	public Texture(BufferedImage image) {
@@ -36,6 +44,7 @@ public class Texture {
 
 	private static BufferedImage loadImage(String filePath) {
 		try {
+
 			return ImageIO.read(Texture.class.getResourceAsStream(filePath));
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -44,9 +53,9 @@ public class Texture {
 
 	}
 
-	private int loadTexture(BufferedImage image) {
-		int width = image.getWidth();
-		int height = image.getHeight();
+	public int loadTexture(BufferedImage image) {
+		width = image.getWidth();
+		height = image.getHeight();
 
 		int[] pixels = new int[width * height];
 		image.getRGB(0, 0, width, height, pixels, 0, width);
@@ -59,7 +68,10 @@ public class Texture {
 				buffer.put((byte) ((pixel >> 16) & 0xFF)); // Red component
 				buffer.put((byte) ((pixel >> 8) & 0xFF)); // Green component
 				buffer.put((byte) (pixel & 0xFF)); // Blue component
-				buffer.put((byte) ((pixel >> 24) & 0xFF)); // Alpha component
+				if ((byte) ((pixel >> 24) & 0xFF) == 0)
+					buffer.put((byte) 0); // Alpha component
+				else
+					buffer.put((byte) ((pixel >> 24) & 0xFF)); // Alpha component
 			}
 		}
 
@@ -111,7 +123,19 @@ public class Texture {
 		// Upload the texture data
 		GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA8, width, height, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE,
 				buffer);
-		return new Texture(td);
+		return new Texture(td, w, h);
+	}
+
+	public int getTextureId() {
+		return textureId;
+	}
+
+	public int getWidth() {
+		return width;
+	}
+
+	public int getHeight() {
+		return height;
 	}
 
 }

@@ -1,0 +1,39 @@
+12:59:55.039 [main] DEBUG com.kronos.Kronos - GL Version: 3.4.0 Win32 WGL Null EGL OSMesa VisualC DLL 
+12:59:55.040 [main] DEBUG com.kronos.Kronos - GL Started
+12:59:55.043 [main] INFO  com.kronos.Kronos - Set Current ScreenConfig to {Width=[900], Height=[900], Title=[KronosTesting], ClearColor=[Color [r=1.0, g=1.0, b=1.0, a=1.0]], UpdateTime=[60], Hints=[{131076=0, 131075=1}]}
+12:59:55.196 [main] INFO  com.kronos.Kronos - Frame Buffer Status Status: 36053 
+12:59:55.198 [main] INFO  com.kronos.Kronos - Frame Buffer Status Status: 36053 
+12:59:55.199 [main] INFO  com.kronos.Kronos - Frame Buffer Status Status: 36053 
+12:59:55.243 [main] DEBUG com.kronos.Kronos - Shaders Loaded:
+12:59:55.244 [main] DEBUG com.kronos.Kronos - Shader: texture, status? 
+12:59:55.244 [main] DEBUG com.kronos.Kronos - Shader: pp_tex, status? 
+12:59:55.297 [main] DEBUG com.kronos.Kronos - Color Color [r=1.0, g=1.0, b=1.0, a=1.0] 
+12:59:55.492 [main] DEBUG com.kronos.Kronos - GL Error: 1282
+12:59:55.551 [main] DEBUG com.kronos.Kronos - GL Error: 1282
+12:59:55.558 [main] DEBUG com.kronos.Kronos - GL Error: 1282
+12:59:55.569 [main] DEBUG com.kronos.Kronos - GL Error: 1282
+12:59:55.585 [main] DEBUG com.kronos.Kronos - GL Error: 1282
+12:59:55.616 [main] DEBUG com.kronos.Kronos - GL Error: 1282
+12:59:55.622 [main] DEBUG com.kronos.Kronos - GL Error: 1282
+12:59:55.636 [main] DEBUG com.kronos.Kronos - GL Error: 1282
+12:59:55.654 [main] DEBUG com.kronos.Kronos - GL Error: 1282
+12:59:55.669 [main] DEBUG com.kronos.Kronos - GL Error: 1282
+12:59:55.687 [main] DEBUG com.kronos.Kronos - GL Error: 1282
+12:59:55.702 [main] DEBUG com.kronos.Kronos - GL Error: 1282
+12:59:55.719 [main] DEBUG com.kronos.Kronos - GL Error: 1282
+12:59:55.736 [main] DEBUG com.kronos.Kronos - GL Error: 1282
+12:59:55.752 [main] DEBUG com.kronos.Kronos - GL Error: 1282
+12:59:55.768 [main] DEBUG com.kronos.Kronos - GL Error: 1282
+12:59:55.785 [main] DEBUG com.kronos.Kronos - GL Error: 1282
+12:59:55.802 [main] DEBUG com.kronos.Kronos - GL Error: 1282
+12:59:55.819 [main] DEBUG com.kronos.Kronos - GL Error: 1282
+12:59:55.836 [main] DEBUG com.kronos.Kronos - GL Error: 1282
+12:59:55.852 [main] DEBUG com.kronos.Kronos - GL Error: 1282
+12:59:55.869 [main] DEBUG com.kronos.Kronos - GL Error: 1282
+12:59:55.886 [main] DEBUG com.kronos.Kronos - GL Error: 1282
+12:59:55.902 [main] DEBUG com.kronos.Kronos - GL Error: 1282
+12:59:55.919 [main] DEBUG com.kronos.Kronos - GL Error: 1282
+12:59:55.935 [main] DEBUG com.kronos.Kronos - GL Error: 1282
+12:59:55.953 [main] DEBUG com.kronos.Kronos - GL Error: 1282
+12:59:55.968 [main] DEBUG com.kronos.Kronos - GL Error: 1282
+12:59:55.985 [main] DEBUG com.kronos.Kronos - GL Error: 1282

@@ -1,5 +1,8 @@
 package com.kronos.io;
 
+import java.awt.Font;
+import java.awt.FontFormatException;
+import java.awt.GraphicsEnvironment;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -227,27 +230,45 @@ public class FileLoader {
 		return rid.getBasePath() + "/" + path + "/" + name;
 	}
 
-	public void writeConfig(Config c,String name,String path) {
+	public void writeConfig(Config c, String name, String path) {
 		createAt(path, name);
 		tryWriteNamed(name, c.writeOut());
 	}
-	
-	public void writeConfig(Config c,String name,String path,ResourceIdentifier rd) {
-		createAt(path,name, rd);
-		tryWriteNamed(path+"/"+name,c.writeOut(), rd);
+
+	public void writeConfig(Config c, String name, String path, ResourceIdentifier rd) {
+		createAt(path, name, rd);
+		tryWriteNamed(path + "/" + name, c.writeOut(), rd);
 	}
-	
-	public Config tryRead(String name,String path) {
-		String d = tryLoad(path+"/"+name);
+
+	public Config tryRead(String name, String path) {
+		String d = tryLoad(path + "/" + name);
 		Gson g = new Gson();
 		return g.fromJson(d, Config.class);
 	}
 
 	public Config tryRead(String name, String path, ResourceIdentifier rd) {
-		
-		String d = tryLoad(path+"/"+name,rd);
+
+		String d = tryLoad(path + "/" + name, rd);
 		Gson g = new Gson();
 		return g.fromJson(d, Config.class);
 	}
-	
+
+	public Font loadFont(File fontFile) {
+		try {
+			if (!fontFile.exists()) {
+				System.err.println("Font file does not exist: " + fontFile.getAbsolutePath());
+				return null;
+			}
+
+			Font font = Font.createFont(Font.TRUETYPE_FONT, fontFile);
+			GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(font);
+			return font;
+		} catch (FontFormatException | IOException e) {
+			System.err.println("Failed to load font: " + e.getMessage());
+			e.printStackTrace();
+		}
+
+		return null;
+	}
+
 }

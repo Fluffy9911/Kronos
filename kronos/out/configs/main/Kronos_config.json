@@ -1,0 +1,9 @@
+{
+  "data": {
+    "extensive_logging": "false",
+    "log_debug": "false",
+    "max_usable_threads": "2",
+    "use_debug": "false",
+    "kronos_id": "Kronos"
+  }
+}
