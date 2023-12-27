@@ -29,4 +29,12 @@ public class ScreenProvider {
 		cam.update();
 	}
 
+	public Cam2D getCam() {
+		return cam;
+	}
+
+	public ScreenConfig getConfig() {
+		return config;
+	}
+
 }
