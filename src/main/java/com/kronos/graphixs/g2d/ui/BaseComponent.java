@@ -9,6 +9,7 @@ public class BaseComponent implements Comp {
 	boolean cdren, moveable;
 	protected boolean hidden;
 	protected States state;
+	protected ComponentHandler ch;
 
 	public BaseComponent(BasePosition bp, boolean cdren, boolean moveable, boolean hidden) {
 		super();
@@ -107,6 +108,36 @@ public class BaseComponent implements Comp {
 			val.getPosition().pos().translate(f, g);
 			val.getPosition().pos().translateSize(h, i);
 		}
+
+	}
+
+	@Override
+	public void onShown() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onHidden() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onDeletion() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void show() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onCreation(ComponentHandler ch) {
+		this.ch = ch;
 
 	}
 

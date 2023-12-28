@@ -5,6 +5,8 @@ import java.awt.Rectangle;
 import org.joml.Matrix4f;
 import org.joml.Vector4f;
 
+import com.kronos.io.Config;
+
 public class ScreenCord {
 
 	float x, y, w, h;
@@ -66,6 +68,21 @@ public class ScreenCord {
 	public void translateSize(float h2, float i) {
 		this.w += h2;
 		this.h += i;
+	}
+
+	public void put(Config c, String name) {
+		c.appendFloat(name + "_X", x);
+		c.appendFloat(name + "_Y", y);
+		c.appendFloat(name + "_W", w);
+		c.appendFloat(name + "_H", h);
+	}
+
+	public void read(Config c, String name) {
+		x = c.readOrWriteFloat(name + "_X", 0);
+		y = c.readOrWriteFloat(name + "_Y", 0);
+		w = c.readOrWriteFloat(name + "_W", 0);
+		h = c.readOrWriteFloat(name + "_H", 0);
+
 	}
 
 }

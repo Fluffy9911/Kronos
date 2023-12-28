@@ -88,4 +88,11 @@ public class BasePosition implements ComponentPosition {
 		return new BasePosition(new ScreenCord(x, y, w, h), new ScreenCord(x, y, w, h), prov);
 	}
 
+	/**
+	 * @return the provider
+	 */
+	public ScreenProvider getProvider() {
+		return provider;
+	}
+
 }

@@ -18,6 +18,16 @@ public interface Comp {
 
 	public boolean hidden();
 
+	public void onCreation(ComponentHandler ch);
+
+	public void onShown();
+
+	public void onHidden();
+
+	public void onDeletion();
+
+	public void show();
+
 	/**
 	 * if the component responds to mouse dragging
 	 * 
