@@ -216,6 +216,11 @@ public class FontRenderer {
 		batch.drawTexture(x, y, t.getWidth(), t.getHeight(), t);
 	}
 
+	public void renderTextConstraints(String text, int x, int y, int w, int h, Font f, Color cc, TextureBatch batch) {
+		Texture t = createDrawTexture(f, cc, text, drawText(new Rectangle(0, 0, w, h), f, text, cc, true));
+		batch.drawTexture(x, y, t.getWidth(), t.getHeight(), t);
+	}
+
 	public void renderTextConstraintsCentered(String text, int x, int y, int w, int h, boolean center,
 			TextureBatch batch) {
 		Texture t = createDrawTexture(default_font, Color.WHITE, text,

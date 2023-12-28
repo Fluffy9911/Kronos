@@ -3,9 +3,11 @@ package com.kronos.graphixs.g2d.ui;
 import java.util.HashMap;
 
 public class BaseComponent implements Comp {
-	BasePosition bp;
-	HashMap<String, BaseComponent> children;
-	boolean cdren, moveable, hidden;
+	protected BasePosition bp;
+	protected HashMap<String, BaseComponent> children;
+	boolean cdren, moveable;
+	protected boolean hidden;
+	protected States state;
 
 	public BaseComponent(BasePosition bp, boolean cdren, boolean moveable, boolean hidden) {
 		super();
@@ -13,6 +15,7 @@ public class BaseComponent implements Comp {
 		this.cdren = cdren;
 		this.moveable = moveable;
 		this.hidden = hidden;
+		state = new States();
 	}
 
 	@Override
@@ -67,6 +70,33 @@ public class BaseComponent implements Comp {
 	public boolean hidden() {
 		// TODO Auto-generated method stub
 		return hidden;
+	}
+
+	/**
+	 * @param i
+	 * @return
+	 * @see com.kronos.graphixs.g2d.ui.States#hasState(int)
+	 */
+	public boolean hasState(int i) {
+		return state.hasState(i);
+	}
+
+	/**
+	 * @param e
+	 * @return
+	 * @see com.kronos.graphixs.g2d.ui.States#add(int)
+	 */
+	public boolean add(int e) {
+		return state.add(e);
+	}
+
+	/**
+	 * @param i
+	 * @return
+	 * @see com.kronos.graphixs.g2d.ui.States#remove(int)
+	 */
+	public boolean remove(int i) {
+		return state.remove(i);
 	}
 
 }

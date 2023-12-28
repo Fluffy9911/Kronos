@@ -9,13 +9,12 @@ import com.kronos.graphixs.color.Color;
 import com.kronos.graphixs.color.Colors;
 import com.kronos.graphixs.display.Graphixs;
 import com.kronos.graphixs.display.ScreenConfig;
-import com.kronos.graphixs.display.Texture;
 import com.kronos.graphixs.g2d.Graphixs2D;
 import com.kronos.graphixs.g2d.ScreenCord;
 import com.kronos.graphixs.g2d.TextureBatch;
 import com.kronos.graphixs.g2d.fonts.FontRenderer;
-import com.kronos.graphixs.g2d.ui.BaseComponent;
 import com.kronos.graphixs.g2d.ui.BasePosition;
+import com.kronos.graphixs.g2d.ui.components.Panel;
 import com.kronos.graphixs.g2d.ui.transform.ClickNDrop;
 import com.kronos.graphixs.g2d.ui.transform.KeepInBox;
 import com.kronos.io.InputHandler;
@@ -68,14 +67,13 @@ public class Testing {
 		Graphixs g = Kronos.graphixs;
 		Font fo = Kronos.loader.loadFont(f).deriveFont(50f);
 		Graphixs2D g2d = g.g2d;
-		BaseComponent bc = new BaseComponent(new BasePosition(new ScreenCord(10, 10, 50, 50), g2d.getProvider()), false,
-				false, false);
-
-		BasePosition test = new BasePosition(new ScreenCord(70, 70, 50, 50), new ScreenCord(0, 0, 70, 70),
+		Panel bc = new Panel(new BasePosition(new ScreenCord(10, 10, 500, 500), g2d.getProvider()), false, false);
+		bc.createTexture(g2d, Colors.Blue, Colors.Black, "Test Panel!");
+		BasePosition test = new BasePosition(new ScreenCord(70, 70, 50, 50), new ScreenCord(0, 0, 300, 300),
 				g2d.getProvider());
 		KeepInBox kib = new KeepInBox();
 		ClickNDrop fm = new ClickNDrop();
-		Texture t = Texture.singleColor(500, 500, Colors.Salmon);
+
 		TextureBatch tb = g2d.createBatch();
 		BasePosition op = BasePosition.single(200, 200, 200, 200, g2d.getProvider());
 		FontRenderer fr = new FontRenderer(fo);
@@ -83,12 +81,8 @@ public class Testing {
 		Kronos.startDrawing((a) -> {
 
 			g.clearScreen(Colors.White);
-			test.drawDebug(tb);
-			// op.drawDebug(tb);
-			tb.render();
-			tb.end();
-			fm.reposition(g2d.getProvider(), test, op, test);
-			kib.reposition(g2d.getProvider(), test, null);
+			bc.update();
+
 			g2d.renderQuad();
 			// g.glErrors();
 			InputHandler.nextFrame();

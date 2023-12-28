@@ -23,6 +23,7 @@ public class TexturedMesh {
 	public void render(Shader s) {
 		GL40.glActiveTexture(GL40.GL_TEXTURE0);
 		texture.bind();
+		GL40.glUseProgram(s.getProgram_id());
 		s.addUniform("tex", 0);
 
 		mesh.render(s);

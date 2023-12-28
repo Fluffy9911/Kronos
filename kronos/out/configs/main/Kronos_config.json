@@ -1,10 +1,11 @@
 {
   "data": {
     "text_caching_extensive_debug": "false",
-    "extensive_logging": "false",
+    "extensive_logging": "true",
     "log_debug": "false",
     "max_usable_threads": "2",
     "use_debug": "false",
-    "kronos_id": "Kronos"
+    "kronos_id": "Kronos",
+    "graphixs.2d.ui.panel_base_border_weight": "1"
   }
 }

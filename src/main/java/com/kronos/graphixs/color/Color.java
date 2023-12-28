@@ -102,4 +102,13 @@ public class Color {
 		return co.getRGB();
 	}
 
+	public static Color interpolate(Color color1, Color color2, float percent) {
+
+		int red = Math.min(1, Math.max(0, (int) (color1.getR() + percent * (color2.getR() - color1.getR()))));
+		int green = Math.min(1, Math.max(0, (int) (color1.getG() + percent * (color2.getG() - color1.getG()))));
+		int blue = Math.min(1, Math.max(0, (int) (color1.getB() + percent * (color2.getB() - color1.getB()))));
+		int alpha = Math.min(1, Math.max(0, (int) (color1.getA() + percent * (color2.getA() - color1.getA()))));
+
+		return new Color(red, green, blue, alpha);
+	}
 }
