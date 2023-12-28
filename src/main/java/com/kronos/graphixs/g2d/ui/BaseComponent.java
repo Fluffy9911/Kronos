@@ -1,6 +1,7 @@
 package com.kronos.graphixs.g2d.ui;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class BaseComponent implements Comp {
 	protected BasePosition bp;
@@ -97,6 +98,16 @@ public class BaseComponent implements Comp {
 	 */
 	public boolean remove(int i) {
 		return state.remove(i);
+	}
+
+	public void move(float f, float g, float h, float i) {
+		for (Map.Entry<String, BaseComponent> entry : children.entrySet()) {
+			String key = entry.getKey();
+			BaseComponent val = entry.getValue();
+			val.getPosition().pos().translate(f, g);
+			val.getPosition().pos().translateSize(h, i);
+		}
+
 	}
 
 }

@@ -58,4 +58,14 @@ public class ScreenCord {
 
 	}
 
+	public void translate(float f, float g) {
+		this.x += f;
+		this.y += g;
+	}
+
+	public void translateSize(float h2, float i) {
+		this.w += h2;
+		this.h += i;
+	}
+
 }
