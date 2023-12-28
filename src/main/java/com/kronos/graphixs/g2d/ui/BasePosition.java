@@ -80,4 +80,7 @@ public class BasePosition implements ComponentPosition {
 		batch.drawTexture((int) pos.getX(), (int) pos.getY(), (int) pos.getW(), (int) pos.getH(), p);
 	}
 
+	public static BasePosition single(int x, int y, int w, int h, ScreenProvider prov) {
+		return new BasePosition(new ScreenCord(x, y, w, h), new ScreenCord(x, y, w, h), prov);
+	}
 }

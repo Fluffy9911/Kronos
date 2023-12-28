@@ -16,7 +16,7 @@ import com.kronos.graphixs.g2d.TextureBatch;
 import com.kronos.graphixs.g2d.fonts.FontRenderer;
 import com.kronos.graphixs.g2d.ui.BaseComponent;
 import com.kronos.graphixs.g2d.ui.BasePosition;
-import com.kronos.graphixs.g2d.ui.transform.FollowMouse;
+import com.kronos.graphixs.g2d.ui.transform.ClickNDrop;
 import com.kronos.graphixs.g2d.ui.transform.KeepInBox;
 import com.kronos.io.InputHandler;
 
@@ -71,25 +71,26 @@ public class Testing {
 		BaseComponent bc = new BaseComponent(new BasePosition(new ScreenCord(10, 10, 50, 50), g2d.getProvider()), false,
 				false, false);
 
-		BasePosition test = new BasePosition(new ScreenCord(70, 70, 50, 50), new ScreenCord(50, 50, 500, 500),
+		BasePosition test = new BasePosition(new ScreenCord(70, 70, 50, 50), new ScreenCord(0, 0, 70, 70),
 				g2d.getProvider());
 		KeepInBox kib = new KeepInBox();
-		FollowMouse fm = new FollowMouse();
+		ClickNDrop fm = new ClickNDrop();
 		Texture t = Texture.singleColor(500, 500, Colors.Salmon);
 		TextureBatch tb = g2d.createBatch();
-
+		BasePosition op = BasePosition.single(200, 200, 200, 200, g2d.getProvider());
 		FontRenderer fr = new FontRenderer(fo);
 		BufferedImage img = Kronos.loader.tryLoadImage("texture/test.png");
 		Kronos.startDrawing((a) -> {
 
 			g.clearScreen(Colors.White);
 			test.drawDebug(tb);
+			// op.drawDebug(tb);
 			tb.render();
 			tb.end();
-			fm.reposition(g2d.getProvider(), test, null);
+			fm.reposition(g2d.getProvider(), test, op, test);
 			kib.reposition(g2d.getProvider(), test, null);
 			g2d.renderQuad();
-			g.glErrors();
+			// g.glErrors();
 			InputHandler.nextFrame();
 		});
 

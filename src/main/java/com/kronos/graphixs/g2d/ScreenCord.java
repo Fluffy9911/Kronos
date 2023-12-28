@@ -1,5 +1,7 @@
 package com.kronos.graphixs.g2d;
 
+import java.awt.Rectangle;
+
 import org.joml.Matrix4f;
 import org.joml.Vector4f;
 
@@ -47,6 +49,12 @@ public class ScreenCord {
 		s = m.transform(s);
 
 		return new NormCord(pos.x, pos.y, s.x, s.y);
+
+	}
+
+	public boolean contains(int x, int y) {
+		Rectangle rect = new Rectangle((int) this.x, (int) this.y, (int) w, (int) h);
+		return rect.contains(x, y);
 
 	}
 
