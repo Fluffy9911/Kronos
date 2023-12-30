@@ -8,9 +8,9 @@ public interface Comp {
 
 	public void recalculatePosition();
 
-	public void addChild(String cid, Comp c);
+	public void addChild(String cid, BaseComponent c);
 
-	public Comp getChild(String cid);
+	public BaseComponent getChild(String cid);
 
 	public void updateChildren();
 

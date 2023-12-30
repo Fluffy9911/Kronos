@@ -5,6 +5,10 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import com.kronos.graphixs.g2d.Graphixs2D;
+import com.kronos.graphixs.g2d.ScreenProvider;
+import com.kronos.graphixs.g2d.TextureBatch;
+import com.kronos.graphixs.g2d.fonts.FontRenderer;
 import com.kronos.graphixs.g2d.ui.components.Persistant;
 import com.kronos.io.ResourceIdentifier;
 import com.kronos.io.config.ConfigFile;
@@ -29,10 +33,19 @@ public class ComponentHandler {
 	HashMap<String, ConfigFile> configs;
 	ArrayList<Persistant> persistant = new ArrayList<Persistant>();
 	HashMap<String, BaseComponent> comps;
+	Graphixs2D g;
+	TextureBatch batcher;
+	FontRenderer fr;
+	ScreenProvider sp;
 
-	public ComponentHandler() {
+	public ComponentHandler(Graphixs2D g) {
 		configs = new HashMap<String, ConfigFile>();
 		comps = new HashMap<String, BaseComponent>();
+
+		this.g = g;
+		batcher = g.createBatch();
+		fr = FontRenderer.createDefault();
+
 	}
 
 	public ConfigFile getOrCreatePersistance(String id) {
@@ -128,6 +141,22 @@ public class ComponentHandler {
 				val.updateChildren();
 			}
 		}
+	}
+
+	public Graphixs2D getG() {
+		return g;
+	}
+
+	public TextureBatch getBatcher() {
+		return batcher;
+	}
+
+	public FontRenderer getFr() {
+		return fr;
+	}
+
+	public ScreenProvider getSp() {
+		return sp;
 	}
 
 }

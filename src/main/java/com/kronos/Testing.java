@@ -5,18 +5,17 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.Map;
 
+import com.kronos.core.event.EngineListener;
 import com.kronos.graphixs.color.Color;
 import com.kronos.graphixs.color.Colors;
 import com.kronos.graphixs.display.Graphixs;
 import com.kronos.graphixs.display.ScreenConfig;
 import com.kronos.graphixs.g2d.Graphixs2D;
 import com.kronos.graphixs.g2d.ScreenCord;
-import com.kronos.graphixs.g2d.TextureBatch;
-import com.kronos.graphixs.g2d.fonts.FontRenderer;
+import com.kronos.graphixs.g2d.ui.BaseComponent;
 import com.kronos.graphixs.g2d.ui.BasePosition;
-import com.kronos.graphixs.g2d.ui.components.Panel;
-import com.kronos.graphixs.g2d.ui.transform.ClickNDrop;
-import com.kronos.graphixs.g2d.ui.transform.KeepInBox;
+import com.kronos.graphixs.g2d.ui.ComponentHandler;
+import com.kronos.io.Config;
 import com.kronos.io.InputHandler;
 
 public class Testing {
@@ -67,22 +66,38 @@ public class Testing {
 		Graphixs g = Kronos.graphixs;
 		Font fo = Kronos.loader.loadFont(f).deriveFont(50f);
 		Graphixs2D g2d = g.g2d;
-		Panel bc = new Panel(new BasePosition(new ScreenCord(10, 10, 500, 500), g2d.getProvider()), false, false);
-		bc.createTexture(g2d, Colors.Blue, Colors.Black, "Test Panel!");
-		BasePosition test = new BasePosition(new ScreenCord(70, 70, 50, 50), new ScreenCord(0, 0, 300, 300),
-				g2d.getProvider());
-		KeepInBox kib = new KeepInBox();
-		ClickNDrop fm = new ClickNDrop();
 
-		TextureBatch tb = g2d.createBatch();
-		BasePosition op = BasePosition.single(200, 200, 200, 200, g2d.getProvider());
-		FontRenderer fr = new FontRenderer(fo);
+		ComponentHandler ch = new ComponentHandler(g2d);
+		BaseComponent bc = new BaseComponent(new BasePosition(new ScreenCord(10, 10, 50, 50), g2d.getProvider()), false,
+				false, false, "test_component");
+		ch.put("test_comp", bc);
 		BufferedImage img = Kronos.loader.tryLoadImage("texture/test.png");
+		ch.createComps();
+		ch.load();
+		Kronos.registerListener(new EngineListener() {
+
+			@Override
+			public void engineStart() {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void engineEnd() {
+				ch.write();
+
+			}
+
+			@Override
+			public void configChange(Config c) {
+				// TODO Auto-generated method stub
+
+			}
+		});
 		Kronos.startDrawing((a) -> {
 
 			g.clearScreen(Colors.White);
-			bc.update();
-
+			ch.update();
 			g2d.renderQuad();
 			// g.glErrors();
 			InputHandler.nextFrame();

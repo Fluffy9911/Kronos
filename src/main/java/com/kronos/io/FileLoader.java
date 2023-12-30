@@ -7,6 +7,7 @@ import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -94,8 +95,13 @@ public class FileLoader {
 				out += line;
 			}
 			return out;
+
+		} catch (FileNotFoundException fe) {
+			Kronos.debug.getLogger().debug(
+					"File Loading caught a soft error, sending error in-case this is not a false alarm. Attempting fix",
+					fe);
 		} catch (IOException e) {
-			Kronos.debug.getLogger().fatal("ERROR {} ", e.getMessage());
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -248,8 +254,19 @@ public class FileLoader {
 
 	public Config tryRead(String name, String path, ResourceIdentifier rd) {
 
-		String d = tryLoad(path + "/" + name, rd);
+		String d = "";
 		Gson g = new Gson();
+		try {
+			d = tryLoad(path + "/" + name, rd);
+			if (d == null) {
+				d = "";
+			}
+
+		} catch (Exception e) {
+			Kronos.debug.getLogger().debug(
+					"File Loading caught a soft error, sending error in-case this is not a false alarm. Attempting fix",
+					e);
+		}
 		return g.fromJson(d, Config.class);
 	}
 

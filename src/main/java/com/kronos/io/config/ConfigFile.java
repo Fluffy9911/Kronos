@@ -22,14 +22,22 @@ public class ConfigFile {
 	}
 
 	public void load() {
-		config = fl.tryRead(name, path, id);
+		fl.createAt(path, name + ".json", id);
+		try {
+			config = fl.tryRead(name + ".json", path, id);
+		} catch (Exception e) {
+			Kronos.debug.getLogger().debug(
+					"File Loading caught a soft error, sending error in-case this is not a false alarm. Attempting fix",
+					e);
+			config = new Config();
+		}
 		if (config == null) {
 			config = new Config();
 		}
 	}
 
 	public void write() {
-		fl.createAndWrite(id, path + "/" + name, config.writeOut());
+		fl.createAndWrite(id, path + "/" + name + ".json", config.writeOut());
 	}
 
 	/**

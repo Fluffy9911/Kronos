@@ -1,23 +1,47 @@
 package com.kronos.graphixs.g2d.ui;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class BaseComponent implements Comp {
+import com.kronos.graphixs.g2d.Graphixs2D;
+import com.kronos.graphixs.g2d.TextureBatch;
+import com.kronos.graphixs.g2d.fonts.FontRenderer;
+import com.kronos.graphixs.g2d.ui.components.Drawable;
+import com.kronos.graphixs.g2d.ui.components.Persistant;
+import com.kronos.graphixs.g2d.ui.transform.KeepInBox;
+import com.kronos.io.Config;
+import com.kronos.io.config.ConfigFile;
+
+public class BaseComponent implements Comp, Drawable, Persistant {
+
+	ConfigFile config;
+	ArrayList<UIListener> listeners;
 	protected BasePosition bp;
 	protected HashMap<String, BaseComponent> children;
-	boolean cdren, moveable;
-	protected boolean hidden;
+	boolean cdren, moveable, update;
+	protected boolean hidden, updateListeners = false;
 	protected States state;
 	protected ComponentHandler ch;
+	private KeepInBox kib = new KeepInBox();
+	private BaseComponent parent;
+	String id;
 
-	public BaseComponent(BasePosition bp, boolean cdren, boolean moveable, boolean hidden) {
+	public BaseComponent(BasePosition bp, boolean cdren, boolean moveable, boolean hidden, String id) {
 		super();
 		this.bp = bp;
 		this.cdren = cdren;
 		this.moveable = moveable;
 		this.hidden = hidden;
 		state = new States();
+		listeners = new ArrayList<>();
+		createListeners();
+		this.id = id;
+
+	}
+
+	public void createListeners() {
+
 	}
 
 	@Override
@@ -28,32 +52,47 @@ public class BaseComponent implements Comp {
 
 	@Override
 	public void update() {
-		// TODO Auto-generated method stub
-
+		if (!hidden) {
+			render(ch.getBatcher(), ch.getFr(), ch.getG());
+		}
+		if (update) {
+			recalculatePosition();
+			update = false;
+		}
+		if (updateListeners) {
+			listeners.forEach((ui) -> {
+				ui.listen(parent, state);
+			});
+		}
 	}
 
 	@Override
 	public void recalculatePosition() {
-		// TODO Auto-generated method stub
-
+		kib.reposition(this.ch.getSp(), bp, null);
+		if (cdren) {
+			updateChildren();
+		}
 	}
 
 	@Override
-	public void addChild(String cid, Comp c) {
-		// TODO Auto-generated method stub
-
+	public void addChild(String cid, BaseComponent c) {
+		this.children.put(cid, c);
+		c.parent = this;
 	}
 
 	@Override
-	public Comp getChild(String cid) {
+	public BaseComponent getChild(String cid) {
 		// TODO Auto-generated method stub
 		return children.get(cid);
 	}
 
 	@Override
 	public void updateChildren() {
-		// TODO Auto-generated method stub
-
+		for (Map.Entry<String, BaseComponent> entry : children.entrySet()) {
+			String key = entry.getKey();
+			BaseComponent val = entry.getValue();
+			kib.reposition(ch.getSp(), val.bp, null);
+		}
 	}
 
 	@Override
@@ -113,32 +152,96 @@ public class BaseComponent implements Comp {
 
 	@Override
 	public void onShown() {
-		// TODO Auto-generated method stub
+		// our stuff
+
+		forEachChild((c, cid) -> {
+
+			c.onShown();
+		});
 
 	}
 
 	@Override
 	public void onHidden() {
-		// TODO Auto-generated method stub
+		// our stuff
+
+		// children
+		forEachChild((c, cid) -> {
+			c.onHidden();
+		});
 
 	}
 
 	@Override
 	public void onDeletion() {
-		// TODO Auto-generated method stub
+		// deletion stuff
+
+		// delete children last
+		forEachChild((c, cid) -> {
+			c.onDeletion();
+		});
 
 	}
 
 	@Override
 	public void show() {
-		// TODO Auto-generated method stub
-
+		hidden = false;
 	}
 
 	@Override
 	public void onCreation(ComponentHandler ch) {
 		this.ch = ch;
+		config = this.ch.getOrCreatePersistance(id);
+	}
 
+	@Override
+	public void render(TextureBatch batch, FontRenderer fr, Graphixs2D g) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public boolean hasParent() {
+		return parent != null;
+	}
+
+	public void forEachChild(ChildHandler ch) {
+		for (Map.Entry<String, BaseComponent> entry : children.entrySet()) {
+			String key = entry.getKey();
+			BaseComponent val = entry.getValue();
+			ch.handle(val, key);
+		}
+	}
+
+	public void registerListener(UIListener uil) {
+		listeners.add(uil);
+	}
+
+	@Override
+	public void load(ConfigFile file) {
+		config = file;
+		this.bp.pos.read(file.config, id);
+		this.bp.ap.read(file.config, id);
+		readWriteDatas(file.config);
+	}
+
+	@Override
+	public void write(ConfigFile file) {
+		this.bp.pos.put(file.config, id);
+		this.bp.ap.put(file.config, id);
+		readWriteDatas(file.config);
+	}
+
+	@Override
+	public String id() {
+		// TODO Auto-generated method stub
+		return id;
+	}
+
+	public void readWriteDatas(Config c) {
+		cdren = c.readOrWriteBoolean("update_children", cdren);
+		hidden = c.readOrWriteBoolean("hidden", hidden);
+		moveable = c.readOrWriteBoolean("moveable", moveable);
+		update = c.readOrWriteBoolean("force_update", update);
 	}
 
 }
