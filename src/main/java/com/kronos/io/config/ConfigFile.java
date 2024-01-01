@@ -37,6 +37,7 @@ public class ConfigFile {
 	}
 
 	public void write() {
+
 		fl.createAndWrite(id, path + "/" + name + ".json", config.writeOut());
 	}
 

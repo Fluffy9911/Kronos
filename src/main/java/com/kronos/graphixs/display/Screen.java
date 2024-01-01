@@ -57,8 +57,8 @@ public class Screen implements Resource {
 
 		closeCallback(id);
 		memory(id);
-		// if (Kronos.extensivedebug)
-		GLUtil.setupDebugMessageCallback();
+		if (Kronos.extensivedebug)
+			GLUtil.setupDebugMessageCallback();
 		makeWindowVisible(id, 1);
 
 		this.id = id;

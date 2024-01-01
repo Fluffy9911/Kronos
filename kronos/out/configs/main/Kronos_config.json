@@ -1,7 +1,7 @@
 {
   "data": {
     "text_caching_extensive_debug": "false",
-    "extensive_logging": "true",
+    "extensive_logging": "false",
     "log_debug": "false",
     "max_usable_threads": "2",
     "use_debug": "false",

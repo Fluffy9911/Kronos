@@ -2,6 +2,7 @@ package com.kronos;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -92,6 +93,10 @@ public class Kronos {
 
 	public static void start(ScreenConfig sc) {
 		defaultKronosInit();
+		for (Iterator iterator = listeners.iterator(); iterator.hasNext();) {
+			EngineListener el = (EngineListener) iterator.next();
+			el.engineStart();
+		}
 		graphixs.startGlSequence(debug.getLogger());
 		graphixs.createScreen(sc);
 
@@ -109,6 +114,10 @@ public class Kronos {
 	public static void onEnd() {
 
 		loader.writeConfig(k_config, kronos_id + "_config.json", config_loc, kronos_out);
+		for (Iterator iterator = listeners.iterator(); iterator.hasNext();) {
+			EngineListener el = (EngineListener) iterator.next();
+			el.engineEnd();
+		}
 	}
 
 	public static void registerListener(EngineListener el) {

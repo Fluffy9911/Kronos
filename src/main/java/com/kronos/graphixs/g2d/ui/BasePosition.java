@@ -75,10 +75,8 @@ public class BasePosition implements ComponentPosition {
 	}
 
 	public void drawDebug(TextureBatch batch) {
-		// Texture a = Texture.singleColor((int) ap.getW(), (int) ap.getH(),
-		// Colors.Lime);
-		Texture a = TextureBuilder.buildRadialGradientTexture((int) ap.getW(), (int) ap.getH(), Colors.White,
-				Colors.Teal);
+		Texture a = Texture.singleColor((int) ap.getW(), (int) ap.getH(), Colors.Lime);
+
 		Texture p = TextureBuilder.buildTextureBordered((int) ap.getW(), (int) ap.getH(), 6, Colors.Salmon, Colors.Red);
 		batch.drawTexture((int) ap.getX(), (int) ap.getY(), (int) ap.getW(), (int) ap.getH(), a);
 		batch.drawTexture((int) pos.getX(), (int) pos.getY(), (int) pos.getW(), (int) pos.getH(), p);

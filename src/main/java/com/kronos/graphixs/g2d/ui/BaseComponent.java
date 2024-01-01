@@ -191,6 +191,7 @@ public class BaseComponent implements Comp, Drawable, Persistant {
 	@Override
 	public void onCreation(ComponentHandler ch) {
 		this.ch = ch;
+		this.register(this, ch);
 		config = this.ch.getOrCreatePersistance(id);
 	}
 
@@ -219,15 +220,16 @@ public class BaseComponent implements Comp, Drawable, Persistant {
 	@Override
 	public void load(ConfigFile file) {
 		config = file;
-		this.bp.pos.read(file.config, id);
-		this.bp.ap.read(file.config, id);
+		this.bp.pos.read(file.config, id + "_position");
+		this.bp.ap.read(file.config, id + "_anchored_position");
 		readWriteDatas(file.config);
 	}
 
 	@Override
 	public void write(ConfigFile file) {
-		this.bp.pos.put(file.config, id);
-		this.bp.ap.put(file.config, id);
+
+		this.bp.pos.put(file.config, id + "_position");
+		this.bp.ap.put(file.config, id + "_anchored_position");
 		readWriteDatas(file.config);
 	}
 

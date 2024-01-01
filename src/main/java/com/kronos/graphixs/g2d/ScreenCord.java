@@ -85,4 +85,25 @@ public class ScreenCord {
 
 	}
 
+	public void scale(float factor) {
+		this.w *= factor;
+		this.h *= factor;
+	}
+
+	public void setX(float x) {
+		this.x = x;
+	}
+
+	public void setY(float y) {
+		this.y = y;
+	}
+
+	public void setW(float w) {
+		this.w = w;
+	}
+
+	public void setH(float h) {
+		this.h = h;
+	}
+
 }

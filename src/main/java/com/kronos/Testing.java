@@ -1,8 +1,5 @@
 package com.kronos;
 
-import java.awt.Font;
-import java.awt.image.BufferedImage;
-import java.io.File;
 import java.util.Map;
 
 import com.kronos.core.event.EngineListener;
@@ -12,9 +9,10 @@ import com.kronos.graphixs.display.Graphixs;
 import com.kronos.graphixs.display.ScreenConfig;
 import com.kronos.graphixs.g2d.Graphixs2D;
 import com.kronos.graphixs.g2d.ScreenCord;
-import com.kronos.graphixs.g2d.ui.BaseComponent;
+import com.kronos.graphixs.g2d.TextureBatch;
 import com.kronos.graphixs.g2d.ui.BasePosition;
-import com.kronos.graphixs.g2d.ui.ComponentHandler;
+import com.kronos.graphixs.g2d.ui.transform.AreaConform;
+import com.kronos.graphixs.g2d.ui.transform.ConformType;
 import com.kronos.io.Config;
 import com.kronos.io.InputHandler;
 
@@ -62,18 +60,19 @@ public class Testing {
 			}
 
 		});
-		File f = new File(Kronos.loader.createFilePath("fonts", "Blox2.ttf"));
+
 		Graphixs g = Kronos.graphixs;
-		Font fo = Kronos.loader.loadFont(f).deriveFont(50f);
+
 		Graphixs2D g2d = g.g2d;
 
-		ComponentHandler ch = new ComponentHandler(g2d);
-		BaseComponent bc = new BaseComponent(new BasePosition(new ScreenCord(10, 10, 50, 50), g2d.getProvider()), false,
-				false, false, "test_component");
-		ch.put("test_comp", bc);
-		BufferedImage img = Kronos.loader.tryLoadImage("texture/test.png");
-		ch.createComps();
-		ch.load();
+		BasePosition bp = new BasePosition(new ScreenCord(60, 60, 600, 600), g2d.getProvider());
+		BasePosition b1 = BasePosition.single(70, 70, 40, 40, g2d.getProvider());
+		BasePosition b2 = BasePosition.single(85, 85, 40, 40, g2d.getProvider());
+		BasePosition b3 = BasePosition.single(95, 95, 85, 40, g2d.getProvider());
+		AreaConform ac = new AreaConform(ConformType.TOP, 5);
+
+		TextureBatch b = g2d.createBatch();
+
 		Kronos.registerListener(new EngineListener() {
 
 			@Override
@@ -84,7 +83,6 @@ public class Testing {
 
 			@Override
 			public void engineEnd() {
-				ch.write();
 
 			}
 
@@ -97,8 +95,13 @@ public class Testing {
 		Kronos.startDrawing((a) -> {
 
 			g.clearScreen(Colors.White);
-			ch.update();
+			bp.drawDebug(b);
+//			b1.drawDebug(b);
+//			b2.drawDebug(b);
+//			b3.drawDebug(b);
+			b.render();
 			g2d.renderQuad();
+			ac.reposition(g2d.getProvider(), bp, b1, b2, b3);
 			// g.glErrors();
 			InputHandler.nextFrame();
 		});
