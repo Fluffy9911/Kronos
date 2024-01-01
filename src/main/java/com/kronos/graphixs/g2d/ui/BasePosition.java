@@ -6,6 +6,7 @@ import com.kronos.graphixs.display.textures.TextureBuilder;
 import com.kronos.graphixs.g2d.ScreenCord;
 import com.kronos.graphixs.g2d.ScreenProvider;
 import com.kronos.graphixs.g2d.TextureBatch;
+import com.kronos.io.InputHandler;
 
 public class BasePosition implements ComponentPosition {
 	ScreenCord pos, ap;
@@ -78,8 +79,17 @@ public class BasePosition implements ComponentPosition {
 		Texture a = Texture.singleColor((int) ap.getW(), (int) ap.getH(), Colors.Lime);
 
 		Texture p = TextureBuilder.buildTextureBordered((int) ap.getW(), (int) ap.getH(), 6, Colors.Salmon, Colors.Red);
-		batch.drawTexture((int) ap.getX(), (int) ap.getY(), (int) ap.getW(), (int) ap.getH(), a);
-		batch.drawTexture((int) pos.getX(), (int) pos.getY(), (int) pos.getW(), (int) pos.getH(), p);
+
+		if (mouseInsideAP()) {
+			batch.drawTexture((int) ap.getX(), (int) ap.getY(), (int) ap.getW(), (int) ap.getH(), a, "highlight_g");
+		} else {
+			batch.drawTexture((int) ap.getX(), (int) ap.getY(), (int) ap.getW(), (int) ap.getH(), a);
+		}
+		if (mouseInsidePos()) {
+			batch.drawTexture((int) pos.getX(), (int) pos.getY(), (int) pos.getW(), (int) pos.getH(), p, "highlight_g");
+		} else {
+			batch.drawTexture((int) pos.getX(), (int) pos.getY(), (int) pos.getW(), (int) pos.getH(), p);
+		}
 	}
 
 	public static BasePosition single(int x, int y, int w, int h, ScreenProvider prov) {
@@ -91,6 +101,14 @@ public class BasePosition implements ComponentPosition {
 	 */
 	public ScreenProvider getProvider() {
 		return provider;
+	}
+
+	public boolean mouseInsidePos() {
+		return pos.contains((int) InputHandler.getLastMouseX(), (int) InputHandler.getLastMouseY());
+	}
+
+	public boolean mouseInsideAP() {
+		return ap.contains((int) InputHandler.getLastMouseX(), (int) InputHandler.getLastMouseY());
 	}
 
 }

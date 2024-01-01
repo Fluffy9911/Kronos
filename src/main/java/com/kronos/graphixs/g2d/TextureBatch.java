@@ -41,4 +41,12 @@ public class TextureBatch {
 	public void drawTexture(int x, int y, int w, int h, Texture img) {
 		mesh.add(new TexturedMesh(img, new ScreenCord(x, y, w, h)));
 	}
+
+	public void drawTexture(int x, int y, int w, int h, BufferedImage img, String sid) {
+		mesh.add(new TexturedMesh(new Texture(img), new ScreenCord(x, y, w, h), sid));
+	}
+
+	public void drawTexture(int x, int y, int w, int h, Texture img, String sid) {
+		mesh.add(new TexturedMesh(img, new ScreenCord(x, y, w, h), sid));
+	}
 }

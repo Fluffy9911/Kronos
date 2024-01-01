@@ -34,8 +34,6 @@ public class Graphixs2D implements SListener {
 
 	public void batchRender(List<TexturedMesh> meshes) {
 		rendered_textures = 0;
-		GL40.glUseProgram(shader.getProgram_id());
-		shader.addUniform("proj", provider.collectTransform());
 
 		graphixs_pane.start();
 		Kronos.graphixs.clearScreen(Colors.White);
@@ -43,7 +41,10 @@ public class Graphixs2D implements SListener {
 
 		for (Iterator iterator = meshes.iterator(); iterator.hasNext();) {
 			TexturedMesh tm = (TexturedMesh) iterator.next();
-			tm.render(shader);
+			GL40.glUseProgram(tm.getDraw().getProgram_id());
+			tm.getDraw().addUniform("proj", provider.collectTransform());
+
+			tm.render();
 			rendered_textures++;
 		}
 		graphixs_pane.end();

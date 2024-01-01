@@ -49,10 +49,12 @@ public class Graphixs {
 	public RenderManager manager_render = new RenderManager(this);
 	public Graphixs2D g2d;
 	private ListMap<String, GraphicEvent> events;
+	String fs, vs;
 
 	public void createShader(String id, Shader s) {
 		test(l);
 		s.compileShader();
+		l.info("Compiled and registered shaderid: {}", id);
 		shaders.put(id, s);
 	}
 
@@ -121,11 +123,16 @@ public class Graphixs {
 		buffers.put("post_proccess", new FrameBuffer(config.width(), config.height(), true));
 		buffers.put("graphixs2d_pane", new FrameBuffer(config.width(), config.height(), true));
 		post_process_quad = Builtin.screenQuad();
-		createShader("texture", new ShaderProgram(Kronos.loader.tryLoad("shaders/texture.vs"),
+		createShader("texture", new TextureProgram(Kronos.loader.tryLoad("shaders/texture.vs"),
 				Kronos.loader.tryLoad("shaders/texture.fs")));
+		createShader("highlight", new HighlightProgram(Kronos.loader.tryLoad("shaders/texture.vs"),
+				Kronos.loader.tryLoad("shaders/highlight.fs")));
+		createShader("highlight_g", new HighlightProgram(Kronos.loader.tryLoad("shaders/texture.vs"),
+				Kronos.loader.tryLoad("shaders/highlighted_g.fs")));
 		createShader("pp_tex", new ShaderProgram(Kronos.loader.tryLoad("shaders/vertex.vs"),
 				Kronos.loader.tryLoad("shaders/fragment.fs")));
-
+		fs = Kronos.loader.tryLoad("shaders/texture.fs");
+		vs = Kronos.loader.tryLoad("shaders/fragment.fs");
 		g2d = new Graphixs2D(buffers.get("graphixs2d_pane"), new ScreenProvider(config),
 				(ShaderProgram) shaders.get("texture"));
 		shaders.get("texture").compileShader();
@@ -333,6 +340,14 @@ public class Graphixs {
 
 		}
 
+	}
+
+	public String getFs() {
+		return fs;
+	}
+
+	public String getVs() {
+		return vs;
 	}
 
 }

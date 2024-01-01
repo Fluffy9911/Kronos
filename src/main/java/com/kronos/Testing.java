@@ -101,7 +101,7 @@ public class Testing {
 			b3.drawDebug(b);
 			b.render();
 			g2d.renderQuad();
-			ac.reposition(g2d.getProvider(), bp, b1, b2, b3);
+			// ac.reposition(g2d.getProvider(), bp, b1, b2, b3);
 			// g.glErrors();
 			InputHandler.nextFrame();
 		});

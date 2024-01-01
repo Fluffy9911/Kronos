@@ -1,7 +1,20 @@
-13:15:42.093 [main] INFO  com.kronos.Kronos - Frame Buffer Status Status: 36053 
-13:15:42.096 [main] INFO  com.kronos.Kronos - Frame Buffer Status Status: 36053 
-13:15:42.097 [main] INFO  com.kronos.Kronos - Frame Buffer Status Status: 36053 
-13:15:42.138 [main] DEBUG com.kronos.Kronos - Shaders Loaded:
-13:15:42.141 [main] DEBUG com.kronos.Kronos - Shader: texture, status? 
-13:15:42.142 [main] DEBUG com.kronos.Kronos - Shader: pp_tex, status? 
-13:15:42.146 [main] DEBUG com.kronos.Kronos - Color Color [r=1.0, g=1.0, b=1.0, a=1.0] 
+16:38:53.411 [main] INFO  com.kronos.Kronos - Dubugger created
+16:38:53.423 [main] INFO  com.kronos.Kronos - Path Already Exists: /kronos/out Skipping
+16:38:53.442 [main] DEBUG com.kronos.Kronos - Loaded Config
+16:38:53.443 [main] DEBUG com.kronos.Kronos - Starting OPENGL
+16:38:53.494 [main] DEBUG com.kronos.Kronos - GL Version: 3.4.0 Win32 WGL Null EGL OSMesa VisualC DLL 
+16:38:53.494 [main] DEBUG com.kronos.Kronos - GL Started
+16:38:53.497 [main] INFO  com.kronos.Kronos - Set Current ScreenConfig to {Width=[900], Height=[900], Title=[KronosTesting], ClearColor=[Color [r=1.0, g=1.0, b=1.0, a=1.0]], UpdateTime=[60], Hints=[{131076=0, 131075=1}]}
+16:38:53.627 [main] INFO  com.kronos.Kronos - Frame Buffer Status Status: 36053 
+16:38:53.628 [main] INFO  com.kronos.Kronos - Frame Buffer Status Status: 36053 
+16:38:53.629 [main] INFO  com.kronos.Kronos - Frame Buffer Status Status: 36053 
+16:38:53.634 [main] INFO  com.kronos.Kronos - Compiled and registered shaderid: texture
+16:38:53.653 [main] INFO  com.kronos.Kronos - Compiled and registered shaderid: highlight
+16:38:53.661 [main] INFO  com.kronos.Kronos - Compiled and registered shaderid: highlight_g
+16:38:53.665 [main] INFO  com.kronos.Kronos - Compiled and registered shaderid: pp_tex
+16:38:53.680 [main] DEBUG com.kronos.Kronos - Shaders Loaded:
+16:38:53.682 [main] DEBUG com.kronos.Kronos - Shader: highlight, status? 
+16:38:53.683 [main] DEBUG com.kronos.Kronos - Shader: texture, status? 
+16:38:53.683 [main] DEBUG com.kronos.Kronos - Shader: highlight_g, status? 
+16:38:53.683 [main] DEBUG com.kronos.Kronos - Shader: pp_tex, status? 
+16:38:53.686 [main] DEBUG com.kronos.Kronos - Color Color [r=1.0, g=1.0, b=1.0, a=1.0] 
