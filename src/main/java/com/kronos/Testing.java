@@ -96,9 +96,9 @@ public class Testing {
 
 			g.clearScreen(Colors.White);
 			bp.drawDebug(b);
-//			b1.drawDebug(b);
-//			b2.drawDebug(b);
-//			b3.drawDebug(b);
+			b1.drawDebug(b);
+			b2.drawDebug(b);
+			b3.drawDebug(b);
 			b.render();
 			g2d.renderQuad();
 			ac.reposition(g2d.getProvider(), bp, b1, b2, b3);
