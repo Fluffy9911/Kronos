@@ -50,6 +50,7 @@ public class Graphixs {
 	public Graphixs2D g2d;
 	private ListMap<String, GraphicEvent> events;
 	String fs, vs;
+	public HashMap<String, Texture> textures;
 
 	public void createShader(String id, Shader s) {
 		test(l);
@@ -91,6 +92,7 @@ public class Graphixs {
 		l.debug("GL Started");
 		g_lock = false;
 		events = new ListMap<String, GraphicEvent>();
+		textures = new HashMap<>();
 		Runtime.getRuntime().addShutdownHook(new Thread(() -> {
 			manager.close();
 		}));
@@ -115,6 +117,7 @@ public class Graphixs {
 	 * @param config
 	 */
 	public void createScreen(ScreenConfig config) {
+		this.setConfig(config);
 		this.screen = new Screen();
 		window_id = screen.init(config);
 		manager.add(screen);
@@ -142,7 +145,28 @@ public class Graphixs {
 			Shader val = entry.getValue();
 			l.debug("Shader: {}, status? {}", key, val.getShaderCompilationStatus());
 		}
+		l.debug("Loading textures");
 
+		textures.put("bg", new Texture(Kronos.loader.tryLoadImage("texture/bg.png")));
+		textures.put("button_base", new Texture(Kronos.loader.tryLoadImage("texture/button.png")));
+		textures.put("down", new Texture(Kronos.loader.tryLoadImage("texture/down.png")));
+		textures.put("slider_left", new Texture(Kronos.loader.tryLoadImage("texture/slider_left.png")));
+		textures.put("slider_right", new Texture(Kronos.loader.tryLoadImage("texture/slider_right.png")));
+		textures.put("slider", new Texture(Kronos.loader.tryLoadImage("texture/slider_middle.png")));
+		textures.put("toggle_off", new Texture(Kronos.loader.tryLoadImage("texture/bg.png")));
+		textures.put("toggle_on", new Texture(Kronos.loader.tryLoadImage("texture/bg.png")));
+		textures.put("top", new Texture(Kronos.loader.tryLoadImage("texture/top.png")));
+		textures.put("up", new Texture(Kronos.loader.tryLoadImage("texture/up.png")));
+
+		for (Map.Entry<String, Texture> entry : textures.entrySet()) {
+			String key = entry.getKey();
+			Texture val = entry.getValue();
+
+			l.debug("Loaded Texture: {} with size of W: {} H : {}", key, val.getHeight(), val.getHeight());
+
+		}
+
+		screen.makeWindowVisible(window_id, config.updateTime());
 	}
 
 	public void render(Runnable r) {

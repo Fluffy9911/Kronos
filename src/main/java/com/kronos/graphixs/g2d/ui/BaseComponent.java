@@ -4,11 +4,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.kronos.graphixs.display.Texture;
 import com.kronos.graphixs.g2d.Graphixs2D;
 import com.kronos.graphixs.g2d.TextureBatch;
 import com.kronos.graphixs.g2d.fonts.FontRenderer;
 import com.kronos.graphixs.g2d.ui.components.Drawable;
 import com.kronos.graphixs.g2d.ui.components.Persistant;
+import com.kronos.graphixs.g2d.ui.transform.DragNDrop;
 import com.kronos.graphixs.g2d.ui.transform.KeepInBox;
 import com.kronos.io.Config;
 import com.kronos.io.config.ConfigFile;
@@ -26,6 +28,7 @@ public class BaseComponent implements Comp, Drawable, Persistant {
 	private KeepInBox kib = new KeepInBox();
 	private BaseComponent parent;
 	String id;
+	DragNDrop dnd;
 
 	public BaseComponent(BasePosition bp, boolean cdren, boolean moveable, boolean hidden, String id) {
 		super();
@@ -37,6 +40,7 @@ public class BaseComponent implements Comp, Drawable, Persistant {
 		listeners = new ArrayList<>();
 		createListeners();
 		this.id = id;
+		dnd = new DragNDrop();
 
 	}
 
@@ -63,6 +67,9 @@ public class BaseComponent implements Comp, Drawable, Persistant {
 			listeners.forEach((ui) -> {
 				ui.listen(parent, state);
 			});
+		}
+		if (moveable) {
+			dnd.reposition(this.bp.getProvider(), bp, null);
 		}
 	}
 
@@ -244,6 +251,11 @@ public class BaseComponent implements Comp, Drawable, Persistant {
 		hidden = c.readOrWriteBoolean("hidden", hidden);
 		moveable = c.readOrWriteBoolean("moveable", moveable);
 		update = c.readOrWriteBoolean("force_update", update);
+	}
+
+	public void drawHere(TextureBatch batch, Texture t) {
+		batch.drawTexture((int) this.bp.pos().getX(), (int) this.bp.pos().getY(), (int) this.bp.pos().getW(),
+				(int) this.bp.pos().getH(), t);
 	}
 
 }

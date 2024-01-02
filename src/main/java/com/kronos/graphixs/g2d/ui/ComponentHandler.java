@@ -133,6 +133,7 @@ public class ComponentHandler {
 	}
 
 	public void update() {
+
 		for (Map.Entry<String, BaseComponent> entry : comps.entrySet()) {
 			String key = entry.getKey();
 			BaseComponent val = entry.getValue();
@@ -140,7 +141,9 @@ public class ComponentHandler {
 			if (val.canUpdateChildren()) {
 				val.updateChildren();
 			}
+			val.render(batcher, fr, g);
 		}
+		batcher.render();
 	}
 
 	public Graphixs2D getG() {

@@ -8,11 +8,9 @@ import com.kronos.graphixs.color.Colors;
 import com.kronos.graphixs.display.Graphixs;
 import com.kronos.graphixs.display.ScreenConfig;
 import com.kronos.graphixs.g2d.Graphixs2D;
-import com.kronos.graphixs.g2d.ScreenCord;
-import com.kronos.graphixs.g2d.TextureBatch;
 import com.kronos.graphixs.g2d.ui.BasePosition;
-import com.kronos.graphixs.g2d.ui.transform.AreaConform;
-import com.kronos.graphixs.g2d.ui.transform.ConformType;
+import com.kronos.graphixs.g2d.ui.ComponentHandler;
+import com.kronos.graphixs.g2d.ui.components.panel.Panel;
 import com.kronos.io.Config;
 import com.kronos.io.InputHandler;
 
@@ -50,7 +48,7 @@ public class Testing {
 			@Override
 			public int updateTime() {
 				// TODO Auto-generated method stub
-				return 60;
+				return -1;
 			}
 
 			@Override
@@ -65,25 +63,21 @@ public class Testing {
 
 		Graphixs2D g2d = g.g2d;
 
-		BasePosition bp = new BasePosition(new ScreenCord(60, 60, 600, 600), g2d.getProvider());
-		BasePosition b1 = BasePosition.single(70, 70, 40, 40, g2d.getProvider());
-		BasePosition b2 = BasePosition.single(85, 85, 40, 40, g2d.getProvider());
-		BasePosition b3 = BasePosition.single(95, 95, 85, 40, g2d.getProvider());
-		AreaConform ac = new AreaConform(ConformType.TOP, 5);
-
-		TextureBatch b = g2d.createBatch();
-
+		ComponentHandler ch = new ComponentHandler(g2d);
+		Panel p = new Panel(BasePosition.single(40, 40, 300, 400, g2d.getProvider()), false, true, "test_panel");
+		ch.put("test_panel", p);
+		ch.createComps();
 		Kronos.registerListener(new EngineListener() {
 
 			@Override
 			public void engineStart() {
-				// TODO Auto-generated method stub
+				ch.load();
 
 			}
 
 			@Override
 			public void engineEnd() {
-
+				ch.write();
 			}
 
 			@Override
@@ -95,14 +89,10 @@ public class Testing {
 		Kronos.startDrawing((a) -> {
 
 			g.clearScreen(Colors.White);
-			bp.drawDebug(b);
-			b1.drawDebug(b);
-			b2.drawDebug(b);
-			b3.drawDebug(b);
-			b.render();
+			ch.update();
 			g2d.renderQuad();
 			// ac.reposition(g2d.getProvider(), bp, b1, b2, b3);
-			// g.glErrors();
+			g.glErrors();
 			InputHandler.nextFrame();
 		});
 

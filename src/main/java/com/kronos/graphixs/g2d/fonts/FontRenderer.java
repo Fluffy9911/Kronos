@@ -248,4 +248,11 @@ public class FontRenderer {
 		createDrawTexture(f, c, text);
 	}
 
+	public Rectangle getSize(String text, Font f) {
+		BufferedImage img = new BufferedImage(16, 16, BufferedImage.TRANSLUCENT);
+		Graphics g = img.createGraphics();
+		g.setFont(f);
+		return (Rectangle) g.getFontMetrics().getStringBounds(text, g);
+	}
+
 }

@@ -59,7 +59,6 @@ public class Screen implements Resource {
 		memory(id);
 		if (Kronos.extensivedebug)
 			GLUtil.setupDebugMessageCallback();
-		makeWindowVisible(id, 1);
 
 		this.id = id;
 		return id;
@@ -117,7 +116,7 @@ public class Screen implements Resource {
 		GL.createCapabilities();
 	}
 
-	private void makeWindowVisible(long wid, int si) {
+	public void makeWindowVisible(long wid, int si) {
 		GL11.glMatrixMode(GL11.GL_PROJECTION);
 		GL11.glLoadIdentity();
 		GL11.glOrtho(0, sc.width(), sc.height(), 0, 1, -1);
@@ -131,7 +130,7 @@ public class Screen implements Resource {
 	@Override
 	public void load() {
 //no loading required unless we want to save resolutions
-		sc.loadValues();
+		// sc.loadValues();
 	}
 
 	@Override
