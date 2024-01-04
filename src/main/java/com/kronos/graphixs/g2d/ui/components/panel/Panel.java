@@ -21,6 +21,9 @@ public class Panel extends BaseComponent {
 	@Override
 	public void render(TextureBatch batch, FontRenderer fr, Graphixs2D g) {
 		this.drawHere(batch, panel);
+		int fh = (int) fr.getSize(this.id(), fr.useDefaultFont()).getHeight();
+		fr.renderText(this.id(), (int) this.bp.pos().getX() + 2, (int) this.bp.pos().getY() + 2,
+				(int) fr.getSize(this.id(), fr.useDefaultFont()).getWidth(), fh, batch);
 
 	}
 

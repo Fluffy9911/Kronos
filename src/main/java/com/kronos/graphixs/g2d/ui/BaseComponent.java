@@ -38,6 +38,7 @@ public class BaseComponent implements Comp, Drawable, Persistant {
 		this.hidden = hidden;
 		state = new States();
 		listeners = new ArrayList<>();
+		children = new HashMap<>();
 		createListeners();
 		this.id = id;
 		dnd = new DragNDrop();
@@ -56,6 +57,7 @@ public class BaseComponent implements Comp, Drawable, Persistant {
 
 	@Override
 	public void update() {
+		updateChildren();
 		if (!hidden) {
 			render(ch.getBatcher(), ch.getFr(), ch.getG());
 		}
@@ -65,12 +67,13 @@ public class BaseComponent implements Comp, Drawable, Persistant {
 		}
 		if (updateListeners) {
 			listeners.forEach((ui) -> {
-				ui.listen(parent, state);
+				ui.listen(this, state);
 			});
 		}
 		if (moveable) {
 			dnd.reposition(this.bp.getProvider(), bp, null);
 		}
+
 	}
 
 	@Override
@@ -98,6 +101,7 @@ public class BaseComponent implements Comp, Drawable, Persistant {
 		for (Map.Entry<String, BaseComponent> entry : children.entrySet()) {
 			String key = entry.getKey();
 			BaseComponent val = entry.getValue();
+			val.update();
 			kib.reposition(ch.getSp(), val.bp, null);
 		}
 	}
@@ -200,11 +204,17 @@ public class BaseComponent implements Comp, Drawable, Persistant {
 		this.ch = ch;
 		this.register(this, ch);
 		config = this.ch.getOrCreatePersistance(id);
+		forEachChild((c, k) -> {
+			c.onCreation(ch);
+		});
 	}
 
 	@Override
 	public void render(TextureBatch batch, FontRenderer fr, Graphixs2D g) {
-		// TODO Auto-generated method stub
+
+		forEachChild((c, h) -> {
+			c.render(batch, fr, g);
+		});
 
 	}
 
@@ -256,6 +266,10 @@ public class BaseComponent implements Comp, Drawable, Persistant {
 	public void drawHere(TextureBatch batch, Texture t) {
 		batch.drawTexture((int) this.bp.pos().getX(), (int) this.bp.pos().getY(), (int) this.bp.pos().getW(),
 				(int) this.bp.pos().getH(), t);
+	}
+
+	public void setUpdateListeners(boolean updateListeners) {
+		this.updateListeners = updateListeners;
 	}
 
 }

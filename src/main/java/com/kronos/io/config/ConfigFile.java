@@ -1,5 +1,6 @@
 package com.kronos.io.config;
 
+import java.io.File;
 import java.util.List;
 import java.util.Map;
 
@@ -37,7 +38,8 @@ public class ConfigFile {
 	}
 
 	public void write() {
-
+		File f = new File(id.getBasePath() + "/" + path + "/" + name + ".json");
+		f.delete();
 		fl.createAndWrite(id, path + "/" + name + ".json", config.writeOut());
 	}
 

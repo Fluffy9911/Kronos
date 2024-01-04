@@ -144,6 +144,7 @@ public class ComponentHandler {
 			val.render(batcher, fr, g);
 		}
 		batcher.render();
+		batcher.end();
 	}
 
 	public Graphixs2D getG() {

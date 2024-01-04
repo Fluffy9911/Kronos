@@ -7,6 +7,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import java.util.Map;
@@ -248,11 +249,11 @@ public class FontRenderer {
 		createDrawTexture(f, c, text);
 	}
 
-	public Rectangle getSize(String text, Font f) {
+	public Rectangle2D getSize(String text, Font f) {
 		BufferedImage img = new BufferedImage(16, 16, BufferedImage.TRANSLUCENT);
 		Graphics g = img.createGraphics();
 		g.setFont(f);
-		return (Rectangle) g.getFontMetrics().getStringBounds(text, g);
+		return g.getFontMetrics().getStringBounds(text, g);
 	}
 
 }

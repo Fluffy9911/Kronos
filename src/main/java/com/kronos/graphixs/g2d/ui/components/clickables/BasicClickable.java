@@ -14,7 +14,7 @@ public abstract class BasicClickable extends BaseComponent implements MouseEvent
 
 	public BasicClickable(BasePosition bp, boolean cdren, boolean moveable, boolean hidden, String id) {
 		super(bp, cdren, moveable, hidden, id);
-
+		this.setUpdateListeners(true);
 	}
 
 	@Override
@@ -45,7 +45,7 @@ public abstract class BasicClickable extends BaseComponent implements MouseEvent
 	@Override
 	public void exited() {
 		current = getBase();
-		endClick();
+
 	}
 
 	@Override

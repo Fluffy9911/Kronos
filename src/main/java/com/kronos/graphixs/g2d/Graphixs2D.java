@@ -47,6 +47,7 @@ public class Graphixs2D implements SListener {
 			tm.render();
 			rendered_textures++;
 		}
+
 		graphixs_pane.end();
 		GL40.glUseProgram(0);
 

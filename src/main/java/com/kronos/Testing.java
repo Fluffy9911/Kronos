@@ -10,6 +10,7 @@ import com.kronos.graphixs.display.ScreenConfig;
 import com.kronos.graphixs.g2d.Graphixs2D;
 import com.kronos.graphixs.g2d.ui.BasePosition;
 import com.kronos.graphixs.g2d.ui.ComponentHandler;
+import com.kronos.graphixs.g2d.ui.components.batched.IncrementNumber;
 import com.kronos.graphixs.g2d.ui.components.panel.Panel;
 import com.kronos.io.Config;
 import com.kronos.io.InputHandler;
@@ -66,7 +67,11 @@ public class Testing {
 		ComponentHandler ch = new ComponentHandler(g2d);
 		Panel p = new Panel(BasePosition.single(40, 40, 300, 400, g2d.getProvider()), false, true, "test_panel");
 		ch.put("test_panel", p);
+		IncrementNumber ic = new IncrementNumber(BasePosition.single(95, 95, 120, 40, g2d.getProvider()), false, false,
+				false, "test_increment");
+		ch.put("test_increment", ic);
 		ch.createComps();
+		ch.load();
 		Kronos.registerListener(new EngineListener() {
 
 			@Override

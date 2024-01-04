@@ -111,4 +111,10 @@ public class BasePosition implements ComponentPosition {
 		return ap.contains((int) InputHandler.getLastMouseX(), (int) InputHandler.getLastMouseY());
 	}
 
+	public BasePosition translate(int x, int y, int w, int h) {
+		BasePosition bp = new BasePosition(new ScreenCord(pos.getX() + x, pos.getY() + y, w, h),
+				new ScreenCord(ap.getX() + x, ap.getY() + y, w, h), this.getProvider());
+		return bp;
+	}
+
 }
