@@ -70,8 +70,10 @@ public class Testing {
 		IncrementNumber ic = new IncrementNumber(BasePosition.single(95, 95, 120, 40, g2d.getProvider()), false, false,
 				false, "test_increment");
 		ch.put("test_increment", ic);
+
 		ch.createComps();
 		ch.load();
+
 		Kronos.registerListener(new EngineListener() {
 
 			@Override

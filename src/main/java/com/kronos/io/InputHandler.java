@@ -16,6 +16,7 @@ public class InputHandler {
 	static int released = 0;
 	static double lastx = 0, lasty = 0;
 	static boolean mouseDownRight = false, mouseDownLeft = false;
+	static boolean rightReleased = false, leftReleased = false;
 
 	// Initialize the key callback
 	public static void init(long window) {
@@ -52,9 +53,11 @@ public class InputHandler {
 				} else if (action == GLFW.GLFW_RELEASE) {
 					if (GLFW.GLFW_MOUSE_BUTTON_RIGHT == button) {
 						mouseDownRight = false;
+						rightReleased = true;
 					}
 					if (GLFW.GLFW_MOUSE_BUTTON_LEFT == button) {
 						mouseDownLeft = false;
+						leftReleased = true;
 					}
 				}
 			}
@@ -63,7 +66,8 @@ public class InputHandler {
 
 	public static void nextFrame() {
 		released = 0;
-
+		rightReleased = false;
+		leftReleased = false;
 	}
 
 	// Static method to check if a key is pressed
@@ -99,6 +103,20 @@ public class InputHandler {
 
 	public static boolean isMouseDownLeft() {
 		return mouseDownLeft;
+	}
+
+	/**
+	 * @return the rightReleased
+	 */
+	public static boolean isRightReleased() {
+		return rightReleased;
+	}
+
+	/**
+	 * @return the leftReleased
+	 */
+	public static boolean isLeftReleased() {
+		return leftReleased;
 	}
 
 }

@@ -23,10 +23,10 @@ public class MouseEventListener implements UIListener {
 		int mx = (int) InputHandler.getLastMouseX();
 		int my = (int) InputHandler.getLastMouseY();
 
-		if (bc.getPosition().pos().contains(mx, my) && InputHandler.isMouseDownLeft()) {
+		if (bc.getPosition().pos().contains(mx, my) && InputHandler.isLeftReleased()) {
 			event.clicked(InteractionType.LEFT_CLICK);
 		}
-		if (bc.getPosition().pos().contains(mx, my) && InputHandler.mouseDownRight()) {
+		if (bc.getPosition().pos().contains(mx, my) && InputHandler.isRightReleased()) {
 			event.clicked(InteractionType.RIGHT_CLICK);
 		}
 		if (bc.getPosition().pos().contains(mx, my) && InputHandler.isKeyReleased(GLFW.GLFW_KEY_SPACE)) {

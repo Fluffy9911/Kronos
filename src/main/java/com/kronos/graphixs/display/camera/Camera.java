@@ -139,6 +139,7 @@ public class Camera {
 	public void movePosition(float x, float y, float z) {
 		position.add(x, y, z);
 		lookAt(new Vector3f(look.x, look.y, 0));
+
 	}
 
 	public void translate(float deltaX, float deltaY, float deltaZ) {
