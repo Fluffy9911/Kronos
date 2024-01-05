@@ -13,7 +13,7 @@ import com.kronos.graphixs.g2d.fonts.FontRenderer;
 import com.kronos.graphixs.g2d.ui.BaseComponent;
 import com.kronos.graphixs.g2d.ui.BasePosition;
 import com.kronos.graphixs.g2d.ui.components.clickables.BasicClickable;
-import com.kronos.io.Config;
+import com.kronos.io.config.ConfigFile;
 
 public class IncrementNumber extends BaseComponent {
 	int incr = 1;
@@ -119,11 +119,30 @@ public class IncrementNumber extends BaseComponent {
 
 	}
 
+//	@Override
+//	public void readWriteDatas(Config c) {
+//		System.out.println("Value:" + num);
+//		num = c.readOrWriteInt("number_value", num);
+//		incr = c.readOrWriteInt("increment_value", incr);
+//		super.readWriteDatas(c);
+//	}
+
 	@Override
-	public void readWriteDatas(Config c) {
-		num = c.readOrWriteInt("number_value", num);
-		incr = c.readOrWriteInt("increment_value", incr);
-		super.readWriteDatas(c);
+	public void write(ConfigFile file) {
+		file.appendInt("number_value", num);
+		file.appendInt("increment_value", incr);
+		super.write(file);
+	}
+
+	@Override
+	public void load(ConfigFile file) {
+		num = file.readOrWriteInt("number_value", num);
+		incr = file.readOrWriteInt("increment_value", incr);
+		super.load(file);
+	}
+
+	public int getNum() {
+		return num;
 	}
 
 }

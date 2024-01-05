@@ -78,10 +78,10 @@ public class ScreenCord {
 	}
 
 	public void read(Config c, String name) {
-		x = c.readOrWriteFloat(name + "_X", 0);
-		y = c.readOrWriteFloat(name + "_Y", 0);
-		w = c.readOrWriteFloat(name + "_W", 0);
-		h = c.readOrWriteFloat(name + "_H", 0);
+		x = c.readOrWriteFloat(name + "_X", x);
+		y = c.readOrWriteFloat(name + "_Y", y);
+		w = c.readOrWriteFloat(name + "_W", w);
+		h = c.readOrWriteFloat(name + "_H", h);
 
 	}
 
