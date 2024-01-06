@@ -94,7 +94,7 @@ public class Testing {
 			}
 		});
 		Kronos.startDrawing((a) -> {
-
+			g2d.getProvider().update();
 			g.clearScreen(Colors.White);
 			ch.update();
 			g2d.renderQuad();

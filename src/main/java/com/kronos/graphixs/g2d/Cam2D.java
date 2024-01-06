@@ -2,10 +2,12 @@ package com.kronos.graphixs.g2d;
 
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
+import org.lwjgl.glfw.GLFW;
 
 import com.kronos.Kronos;
 import com.kronos.core.util.SListener;
 import com.kronos.graphixs.display.ScreenConfig;
+import com.kronos.io.InputHandler;
 
 public class Cam2D implements SListener {
 	Matrix4f projection, view, model;
@@ -15,6 +17,7 @@ public class Cam2D implements SListener {
 	float sw, sh;
 
 	float near, far;
+	float zoom = 1;
 
 	public Cam2D(Vector3f position, float sw, float sh, float near, float far) {
 		super();
@@ -33,12 +36,17 @@ public class Cam2D implements SListener {
 	}
 
 	public void update() {
-
+		if (InputHandler.isKeyReleased(GLFW.GLFW_KEY_UP)) {
+			zoom += 0.25f;
+		}
+		if (InputHandler.isKeyReleased(GLFW.GLFW_KEY_DOWN)) {
+			zoom -= 0.25f;
+		}
 		projection.identity();
 		view.identity();
 
 		projection.ortho2DLH(0, sw, sh, 0);
-
+		projection.scale(zoom);
 	}
 
 	public Matrix4f collectTransform() {

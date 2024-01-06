@@ -21,22 +21,19 @@ public class Kronos {
 
 	private static HashMap<String, Config> registeredConfig;
 
-	public static String config_loc = "configs/main";
-
+	// config
 	public static Config k_config = new Config();
-	public static Debugger debug = new Debugger();
 
-	public static boolean debg = false, logdebug = false, extensivedebug = false;
+	// config values
+	public static boolean debg = false;
+	public static boolean logdebug = false;
+	public static boolean extensivedebug = false;
 	public static int max_threads = 2;
 
+	// resources
+	public static String config_loc = "configs/main";
 	public static String kronos_id = "kronos";
-
 	public static ResourceIdentifier kronos_rid = new ResourceIdentifier() {
-
-		/**
-		 * 
-		 */
-		private static final long serialVersionUID = 1L;
 
 		@Override
 		public String getNameid() {
@@ -71,9 +68,14 @@ public class Kronos {
 		}
 	};
 
+	// modules
+	public static Debugger debug = new Debugger();
 	public static FileLoader loader = new FileLoader(kronos_rid);
 	public static Graphixs graphixs = new Graphixs();
 
+	/**
+	 * Starts Kronos default startup making config and listeners
+	 */
 	private static void defaultKronosInit() {
 		listeners = new ArrayList<>();
 		registeredConfig = new HashMap<>();
@@ -91,6 +93,11 @@ public class Kronos {
 		}
 	}
 
+	/**
+	 * Starts opengl
+	 * 
+	 * @param sc
+	 */
 	public static void start(ScreenConfig sc) {
 		defaultKronosInit();
 		for (Iterator iterator = listeners.iterator(); iterator.hasNext();) {

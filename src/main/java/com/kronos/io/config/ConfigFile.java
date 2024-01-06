@@ -505,4 +505,9 @@ public class ConfigFile {
 		return config.toString();
 	}
 
+	public float readOrWriteFloat(String string, float num) {
+		// TODO Auto-generated method stub
+		return config.readOrWriteFloat(string, num);
+	}
+
 }

@@ -16,14 +16,16 @@ import com.kronos.graphixs.g2d.ui.components.clickables.BasicClickable;
 import com.kronos.io.config.ConfigFile;
 
 public class IncrementNumber extends BaseComponent {
-	int incr = 1;
-	int num = 1;
+	float incr = 1;
+	float num = 1;
 
 	BasicClickable bigger, smaller;
 
 	public IncrementNumber(BasePosition bp, boolean cdren, boolean moveable, boolean hidden, String id) {
 		super(bp, cdren, moveable, hidden, id);
-		bigger = new BasicClickable(bp.translate(-40, 0, 35, 35), false, false, hidden, id + "_increment_button") {
+		Vector2i c = center(bp.pos().getX(), bp.pos().getY(), bp.pos().getW(), bp.pos().getH());
+		bigger = new BasicClickable(bp.translate(c.x() - 10, -11, 10, 10), false, false, hidden,
+				id + "_increment_button") {
 			@Override
 			public void render(TextureBatch batch, FontRenderer fr, Graphixs2D g) {
 				this.drawHere(batch, getBase());
@@ -58,7 +60,7 @@ public class IncrementNumber extends BaseComponent {
 				return TextureBuilder.buildTextureBordered(40, 40, 2, Colors.Blue, Colors.Blue);
 			}
 		};
-		smaller = new BasicClickable(bp.translate((int) (40 + bp.pos().getW()), 0, 35, 35), false, false, hidden,
+		smaller = new BasicClickable(bp.translate(c.x() - 10, 0, 10, 10), false, false, hidden,
 				id + "_decrement_button") {
 
 			@Override
@@ -101,7 +103,7 @@ public class IncrementNumber extends BaseComponent {
 
 	}
 
-	public void setNum(int val) {
+	public void setNum(float val) {
 		num = val;
 	}
 
@@ -109,6 +111,10 @@ public class IncrementNumber extends BaseComponent {
 	public void render(TextureBatch batch, FontRenderer fr, Graphixs2D g) {
 		Vector2i c = center(bp.pos().getX(), bp.pos().getY(), bp.pos().getW(), bp.pos().getH());
 		fr.renderText("Value: " + num, c.x(), c.y(), fr.useDefaultFont(), Color.BLACK, batch);
+		bigger.getPosition().pos().setX(c.x() - 10);
+		smaller.getPosition().pos().setX(c.x() - 10);
+		bigger.getPosition().pos().setY(c.y() + 11);
+		smaller.getPosition().pos().setY(c.y());
 //		bigger.render(batch, fr, g);
 //		smaller.render(batch, fr, g);
 		super.render(batch, fr, g);
@@ -129,19 +135,19 @@ public class IncrementNumber extends BaseComponent {
 
 	@Override
 	public void write(ConfigFile file) {
-		file.appendInt("number_value", num);
-		file.appendInt("increment_value", incr);
+		file.appendFloat("number_value", num);
+		file.appendFloat("increment_value", incr);
 		super.write(file);
 	}
 
 	@Override
 	public void load(ConfigFile file) {
-		num = file.readOrWriteInt("number_value", num);
-		incr = file.readOrWriteInt("increment_value", incr);
+		num = file.readOrWriteFloat("number_value", num);
+		incr = file.readOrWriteFloat("increment_value", incr);
 		super.load(file);
 	}
 
-	public int getNum() {
+	public float getNum() {
 		return num;
 	}
 
