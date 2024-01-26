@@ -6,6 +6,7 @@ import java.awt.GraphicsEnvironment;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -15,6 +16,9 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.zip.DataFormatException;
+import java.util.zip.Deflater;
+import java.util.zip.Inflater;
 
 import javax.imageio.ImageIO;
 
@@ -182,7 +186,8 @@ public class FileLoader {
 	}
 
 	public void createAt(String file, ResourceIdentifier rid) {
-
+		File fd = new File(rid.getBasePath());
+		fd.mkdirs();
 		File f = new File(rid.getBasePath() + "/" + file);
 		try {
 			f.createNewFile();
@@ -237,6 +242,7 @@ public class FileLoader {
 	}
 
 	public void writeConfig(Config c, String name, String path) {
+		Kronos.debug.getLogger().debug("Path: {} \n {}", path + "/" + name, c.writeOut());
 		createAt(path, name);
 		tryWriteNamed(name, c.writeOut());
 	}
@@ -250,6 +256,22 @@ public class FileLoader {
 		String d = tryLoad(path + "/" + name);
 		Gson g = new Gson();
 		return g.fromJson(d, Config.class);
+	}
+
+	public Config getOrCreate(String name, String path) {
+		Config c = null;
+		try {
+			c = tryRead(name, path);
+		} catch (Exception e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+		}
+		if (c == null) {
+			System.out.println("created");
+			createAt(path, name + ".json");
+			c = new Config();
+		}
+		return c;
 	}
 
 	public Config tryRead(String name, String path, ResourceIdentifier rd) {
@@ -288,4 +310,42 @@ public class FileLoader {
 		return null;
 	}
 
+	public static byte[] compressString(String input) throws IOException {
+		byte[] data = input.getBytes(StandardCharsets.UTF_8);
+
+		Deflater deflater = new Deflater();
+		deflater.setInput(data);
+		deflater.finish();
+
+		ByteArrayOutputStream outputStream = new ByteArrayOutputStream(data.length);
+
+		byte[] buffer = new byte[1024];
+		while (!deflater.finished()) {
+			int count = deflater.deflate(buffer);
+			outputStream.write(buffer, 0, count);
+		}
+
+		deflater.end();
+		outputStream.close();
+
+		return outputStream.toByteArray();
+	}
+
+	public static String decompressString(byte[] compressedData) throws IOException, DataFormatException {
+		Inflater inflater = new Inflater();
+		inflater.setInput(compressedData);
+
+		ByteArrayOutputStream outputStream = new ByteArrayOutputStream(compressedData.length);
+
+		byte[] buffer = new byte[1024];
+		while (!inflater.finished()) {
+			int count = inflater.inflate(buffer);
+			outputStream.write(buffer, 0, count);
+		}
+
+		inflater.end();
+		outputStream.close();
+
+		return outputStream.toString(StandardCharsets.UTF_8.name());
+	}
 }

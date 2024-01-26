@@ -128,14 +128,14 @@ public class Graphixs {
 		post_process_quad = Builtin.screenQuad();
 		createShader("texture", new TextureProgram(Kronos.loader.tryLoad("shaders/texture.vs"),
 				Kronos.loader.tryLoad("shaders/texture.fs")));
-		createShader("highlight", new HighlightProgram(Kronos.loader.tryLoad("shaders/texture.vs"),
-				Kronos.loader.tryLoad("shaders/highlight.fs")));
-		createShader("highlight_g", new HighlightProgram(Kronos.loader.tryLoad("shaders/texture.vs"),
-				Kronos.loader.tryLoad("shaders/highlighted_g.fs")));
-		createShader("pp_tex", new ShaderProgram(Kronos.loader.tryLoad("shaders/vertex.vs"),
-				Kronos.loader.tryLoad("shaders/fragment.fs")));
-		fs = Kronos.loader.tryLoad("shaders/texture.fs");
-		vs = Kronos.loader.tryLoad("shaders/fragment.fs");
+//		createShader("highlight", new HighlightProgram(Kronos.loader.tryLoad("shaders/texture.vs"),
+//				Kronos.loader.tryLoad("shaders/highlight.fs")));
+//		createShader("highlight_g", new HighlightProgram(Kronos.loader.tryLoad("shaders/texture.vs"),
+//				Kronos.loader.tryLoad("shaders/highlighted_g.fs")));
+//		createShader("pp_tex", new ShaderProgram(Kronos.loader.tryLoad("shaders/vertex.vs"),
+//				Kronos.loader.tryLoad("shaders/fragment.fs")));
+//		fs = Kronos.loader.tryLoad("shaders/texture.fs");
+//		vs = Kronos.loader.tryLoad("shaders/fragment.fs");
 		g2d = new Graphixs2D(buffers.get("graphixs2d_pane"), new ScreenProvider(config),
 				(ShaderProgram) shaders.get("texture"));
 		shaders.get("texture").compileShader();
@@ -147,16 +147,16 @@ public class Graphixs {
 		}
 		l.debug("Loading textures");
 
-		textures.put("bg", new Texture(Kronos.loader.tryLoadImage("texture/bg.png")));
-		textures.put("button_base", new Texture(Kronos.loader.tryLoadImage("texture/button.png")));
-		textures.put("down", new Texture(Kronos.loader.tryLoadImage("texture/down.png")));
-		textures.put("slider_left", new Texture(Kronos.loader.tryLoadImage("texture/slider_left.png")));
-		textures.put("slider_right", new Texture(Kronos.loader.tryLoadImage("texture/slider_right.png")));
-		textures.put("slider", new Texture(Kronos.loader.tryLoadImage("texture/slider_middle.png")));
-		textures.put("toggle_off", new Texture(Kronos.loader.tryLoadImage("texture/bg.png")));
-		textures.put("toggle_on", new Texture(Kronos.loader.tryLoadImage("texture/bg.png")));
-		textures.put("top", new Texture(Kronos.loader.tryLoadImage("texture/top.png")));
-		textures.put("up", new Texture(Kronos.loader.tryLoadImage("texture/up.png")));
+//		textures.put("bg", new Texture(Kronos.loader.tryLoadImage("texture/bg.png")));
+//		textures.put("button_base", new Texture(Kronos.loader.tryLoadImage("texture/button.png")));
+//		textures.put("down", new Texture(Kronos.loader.tryLoadImage("texture/down.png")));
+//		textures.put("slider_left", new Texture(Kronos.loader.tryLoadImage("texture/slider_left.png")));
+//		textures.put("slider_right", new Texture(Kronos.loader.tryLoadImage("texture/slider_right.png")));
+//		textures.put("slider", new Texture(Kronos.loader.tryLoadImage("texture/slider_middle.png")));
+//		textures.put("toggle_off", new Texture(Kronos.loader.tryLoadImage("texture/bg.png")));
+//		textures.put("toggle_on", new Texture(Kronos.loader.tryLoadImage("texture/bg.png")));
+//		textures.put("top", new Texture(Kronos.loader.tryLoadImage("texture/top.png")));
+//		textures.put("up", new Texture(Kronos.loader.tryLoadImage("texture/up.png")));
 
 		for (Map.Entry<String, Texture> entry : textures.entrySet()) {
 			String key = entry.getKey();
