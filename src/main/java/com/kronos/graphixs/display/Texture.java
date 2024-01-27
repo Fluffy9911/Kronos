@@ -8,6 +8,7 @@ import javax.imageio.ImageIO;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL40;
 
 import com.kronos.graphixs.color.Color;
 
@@ -23,6 +24,12 @@ public class Texture {
 		textureId = tid;
 	}
 
+	public Texture(int[][] pixels) {
+		width = pixels.length;
+		height = pixels[0].length;
+		textureId = loadTexture(pixels);
+	}
+
 	public Texture(int textureId, int width, int height) {
 		super();
 		this.textureId = textureId;
@@ -35,7 +42,9 @@ public class Texture {
 	}
 
 	public void bind() {
+		GL40.glActiveTexture(GL40.GL_TEXTURE0);
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, textureId);
+
 	}
 
 	public void unbind() {
@@ -65,6 +74,39 @@ public class Texture {
 		for (int y = 0; y < height; y++) {
 			for (int x = 0; x < width; x++) {
 				int pixel = pixels[y * width + x];
+				buffer.put((byte) ((pixel >> 16) & 0xFF)); // Red component
+				buffer.put((byte) ((pixel >> 8) & 0xFF)); // Green component
+				buffer.put((byte) (pixel & 0xFF)); // Blue component
+				if ((byte) ((pixel >> 24) & 0xFF) == 0)
+					buffer.put((byte) 0); // Alpha component
+				else
+					buffer.put((byte) ((pixel >> 24) & 0xFF)); // Alpha component
+			}
+		}
+
+		buffer.flip();
+
+		textureId = GL11.glGenTextures();
+		GL11.glBindTexture(GL11.GL_TEXTURE_2D, textureId);
+
+		// Setup texture parameters
+		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
+		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
+
+		// Upload the texture data
+		GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA8, width, height, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE,
+				buffer);
+
+		return textureId;
+	}
+
+	public int loadTexture(int[][] pixels) {
+
+		ByteBuffer buffer = BufferUtils.createByteBuffer(width * height * 4); // 4 for RGBA
+
+		for (int y = 0; y < height; y++) {
+			for (int x = 0; x < width; x++) {
+				int pixel = pixels[x][y];
 				buffer.put((byte) ((pixel >> 16) & 0xFF)); // Red component
 				buffer.put((byte) ((pixel >> 8) & 0xFF)); // Green component
 				buffer.put((byte) (pixel & 0xFF)); // Blue component

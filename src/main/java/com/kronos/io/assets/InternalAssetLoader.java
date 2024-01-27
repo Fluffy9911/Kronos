@@ -2,6 +2,7 @@ package com.kronos.io.assets;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.logging.log4j.Logger;
 
@@ -16,6 +17,15 @@ public class InternalAssetLoader {
 	// flags
 	boolean exitonerror = false, reloadable = true;
 
+	public InternalAssetLoader(String current) {
+		super();
+		this.current = current;
+
+		load_que = new HashMap<>();
+		loaded = new HashMap<>();
+
+	}
+
 	/**
 	 * Equals current + / + sub + name + .png
 	 * 
@@ -29,6 +39,38 @@ public class InternalAssetLoader {
 
 	public boolean doesExist(String loc) {
 		return new File(loc).exists();
+	}
+
+	public boolean isExitonerror() {
+		return exitonerror;
+	}
+
+	public void setExitonerror(boolean exitonerror) {
+		this.exitonerror = exitonerror;
+	}
+
+	public boolean isReloadable() {
+		return reloadable;
+	}
+
+	public void setReloadable(boolean reloadable) {
+		this.reloadable = reloadable;
+	}
+
+	public void loadIn() {
+		for (Map.Entry<String, String> entry : load_que.entrySet()) {
+			String key = entry.getKey();
+			String val = entry.getValue();
+			l.debug("Searching for id: {}", key);
+			if (doesExist(val)) {
+
+			}
+		}
+	}
+
+	private File asFile(String val) {
+		// TODO Auto-generated method stub
+		return new File(val);
 	}
 
 }

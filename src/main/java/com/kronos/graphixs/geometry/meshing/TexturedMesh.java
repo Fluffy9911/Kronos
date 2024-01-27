@@ -50,4 +50,8 @@ public class TexturedMesh {
 		return draw;
 	}
 
+	public Texture getTexture() {
+		return texture;
+	}
+
 }

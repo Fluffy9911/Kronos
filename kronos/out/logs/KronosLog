@@ -1,1 +1,22 @@
-14:30:07.022 [main] DEBUG com.kronos.Kronos - Color Color [r=1.0, g=1.0, b=1.0, a=1.0] 
+19:20:54.610 [main] INFO  com.kronos.Kronos - Dubugger created
+19:20:54.622 [main] INFO  com.kronos.Kronos - Path Already Exists: /kronos/out Skipping
+19:20:54.640 [main] DEBUG com.kronos.Kronos - Loaded Config
+19:20:54.640 [main] DEBUG com.kronos.Kronos - Starting OPENGL
+19:20:54.692 [main] DEBUG com.kronos.Kronos - GL Version: 3.4.0 Win32 WGL Null EGL OSMesa VisualC DLL 
+19:20:54.692 [main] DEBUG com.kronos.Kronos - GL Started
+19:20:54.694 [main] INFO  com.kronos.Kronos - Set Current ScreenConfig to {Width=[900], Height=[900], Title=[KronosTesting], ClearColor=[Color [r=1.0, g=1.0, b=1.0, a=1.0]], UpdateTime=[60], Hints=[{131075=1, 131076=0}]}
+19:20:54.695 [main] INFO  com.kronos.Kronos - Set Current ScreenConfig to {Width=[900], Height=[900], Title=[KronosTesting], ClearColor=[Color [r=1.0, g=1.0, b=1.0, a=1.0]], UpdateTime=[60], Hints=[{131075=1, 131076=0}]}
+19:20:54.833 [main] INFO  com.kronos.Kronos - Frame Buffer Status Status: 36053 
+19:20:54.834 [main] INFO  com.kronos.Kronos - Frame Buffer Status Status: 36053 
+19:20:54.834 [main] INFO  com.kronos.Kronos - Frame Buffer Status Status: 36053 
+19:20:54.839 [main] INFO  com.kronos.Kronos - Compiled and registered shaderid: texture
+19:20:54.860 [main] INFO  com.kronos.Kronos - Compiled and registered shaderid: highlight
+19:20:54.861 [main] INFO  com.kronos.Kronos - Compiled and registered shaderid: highlight_g
+19:20:54.868 [main] INFO  com.kronos.Kronos - Compiled and registered shaderid: pp_tex
+19:20:54.885 [main] DEBUG com.kronos.Kronos - Shaders Loaded:
+19:20:54.887 [main] DEBUG com.kronos.Kronos - Shader: highlight, status? 
+19:20:54.887 [main] DEBUG com.kronos.Kronos - Shader: texture, status? 
+19:20:54.887 [main] DEBUG com.kronos.Kronos - Shader: highlight_g, status? 
+19:20:54.887 [main] DEBUG com.kronos.Kronos - Shader: pp_tex, status? 
+19:20:54.887 [main] DEBUG com.kronos.Kronos - Loading textures
+19:20:54.924 [main] DEBUG com.kronos.Kronos - Color Color [r=1.0, g=1.0, b=1.0, a=1.0] 

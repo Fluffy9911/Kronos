@@ -8,10 +8,10 @@ import com.kronos.graphixs.color.Colors;
 import com.kronos.graphixs.display.Graphixs;
 import com.kronos.graphixs.display.ScreenConfig;
 import com.kronos.graphixs.g2d.Graphixs2D;
-import com.kronos.graphixs.g2d.ui.BasePosition;
-import com.kronos.graphixs.g2d.ui.ComponentHandler;
-import com.kronos.graphixs.g2d.ui.components.batched.IncrementNumber;
-import com.kronos.graphixs.g2d.ui.components.panel.Panel;
+import com.kronos.graphixs.g2d.TextureBatch;
+import com.kronos.graphixs.g2d.pixelcanvas.Canvas2D;
+import com.kronos.graphixs.geometry.Mesh;
+import com.kronos.graphixs.geometry.meshing.Builtin;
 import com.kronos.io.Config;
 import com.kronos.io.InputHandler;
 
@@ -49,7 +49,7 @@ public class Testing {
 			@Override
 			public int updateTime() {
 				// TODO Auto-generated method stub
-				return -1;
+				return 60;
 			}
 
 			@Override
@@ -64,27 +64,31 @@ public class Testing {
 
 		Graphixs2D g2d = g.g2d;
 
-		ComponentHandler ch = new ComponentHandler(g2d);
-		Panel p = new Panel(BasePosition.single(40, 40, 300, 400, g2d.getProvider()), false, true, "test_panel");
-		ch.put("test_panel", p);
-		IncrementNumber ic = new IncrementNumber(BasePosition.single(95, 95, 120, 40, g2d.getProvider()), false, false,
-				false, "test_increment");
-		ch.put("test_increment", ic);
+//		ComponentHandler ch = new ComponentHandler(g2d);
+//		Panel p = new Panel(BasePosition.single(40, 40, 300, 400, g2d.getProvider()), false, true, "test_panel");
+//		ch.put("test_panel", p);
+//		IncrementNumber ic = new IncrementNumber(BasePosition.single(95, 95, 120, 40, g2d.getProvider()), false, false,
+//				false, "test_increment");
+//		ch.put("test_increment", ic);
+//
+//		ch.createComps();
+//		ch.load();
 
-		ch.createComps();
-		ch.load();
-
+		Canvas2D c = new Canvas2D(400, 400);
+		c.clear(Colors.White.rgb());
+		c.noiseShort();
+		TextureBatch tb = g2d.createBatch();
 		Kronos.registerListener(new EngineListener() {
 
 			@Override
 			public void engineStart() {
-				ch.load();
+				// ch.load();
 
 			}
 
 			@Override
 			public void engineEnd() {
-				ch.write();
+				// ch.write();
 			}
 
 			@Override
@@ -93,12 +97,17 @@ public class Testing {
 
 			}
 		});
+		Mesh quad = Builtin.screenQuad();
+
 		Kronos.startDrawing((a) -> {
 			g2d.getProvider().update();
 			g.clearScreen(Colors.White);
-			ch.update();
+			tb.drawTexture(0, 0, 500, 500, c.toTexture());
+
+			tb.render();
+			tb.end();
 			g2d.renderQuad();
-			// ac.reposition(g2d.getProvider(), bp, b1, b2, b3);
+			c.noise();
 			g.glErrors();
 			InputHandler.nextFrame();
 		});

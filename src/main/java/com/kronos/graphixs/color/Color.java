@@ -1,5 +1,7 @@
 package com.kronos.graphixs.color;
 
+import java.util.Random;
+
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 
@@ -14,6 +16,11 @@ public class Color {
 
 	public Color(float r, float g, float b) {
 		this(r, g, b, 1);
+	}
+
+	public Color(int i) {
+		java.awt.Color co = new java.awt.Color(i);
+		setRGBA(co.getRed() / 255, co.getGreen() / 255, co.getBlue() / 255, co.getAlpha() / 255);
 	}
 
 	/**
@@ -111,4 +118,32 @@ public class Color {
 
 		return new Color(red, green, blue, alpha);
 	}
+
+	public int getRGBAShort(int rgba) {
+		int alpha = (rgba >> 24) & 0xFF;
+		int red = (rgba >> 16) & 0xFF;
+		int green = (rgba >> 8) & 0xFF;
+		int blue = rgba & 0xFF;
+
+		short a = (short) alpha;
+		short r = (short) red;
+		short b = (short) blue;
+		short g = (short) green;
+
+		// Combine the values back into a short
+		int result = (short) ((a << 12) | (r << 8) | (g << 4) | b);
+
+		return result;
+	}
+
+	public static Color randomNoA() {
+		Random r = new Random();
+		return new Color(r.nextFloat(0, 1), r.nextFloat(0, 1), r.nextFloat(0, 1));
+	}
+
+	public static Color random() {
+		Random r = new Random();
+		return new Color(r.nextFloat(0, 1), r.nextFloat(0, 1), r.nextFloat(0, 1), r.nextFloat(0, 1));
+	}
+
 }
