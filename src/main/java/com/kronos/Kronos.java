@@ -114,6 +114,7 @@ public class Kronos {
 		graphixs.startGlSequence(debug.getLogger());
 		graphixs.createScreen(sc);
 		config = new CoreConfig(graphixs, graphixs.g2d, loader, new InternalAssetLoader(config_loc), debug.getLogger());
+		config.setCurrent(graphixs.getConfig());
 	}
 
 	/**

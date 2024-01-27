@@ -110,4 +110,15 @@ public class Canvas2D {
 		this.canvas = canvas;
 	}
 
+	public int[][] copyFrame() {
+		int[][] t = new int[width][height];
+		for (int i = 0; i < t.length; i++) {
+			for (int j = 0; j < t[i].length; j++) {
+
+				t[i][j] = canvas[i][j];
+			}
+		}
+		return t;
+	}
+
 }

@@ -138,6 +138,9 @@ public class Graphixs {
 					Kronos.loader.tryLoad("shaders/highlighted_g.fs")));
 			createShader("pp_tex", new ShaderProgram(Kronos.loader.tryLoad("shaders/vertex.vs"),
 					Kronos.loader.tryLoad("shaders/fragment.fs")));
+			createShader("3d", new ShaderProgram(Kronos.loader.tryLoad("shaders/threed.vs"),
+					Kronos.loader.tryLoad("shaders/basiccolor.fs")));
+
 			fs = Kronos.loader.tryLoad("shaders/texture.fs");
 			vs = Kronos.loader.tryLoad("shaders/fragment.fs");
 			shaders.get("texture").compileShader();
@@ -261,13 +264,13 @@ public class Graphixs {
 	public void drawPPQuad(Shader shader) {
 
 		GL40.glActiveTexture(GL40.GL_TEXTURE0);
-		buffers.get("graphixs2d_pane").bindTexture();
+		buffers.get("post_proccess").bindTexture();
 
-		// post_process_quad.renderPPO(shader, buffers.get("graphixs2d_pane"));
+		post_process_quad.renderPPO(shader, buffers.get("post_proccess"));
 
-		post_process_quad.render(shader);
+		// post_process_quad.render(shader);
 
-		buffers.get("graphixs2d_pane").unbindTexture();
+		buffers.get("post_proccess").unbindTexture();
 	}
 
 	public void drawPPQuad(Shader shader, FrameBuffer fb) {

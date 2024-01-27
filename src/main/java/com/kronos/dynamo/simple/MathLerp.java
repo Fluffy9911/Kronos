@@ -1,10 +1,20 @@
 package com.kronos.dynamo.simple;
 
+import org.joml.Vector3f;
+
 public class MathLerp {
 
 	public static float lerpSmooth(float target, float value, float iv) {
 		value += (target - value) * iv;
 		return value;
+	}
+
+	public static Vector3f lerpSmooth(Vector3f target, Vector3f value, float iv) {
+		float x = lerpSmooth(target.x, value.x, iv);
+		float y = lerpSmooth(target.y, value.y, iv);
+		float z = lerpSmooth(target.z, value.z, iv);
+
+		return value.add(x, y, z);
 	}
 
 	public static double lerpSmooth(double target, double value, double iv) {

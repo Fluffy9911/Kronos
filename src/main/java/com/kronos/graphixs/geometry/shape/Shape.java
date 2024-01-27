@@ -38,8 +38,8 @@ public class Shape extends Canvas2D {
 	}
 
 	public Texture buildTextureForRender(int rgb) {
-		Canvas2D cv = new Canvas2D(this.width, this.height);
-		cv.setCanvas(getCanvas());
+		Shape cv = this;
+		cv.setCanvas(this.copyFrame());
 		cv.setAll(Colors.Black.rgb(), rgb);
 		return cv.toTexture();
 	}
