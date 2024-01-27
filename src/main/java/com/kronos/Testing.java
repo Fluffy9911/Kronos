@@ -9,6 +9,7 @@ import com.kronos.graphixs.display.Graphixs;
 import com.kronos.graphixs.display.ScreenConfig;
 import com.kronos.graphixs.g2d.Graphixs2D;
 import com.kronos.graphixs.g2d.TextureBatch;
+import com.kronos.graphixs.g2d.builder.ShapeRenderer;
 import com.kronos.graphixs.g2d.pixelcanvas.Canvas2D;
 import com.kronos.graphixs.geometry.Mesh;
 import com.kronos.graphixs.geometry.meshing.Builtin;
@@ -78,6 +79,8 @@ public class Testing {
 		c.clear(Colors.White.rgb());
 		c.noiseShort();
 		TextureBatch tb = g2d.createBatch();
+		ShapeRenderer sr = g.shapeRenderer;
+		sr.loadIn("test_shape", Kronos.loader.tryLoadImage("texture/test_shape.png"));
 		Kronos.registerListener(new EngineListener() {
 
 			@Override
@@ -102,8 +105,9 @@ public class Testing {
 		Kronos.startDrawing((a) -> {
 			g2d.getProvider().update();
 			g.clearScreen(Colors.White);
-			tb.drawTexture(0, 0, 500, 500, c.toTexture());
-
+			Color col = Colors.randColor();
+			sr.renderShape("test_shape", col, 0, 0, 400, 400, tb);
+			tb.drawTexture(401, 0, 400, 400, sr.shapes.get("test_shape").toTexture());
 			tb.render();
 			tb.end();
 			g2d.renderQuad();

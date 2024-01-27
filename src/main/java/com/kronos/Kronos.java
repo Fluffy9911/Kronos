@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import com.kronos.core.CoreConfig;
 import com.kronos.core.event.EngineListener;
 import com.kronos.debug.Debugger;
 import com.kronos.graphixs.Loop;
@@ -14,6 +15,7 @@ import com.kronos.graphixs.display.ScreenConfig;
 import com.kronos.io.Config;
 import com.kronos.io.FileLoader;
 import com.kronos.io.ResourceIdentifier;
+import com.kronos.io.assets.InternalAssetLoader;
 
 public class Kronos {
 
@@ -74,6 +76,11 @@ public class Kronos {
 	public static Graphixs graphixs = new Graphixs();
 
 	/**
+	 * not available until startup
+	 */
+	public static CoreConfig config;
+
+	/**
 	 * Starts Kronos default startup making config and listeners
 	 */
 	private static void defaultKronosInit() {
@@ -106,7 +113,7 @@ public class Kronos {
 		}
 		graphixs.startGlSequence(debug.getLogger());
 		graphixs.createScreen(sc);
-
+		config = new CoreConfig(graphixs, graphixs.g2d, loader, new InternalAssetLoader(config_loc), debug.getLogger());
 	}
 
 	/**

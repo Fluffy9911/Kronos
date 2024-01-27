@@ -27,9 +27,9 @@ import com.kronos.graphixs.color.Color;
 import com.kronos.graphixs.events.GraphicEvent;
 import com.kronos.graphixs.g2d.Graphixs2D;
 import com.kronos.graphixs.g2d.ScreenProvider;
+import com.kronos.graphixs.g2d.builder.ShapeRenderer;
 import com.kronos.graphixs.geometry.Mesh;
 import com.kronos.graphixs.geometry.meshing.Builtin;
-import com.kronos.graphixs.rendering.RenderManager;
 import com.kronos.graphixs.resources.Resource;
 import com.kronos.graphixs.resources.ResourceManager;
 import com.kronos.graphixs.shaders.Shader;
@@ -46,11 +46,14 @@ public class Graphixs {
 	public HashMap<String, FrameBuffer> buffers = new HashMap<>();
 	private HashMap<String, Shader> shaders = new HashMap<String, Shader>();
 	private long window_id = -1;
-	public RenderManager manager_render = new RenderManager(this);
+
 	public Graphixs2D g2d;
 	private ListMap<String, GraphicEvent> events;
 	String fs, vs;
 	public HashMap<String, Texture> textures;
+
+	// modules
+	public ShapeRenderer shapeRenderer = new ShapeRenderer();
 
 	public void createShader(String id, Shader s) {
 		test(l);
@@ -149,18 +152,18 @@ public class Graphixs {
 			l.debug("Shader: {}, status? {}", key, val.getShaderCompilationStatus());
 		}
 		l.debug("Loading textures");
-
-//		textures.put("bg", new Texture(Kronos.loader.tryLoadImage("texture/bg.png")));
-//		textures.put("button_base", new Texture(Kronos.loader.tryLoadImage("texture/button.png")));
-//		textures.put("down", new Texture(Kronos.loader.tryLoadImage("texture/down.png")));
-//		textures.put("slider_left", new Texture(Kronos.loader.tryLoadImage("texture/slider_left.png")));
-//		textures.put("slider_right", new Texture(Kronos.loader.tryLoadImage("texture/slider_right.png")));
-//		textures.put("slider", new Texture(Kronos.loader.tryLoadImage("texture/slider_middle.png")));
-//		textures.put("toggle_off", new Texture(Kronos.loader.tryLoadImage("texture/bg.png")));
-//		textures.put("toggle_on", new Texture(Kronos.loader.tryLoadImage("texture/bg.png")));
-//		textures.put("top", new Texture(Kronos.loader.tryLoadImage("texture/top.png")));
-//		textures.put("up", new Texture(Kronos.loader.tryLoadImage("texture/up.png")));
-
+		if (dev) {
+			textures.put("test_shape", new Texture(Kronos.loader.tryLoadImage("texture/test_shape.png")));
+			textures.put("button_base", new Texture(Kronos.loader.tryLoadImage("texture/button.png")));
+			textures.put("down", new Texture(Kronos.loader.tryLoadImage("texture/down.png")));
+			textures.put("slider_left", new Texture(Kronos.loader.tryLoadImage("texture/slider_left.png")));
+			textures.put("slider_right", new Texture(Kronos.loader.tryLoadImage("texture/slider_right.png")));
+			textures.put("slider", new Texture(Kronos.loader.tryLoadImage("texture/slider_middle.png")));
+			textures.put("toggle_off", new Texture(Kronos.loader.tryLoadImage("texture/bg.png")));
+			textures.put("toggle_on", new Texture(Kronos.loader.tryLoadImage("texture/bg.png")));
+			textures.put("top", new Texture(Kronos.loader.tryLoadImage("texture/top.png")));
+			textures.put("up", new Texture(Kronos.loader.tryLoadImage("texture/up.png")));
+		}
 		for (Map.Entry<String, Texture> entry : textures.entrySet()) {
 			String key = entry.getKey();
 			Texture val = entry.getValue();
@@ -375,6 +378,10 @@ public class Graphixs {
 
 	public String getVs() {
 		return vs;
+	}
+
+	public class Targets {
+
 	}
 
 }

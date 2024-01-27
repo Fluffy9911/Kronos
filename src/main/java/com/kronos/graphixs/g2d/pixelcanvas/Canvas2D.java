@@ -5,7 +5,8 @@ import com.kronos.graphixs.display.Texture;
 
 public class Canvas2D {
 	int[][] canvas;
-	int width, height;
+	protected int width;
+	protected int height;
 
 	public Canvas2D(int width, int height) {
 		super();
@@ -83,4 +84,30 @@ public class Canvas2D {
 			}
 		}
 	}
+
+	public void setAll(int f, int r) {
+		for (int i = 0; i < canvas.length; i++) {
+			for (int j = 0; j < canvas[i].length; j++) {
+				if (getRGBA(i, j) == f) {
+					setPixel(i, j, r);
+				}
+
+			}
+		}
+	}
+
+	/**
+	 * @return the canvas
+	 */
+	public int[][] getCanvas() {
+		return canvas;
+	}
+
+	/**
+	 * @param canvas the canvas to set
+	 */
+	public void setCanvas(int[][] canvas) {
+		this.canvas = canvas;
+	}
+
 }
