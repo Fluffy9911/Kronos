@@ -4,6 +4,8 @@ import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWCursorPosCallback;
 import org.lwjgl.glfw.GLFWCursorPosCallbackI;
 import org.lwjgl.glfw.GLFWKeyCallback;
+import org.lwjgl.glfw.GLFWMouseButtonCallback;
+import org.lwjgl.glfw.GLFWMouseButtonCallbackI;
 
 public class InputHandler {
 	private static boolean[] keys = new boolean[GLFW.GLFW_KEY_LAST];
@@ -13,6 +15,8 @@ public class InputHandler {
 
 	static int released = 0;
 	static double lastx = 0, lasty = 0;
+	static boolean mouseDownRight = false, mouseDownLeft = false;
+	static boolean rightReleased = false, leftReleased = false;
 
 	// Initialize the key callback
 	public static void init(long window) {
@@ -35,10 +39,35 @@ public class InputHandler {
 				lasty = ypos;
 			}
 		}));
+		GLFW.glfwSetMouseButtonCallback(window, GLFWMouseButtonCallback.create(new GLFWMouseButtonCallbackI() {
+
+			@Override
+			public void invoke(long window, int button, int action, int mods) {
+				if (action == GLFW.GLFW_PRESS) {
+					if (GLFW.GLFW_MOUSE_BUTTON_RIGHT == button) {
+						mouseDownRight = true;
+					}
+					if (GLFW.GLFW_MOUSE_BUTTON_LEFT == button) {
+						mouseDownLeft = true;
+					}
+				} else if (action == GLFW.GLFW_RELEASE) {
+					if (GLFW.GLFW_MOUSE_BUTTON_RIGHT == button) {
+						mouseDownRight = false;
+						rightReleased = true;
+					}
+					if (GLFW.GLFW_MOUSE_BUTTON_LEFT == button) {
+						mouseDownLeft = false;
+						leftReleased = true;
+					}
+				}
+			}
+		}));
 	}
 
 	public static void nextFrame() {
 		released = 0;
+		rightReleased = false;
+		leftReleased = false;
 	}
 
 	// Static method to check if a key is pressed
@@ -65,6 +94,29 @@ public class InputHandler {
 	 */
 	public static double getLastMouseY() {
 		return lasty;
+	}
+
+	public static boolean mouseDownRight() {
+		// TODO Auto-generated method stub
+		return mouseDownRight;
+	}
+
+	public static boolean isMouseDownLeft() {
+		return mouseDownLeft;
+	}
+
+	/**
+	 * @return the rightReleased
+	 */
+	public static boolean isRightReleased() {
+		return rightReleased;
+	}
+
+	/**
+	 * @return the leftReleased
+	 */
+	public static boolean isLeftReleased() {
+		return leftReleased;
 	}
 
 }

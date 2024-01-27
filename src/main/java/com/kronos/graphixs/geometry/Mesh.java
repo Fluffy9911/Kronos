@@ -93,8 +93,10 @@ public class Mesh {
 	public void renderPPO(Shader shader, FrameBuffer fb) {
 		// Bind the VAO and draw the mesh
 		GL40.glUseProgram(shader.getProgram_id());
-		GL30.glBindVertexArray(vaoID);
 		fb.bindTexture();
+		shader.addUniform("tex", 0);
+		GL30.glBindVertexArray(vaoID);
+
 		GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, eboID);
 		GL11.glDrawElements(GL11.GL_TRIANGLES, indexCount, GL11.GL_UNSIGNED_INT, 0);
 		GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, 0);

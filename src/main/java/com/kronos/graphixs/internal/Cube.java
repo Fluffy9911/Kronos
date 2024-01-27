@@ -137,7 +137,7 @@ public class Cube {
 		Vector3f v2 = new Vector3f(x + size, y, z + size);
 		Vector3f v3 = new Vector3f(x, y, z + size);
 		Vector3f v4 = new Vector3f(x, y, z);
-		Vector3f norm = new Vector3f(0, -1, 0);
+		Vector3f norm = new Vector3f(0, 1, 0);
 		buf.addVertex(v1, get(), norm);
 		buf.addVertex(v2, get(), norm);
 		buf.addVertex(v3, get(), norm);

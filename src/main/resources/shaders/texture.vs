@@ -1,15 +1,17 @@
 #version 400 core
 
 in vec3 in_pos;
-in vec3 color;
+
 in vec2 uv;
+uniform mat4 proj;
+uniform mat4 view;
 out vec3 f_color;
 out vec2 uv_p;
 
 void main() {
     
-    f_color = color;
+    
 uv_p = uv;
-    gl_Position = vec4(in_pos, 1.0);
+    gl_Position =  proj* vec4(in_pos, 1.0);
     
 }

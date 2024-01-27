@@ -2,9 +2,11 @@ package com.kronos;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import com.kronos.core.CoreConfig;
 import com.kronos.core.event.EngineListener;
 import com.kronos.debug.Debugger;
 import com.kronos.graphixs.Loop;
@@ -13,6 +15,7 @@ import com.kronos.graphixs.display.ScreenConfig;
 import com.kronos.io.Config;
 import com.kronos.io.FileLoader;
 import com.kronos.io.ResourceIdentifier;
+import com.kronos.io.assets.InternalAssetLoader;
 
 public class Kronos {
 
@@ -20,22 +23,19 @@ public class Kronos {
 
 	private static HashMap<String, Config> registeredConfig;
 
-	public static String config_loc = "configs/main";
-
+	// config
 	public static Config k_config = new Config();
-	public static Debugger debug = new Debugger();
 
-	public static boolean debg = false, logdebug = false, extensivedebug = false;
+	// config values
+	public static boolean debg = false;
+	public static boolean logdebug = false;
+	public static boolean extensivedebug = false;
 	public static int max_threads = 2;
 
+	// resources
+	public static String config_loc = "configs/main";
 	public static String kronos_id = "kronos";
-
 	public static ResourceIdentifier kronos_rid = new ResourceIdentifier() {
-
-		/**
-		 * 
-		 */
-		private static final long serialVersionUID = 1L;
 
 		@Override
 		public String getNameid() {
@@ -70,19 +70,23 @@ public class Kronos {
 		}
 	};
 
+	// modules
+	public static Debugger debug = new Debugger();
 	public static FileLoader loader = new FileLoader(kronos_rid);
 	public static Graphixs graphixs = new Graphixs();
 
+	/**
+	 * not available until startup
+	 */
+	public static CoreConfig config;
+
+	/**
+	 * Starts Kronos default startup making config and listeners
+	 */
 	private static void defaultKronosInit() {
 		listeners = new ArrayList<>();
 		registeredConfig = new HashMap<>();
-		Config cf = new Config();
-		cf.appendBoolean("tb", true);
-		cf.appendLong("try", 1213455);
 
-		cf.appendIntegerArray("keyyy", new Integer[] { 0, 7, 5, 7, 3, 7, 998, 46 });
-
-		registerConfig("Test Config", cf);
 		Runtime.getRuntime().addShutdownHook(new Thread(() -> {
 			onEnd();
 		}));
@@ -96,11 +100,21 @@ public class Kronos {
 		}
 	}
 
+	/**
+	 * Starts opengl
+	 * 
+	 * @param sc
+	 */
 	public static void start(ScreenConfig sc) {
 		defaultKronosInit();
+		for (Iterator iterator = listeners.iterator(); iterator.hasNext();) {
+			EngineListener el = (EngineListener) iterator.next();
+			el.engineStart();
+		}
 		graphixs.startGlSequence(debug.getLogger());
 		graphixs.createScreen(sc);
-
+		config = new CoreConfig(graphixs, graphixs.g2d, loader, new InternalAssetLoader(config_loc), debug.getLogger());
+		config.setCurrent(graphixs.getConfig());
 	}
 
 	/**
@@ -115,6 +129,10 @@ public class Kronos {
 	public static void onEnd() {
 
 		loader.writeConfig(k_config, kronos_id + "_config.json", config_loc, kronos_out);
+		for (Iterator iterator = listeners.iterator(); iterator.hasNext();) {
+			EngineListener el = (EngineListener) iterator.next();
+			el.engineEnd();
+		}
 	}
 
 	public static void registerListener(EngineListener el) {

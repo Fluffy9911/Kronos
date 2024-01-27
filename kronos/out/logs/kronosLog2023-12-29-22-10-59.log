@@ -1,0 +1,12 @@
+22:10:59.003 [main] DEBUG com.kronos.Kronos - GL Version: 3.4.0 Win32 WGL Null EGL OSMesa VisualC DLL 
+22:10:59.004 [main] DEBUG com.kronos.Kronos - GL Started
+22:10:59.007 [main] INFO  com.kronos.Kronos - Set Current ScreenConfig to {Width=[900], Height=[900], Title=[KronosTesting], ClearColor=[Color [r=1.0, g=1.0, b=1.0, a=1.0]], UpdateTime=[60], Hints=[{131075=1, 131076=0}]}
+22:10:59.169 [main] INFO  com.kronos.Kronos - Frame Buffer Status Status: 36053 
+22:10:59.170 [main] INFO  com.kronos.Kronos - Frame Buffer Status Status: 36053 
+22:10:59.171 [main] INFO  com.kronos.Kronos - Frame Buffer Status Status: 36053 
+22:10:59.204 [main] DEBUG com.kronos.Kronos - Shaders Loaded:
+22:10:59.206 [main] DEBUG com.kronos.Kronos - Shader: texture, status? 
+22:10:59.206 [main] DEBUG com.kronos.Kronos - Shader: pp_tex, status? 
+22:10:59.310 [main] ERROR com.kronos.Kronos - File Path kronos/out/UI/components/persistance/test_component is null using resource identifier kronos.components.persistance 
+22:10:59.310 [main] FATAL com.kronos.Kronos - ERROR kronos\out\UI\components\persistance\test_component (The system cannot find the path specified) 
+22:10:59.313 [main] DEBUG com.kronos.Kronos - Color Color [r=1.0, g=1.0, b=1.0, a=1.0] 

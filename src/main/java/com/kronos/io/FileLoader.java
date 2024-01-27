@@ -1,9 +1,14 @@
 package com.kronos.io;
 
+import java.awt.Font;
+import java.awt.FontFormatException;
+import java.awt.GraphicsEnvironment;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -11,6 +16,9 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.zip.DataFormatException;
+import java.util.zip.Deflater;
+import java.util.zip.Inflater;
 
 import javax.imageio.ImageIO;
 
@@ -91,8 +99,13 @@ public class FileLoader {
 				out += line;
 			}
 			return out;
+
+		} catch (FileNotFoundException fe) {
+			Kronos.debug.getLogger().debug(
+					"File Loading caught a soft error, sending error in-case this is not a false alarm. Attempting fix",
+					fe);
 		} catch (IOException e) {
-			Kronos.debug.getLogger().fatal("ERROR {} ", e.getMessage());
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -173,7 +186,8 @@ public class FileLoader {
 	}
 
 	public void createAt(String file, ResourceIdentifier rid) {
-
+		File fd = new File(rid.getBasePath());
+		fd.mkdirs();
 		File f = new File(rid.getBasePath() + "/" + file);
 		try {
 			f.createNewFile();
@@ -227,27 +241,111 @@ public class FileLoader {
 		return rid.getBasePath() + "/" + path + "/" + name;
 	}
 
-	public void writeConfig(Config c,String name,String path) {
+	public void writeConfig(Config c, String name, String path) {
+		Kronos.debug.getLogger().debug("Path: {} \n {}", path + "/" + name, c.writeOut());
 		createAt(path, name);
 		tryWriteNamed(name, c.writeOut());
 	}
-	
-	public void writeConfig(Config c,String name,String path,ResourceIdentifier rd) {
-		createAt(path,name, rd);
-		tryWriteNamed(path+"/"+name,c.writeOut(), rd);
+
+	public void writeConfig(Config c, String name, String path, ResourceIdentifier rd) {
+		createAt(path, name, rd);
+		tryWriteNamed(path + "/" + name, c.writeOut(), rd);
 	}
-	
-	public Config tryRead(String name,String path) {
-		String d = tryLoad(path+"/"+name);
+
+	public Config tryRead(String name, String path) {
+		String d = tryLoad(path + "/" + name);
 		Gson g = new Gson();
 		return g.fromJson(d, Config.class);
 	}
 
+	public Config getOrCreate(String name, String path) {
+		Config c = null;
+		try {
+			c = tryRead(name, path);
+		} catch (Exception e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+		}
+		if (c == null) {
+			System.out.println("created");
+			createAt(path, name + ".json");
+			c = new Config();
+		}
+		return c;
+	}
+
 	public Config tryRead(String name, String path, ResourceIdentifier rd) {
-		
-		String d = tryLoad(path+"/"+name,rd);
+
+		String d = "";
 		Gson g = new Gson();
+		try {
+			d = tryLoad(path + "/" + name, rd);
+			if (d == null) {
+				d = "";
+			}
+
+		} catch (Exception e) {
+			Kronos.debug.getLogger().debug(
+					"File Loading caught a soft error, sending error in-case this is not a false alarm. Attempting fix",
+					e);
+		}
 		return g.fromJson(d, Config.class);
 	}
-	
+
+	public Font loadFont(File fontFile) {
+		try {
+			if (!fontFile.exists()) {
+				System.err.println("Font file does not exist: " + fontFile.getAbsolutePath());
+				return null;
+			}
+
+			Font font = Font.createFont(Font.TRUETYPE_FONT, fontFile);
+			GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(font);
+			return font;
+		} catch (FontFormatException | IOException e) {
+			System.err.println("Failed to load font: " + e.getMessage());
+			e.printStackTrace();
+		}
+
+		return null;
+	}
+
+	public static byte[] compressString(String input) throws IOException {
+		byte[] data = input.getBytes(StandardCharsets.UTF_8);
+
+		Deflater deflater = new Deflater();
+		deflater.setInput(data);
+		deflater.finish();
+
+		ByteArrayOutputStream outputStream = new ByteArrayOutputStream(data.length);
+
+		byte[] buffer = new byte[1024];
+		while (!deflater.finished()) {
+			int count = deflater.deflate(buffer);
+			outputStream.write(buffer, 0, count);
+		}
+
+		deflater.end();
+		outputStream.close();
+
+		return outputStream.toByteArray();
+	}
+
+	public static String decompressString(byte[] compressedData) throws IOException, DataFormatException {
+		Inflater inflater = new Inflater();
+		inflater.setInput(compressedData);
+
+		ByteArrayOutputStream outputStream = new ByteArrayOutputStream(compressedData.length);
+
+		byte[] buffer = new byte[1024];
+		while (!inflater.finished()) {
+			int count = inflater.inflate(buffer);
+			outputStream.write(buffer, 0, count);
+		}
+
+		inflater.end();
+		outputStream.close();
+
+		return outputStream.toString(StandardCharsets.UTF_8.name());
+	}
 }

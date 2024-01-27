@@ -8,7 +8,6 @@ import java.util.List;
 import org.joml.Vector3f;
 import org.lwjgl.opengl.GL40;
 
-import com.kronos.Kronos;
 import com.kronos.graphixs.geometry.Mesh;
 import com.kronos.graphixs.geometry.Mesh.AttributeInfo;
 
@@ -85,6 +84,15 @@ public class BasicMeshBuilder {
 		});
 	}
 
+	public void rot(float a, float x, float y, float z) {
+
+		foreach((v, c, n) -> {
+			v.rotateX(a);
+			v.rotateY(a);
+			v.rotateZ(a);
+		});
+	}
+
 	/**
 	 * @param vert
 	 * @param col
@@ -112,7 +120,7 @@ public class BasicMeshBuilder {
 			idn[i] = ind.get(i);
 
 		}
-		Kronos.debug.getLogger().debug("Verts: {} indices: {}", vs, idn);
+		// Kronos.debug.getLogger().debug("Verts: {} indices: {}", vs, idn);
 		Mesh m = new Mesh(vs, idn, am, ia);
 		m.addAll(attribs);
 		return m.build();
@@ -129,8 +137,8 @@ public class BasicMeshBuilder {
 
 	public static List<AttributeInfo> getAttribs() {
 		return List.of(new AttributeInfo("in_pos", 0, 3, GL40.GL_FLOAT, 9 * Float.BYTES, 0),
-				new AttributeInfo("color", 1, 3, GL40.GL_FLOAT, 9 * Float.BYTES, 3 * Float.BYTES),
-				new AttributeInfo("normal", 2, 3, GL40.GL_FLOAT, 9 * Float.BYTES, 6 * Float.BYTES));
+				new AttributeInfo("in_color", 1, 3, GL40.GL_FLOAT, 9 * Float.BYTES, 3 * Float.BYTES),
+				new AttributeInfo("in_normal", 2, 3, GL40.GL_FLOAT, 9 * Float.BYTES, 6 * Float.BYTES));
 	}
 
 	public static interface BuilderImpl {

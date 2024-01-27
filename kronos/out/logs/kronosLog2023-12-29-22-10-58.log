@@ -1,0 +1,4 @@
+22:10:58.921 [main] INFO  com.kronos.Kronos - Dubugger created
+22:10:58.934 [main] INFO  com.kronos.Kronos - Path Already Exists: /kronos/out Skipping
+22:10:58.951 [main] DEBUG com.kronos.Kronos - Loaded Config
+22:10:58.951 [main] DEBUG com.kronos.Kronos - Starting OPENGL

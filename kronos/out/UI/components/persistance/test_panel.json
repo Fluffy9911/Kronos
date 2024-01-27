@@ -1,0 +1,16 @@
+{
+  "data": {
+    "test_panel_position_X": "558.0",
+    "test_panel_position_H": "400.0",
+    "test_panel_position_Y": "279.0",
+    "test_panel_position_W": "300.0",
+    "hidden": "false",
+    "moveable": "true",
+    "test_panel_anchored_position_X": "40.0",
+    "test_panel_anchored_position_H": "400.0",
+    "test_panel_anchored_position_W": "300.0",
+    "update_children": "false",
+    "force_update": "false",
+    "test_panel_anchored_position_Y": "40.0"
+  }
+}

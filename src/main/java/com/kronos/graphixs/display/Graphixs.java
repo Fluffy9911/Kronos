@@ -4,6 +4,9 @@ import static org.lwjgl.glfw.GLFW.glfwInit;
 
 import java.nio.ByteBuffer;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 import org.apache.logging.log4j.Logger;
 import org.lwjgl.BufferUtils;
@@ -12,37 +15,50 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 import org.lwjgl.opengl.GL40;
+import org.lwjgl.opengl.GL46;
 import org.lwjgl.stb.STBImageWrite;
 
 import com.kronos.Kronos;
+import com.kronos.core.util.ListMap;
 import com.kronos.graphixs.FixedLoopSystem;
 import com.kronos.graphixs.FrameBuffer;
 import com.kronos.graphixs.Loop;
 import com.kronos.graphixs.color.Color;
+import com.kronos.graphixs.events.GraphicEvent;
+import com.kronos.graphixs.g2d.Graphixs2D;
+import com.kronos.graphixs.g2d.ScreenProvider;
+import com.kronos.graphixs.g2d.builder.ShapeRenderer;
 import com.kronos.graphixs.geometry.Mesh;
 import com.kronos.graphixs.geometry.meshing.Builtin;
-import com.kronos.graphixs.rendering.RenderManager;
 import com.kronos.graphixs.resources.Resource;
 import com.kronos.graphixs.resources.ResourceManager;
 import com.kronos.graphixs.shaders.Shader;
 import com.kronos.graphixs.shaders.ShaderProgram;
 
 public class Graphixs {
-	boolean g_lock = true;
+	boolean g_lock = true, dev = true;
 	private ScreenConfig config;
 	private Screen screen;
 	private ResourceManager manager = new ResourceManager();
 	private FixedLoopSystem fls;
 	private Logger l = Kronos.debug.getLogger();
 	public Mesh post_process_quad;
-	HashMap<String, FrameBuffer> buffers = new HashMap<>();
+	public HashMap<String, FrameBuffer> buffers = new HashMap<>();
 	private HashMap<String, Shader> shaders = new HashMap<String, Shader>();
 	private long window_id = -1;
-	public RenderManager manager_render = new RenderManager(this);
+
+	public Graphixs2D g2d;
+	private ListMap<String, GraphicEvent> events;
+	String fs, vs;
+	public HashMap<String, Texture> textures;
+
+	// modules
+	public ShapeRenderer shapeRenderer = new ShapeRenderer();
 
 	public void createShader(String id, Shader s) {
 		test(l);
 		s.compileShader();
+		l.info("Compiled and registered shaderid: {}", id);
 		shaders.put(id, s);
 	}
 
@@ -52,6 +68,7 @@ public class Graphixs {
 	public void setConfig(ScreenConfig config) {
 		Kronos.debug.getLogger().info("Set Current ScreenConfig to {}", config.getData());
 		this.config = config;
+
 	}
 
 	public void setFrame() {
@@ -77,10 +94,12 @@ public class Graphixs {
 		l.debug("GL Version: {} ", GLFW.glfwGetVersionString());
 		l.debug("GL Started");
 		g_lock = false;
-
+		events = new ListMap<String, GraphicEvent>();
+		textures = new HashMap<>();
 		Runtime.getRuntime().addShutdownHook(new Thread(() -> {
 			manager.close();
 		}));
+
 	}
 
 	public void test(Logger l) {
@@ -95,16 +114,68 @@ public class Graphixs {
 		GL40.glClearColor(r, g, b, a);
 	}
 
+	/**
+	 * G2D is not Available until this method is called!
+	 * 
+	 * @param config
+	 */
 	public void createScreen(ScreenConfig config) {
+		this.setConfig(config);
 		this.screen = new Screen();
 		window_id = screen.init(config);
 		manager.add(screen);
 		screen.load();
-		buffers.put("edge_detection", new FrameBuffer(config.width(), config.height(), true));
-		buffers.put("post_proccess", new FrameBuffer(config.width(), config.height(), true));
-		post_process_quad = Builtin.screenQuad();
-		createShader("texture", new ShaderProgram(Kronos.loader.tryLoad("shaders/texture.vs"),
-				Kronos.loader.tryLoad("shaders/texture.fs")));
+		if (dev) {
+			buffers.put("edge_detection", new FrameBuffer(config.width(), config.height(), true));
+			buffers.put("post_proccess", new FrameBuffer(config.width(), config.height(), true));
+			buffers.put("graphixs2d_pane", new FrameBuffer(config.width(), config.height(), true));
+			post_process_quad = Builtin.screenQuad();
+			createShader("texture", new TextureProgram(Kronos.loader.tryLoad("shaders/texture.vs"),
+					Kronos.loader.tryLoad("shaders/texture.fs")));
+			createShader("highlight", new HighlightProgram(Kronos.loader.tryLoad("shaders/texture.vs"),
+					Kronos.loader.tryLoad("shaders/highlight.fs")));
+			createShader("highlight_g", new HighlightProgram(Kronos.loader.tryLoad("shaders/texture.vs"),
+					Kronos.loader.tryLoad("shaders/highlighted_g.fs")));
+			createShader("pp_tex", new ShaderProgram(Kronos.loader.tryLoad("shaders/vertex.vs"),
+					Kronos.loader.tryLoad("shaders/fragment.fs")));
+			createShader("3d", new ShaderProgram(Kronos.loader.tryLoad("shaders/threed.vs"),
+					Kronos.loader.tryLoad("shaders/basiccolor.fs")));
+
+			fs = Kronos.loader.tryLoad("shaders/texture.fs");
+			vs = Kronos.loader.tryLoad("shaders/fragment.fs");
+			shaders.get("texture").compileShader();
+		}
+		g2d = new Graphixs2D(buffers.get("graphixs2d_pane"), new ScreenProvider(config),
+				(ShaderProgram) shaders.get("texture"));
+
+		l.debug("Shaders Loaded:");
+		for (Map.Entry<String, Shader> entry : shaders.entrySet()) {
+			String key = entry.getKey();
+			Shader val = entry.getValue();
+			l.debug("Shader: {}, status? {}", key, val.getShaderCompilationStatus());
+		}
+		l.debug("Loading textures");
+		if (dev) {
+			textures.put("test_shape", new Texture(Kronos.loader.tryLoadImage("texture/test_shape.png")));
+			textures.put("button_base", new Texture(Kronos.loader.tryLoadImage("texture/button.png")));
+			textures.put("down", new Texture(Kronos.loader.tryLoadImage("texture/down.png")));
+			textures.put("slider_left", new Texture(Kronos.loader.tryLoadImage("texture/slider_left.png")));
+			textures.put("slider_right", new Texture(Kronos.loader.tryLoadImage("texture/slider_right.png")));
+			textures.put("slider", new Texture(Kronos.loader.tryLoadImage("texture/slider_middle.png")));
+			textures.put("toggle_off", new Texture(Kronos.loader.tryLoadImage("texture/bg.png")));
+			textures.put("toggle_on", new Texture(Kronos.loader.tryLoadImage("texture/bg.png")));
+			textures.put("top", new Texture(Kronos.loader.tryLoadImage("texture/top.png")));
+			textures.put("up", new Texture(Kronos.loader.tryLoadImage("texture/up.png")));
+		}
+		for (Map.Entry<String, Texture> entry : textures.entrySet()) {
+			String key = entry.getKey();
+			Texture val = entry.getValue();
+
+			l.debug("Loaded Texture: {} with size of W: {} H : {}", key, val.getHeight(), val.getHeight());
+
+		}
+
+		screen.makeWindowVisible(window_id, config.updateTime());
 	}
 
 	public void render(Runnable r) {
@@ -191,10 +262,14 @@ public class Graphixs {
 	}
 
 	public void drawPPQuad(Shader shader) {
+
+		GL40.glActiveTexture(GL40.GL_TEXTURE0);
 		buffers.get("post_proccess").bindTexture();
-		writeTextureOut("test");
 
 		post_process_quad.renderPPO(shader, buffers.get("post_proccess"));
+
+		// post_process_quad.render(shader);
+
 		buffers.get("post_proccess").unbindTexture();
 	}
 
@@ -255,6 +330,61 @@ public class Graphixs {
 		m.render(shaders.get("texture"));
 		t.unbind();
 		m.cleanup();
+	}
+
+	public void glErrors() {
+		int gl = GL46.glGetError();
+		if (gl != 0)
+			Kronos.debug.getLogger().debug("GL Error: {}", gl);
+
+	}
+
+	public void logChanges(String i) {
+		l.debug("Graphixs Config has changed: {}", i);
+	}
+
+	public void logErrors(String e) {
+		l.error("The Program Has Reported Graphixs Errors: {}", e);
+	}
+
+	public void registerEvent(String s, GraphicEvent ge) {
+		events.put(s, ge);
+	}
+
+	public void createEvent(String key) {
+		events.create(key);
+	}
+
+	public void runEvent(String key) {
+		List<GraphicEvent> ev = events.get(key);
+		for (Iterator iterator = ev.iterator(); iterator.hasNext();) {
+			GraphicEvent ge = (GraphicEvent) iterator.next();
+			ge.updated(this);
+
+		}
+
+	}
+
+	public void runEvent2D(String key) {
+		List<GraphicEvent> ev = events.get(key);
+		for (Iterator iterator = ev.iterator(); iterator.hasNext();) {
+			GraphicEvent ge = (GraphicEvent) iterator.next();
+			ge.update2D(g2d);
+
+		}
+
+	}
+
+	public String getFs() {
+		return fs;
+	}
+
+	public String getVs() {
+		return vs;
+	}
+
+	public class Targets {
+
 	}
 
 }

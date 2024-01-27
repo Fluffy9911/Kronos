@@ -303,4 +303,13 @@ public class Config {
 		}
 	}
 
+	public float readOrWriteFloat(String name, float i) {
+		if (data.containsKey(name)) {
+			return readFloat(name);
+		} else {
+			appendFloat(name, i);
+			return i;
+		}
+	}
+
 }

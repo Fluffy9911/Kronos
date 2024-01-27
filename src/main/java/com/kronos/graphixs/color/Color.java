@@ -1,5 +1,7 @@
 package com.kronos.graphixs.color;
 
+import java.util.Random;
+
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 
@@ -14,6 +16,11 @@ public class Color {
 
 	public Color(float r, float g, float b) {
 		this(r, g, b, 1);
+	}
+
+	public Color(int i) {
+		java.awt.Color co = new java.awt.Color(i);
+		setRGBA(co.getRed() / 255, co.getGreen() / 255, co.getBlue() / 255, co.getAlpha() / 255);
 	}
 
 	/**
@@ -95,6 +102,48 @@ public class Color {
 		builder.append(a);
 		builder.append("]");
 		return builder.toString();
+	}
+
+	public int rgb() {
+		java.awt.Color co = new java.awt.Color(r, g, b);
+		return co.getRGB();
+	}
+
+	public static Color interpolate(Color color1, Color color2, float percent) {
+
+		int red = Math.min(1, Math.max(0, (int) (color1.getR() + percent * (color2.getR() - color1.getR()))));
+		int green = Math.min(1, Math.max(0, (int) (color1.getG() + percent * (color2.getG() - color1.getG()))));
+		int blue = Math.min(1, Math.max(0, (int) (color1.getB() + percent * (color2.getB() - color1.getB()))));
+		int alpha = Math.min(1, Math.max(0, (int) (color1.getA() + percent * (color2.getA() - color1.getA()))));
+
+		return new Color(red, green, blue, alpha);
+	}
+
+	public int getRGBAShort(int rgba) {
+		int alpha = (rgba >> 24) & 0xFF;
+		int red = (rgba >> 16) & 0xFF;
+		int green = (rgba >> 8) & 0xFF;
+		int blue = rgba & 0xFF;
+
+		short a = (short) alpha;
+		short r = (short) red;
+		short b = (short) blue;
+		short g = (short) green;
+
+		// Combine the values back into a short
+		int result = (short) ((a << 12) | (r << 8) | (g << 4) | b);
+
+		return result;
+	}
+
+	public static Color randomNoA() {
+		Random r = new Random();
+		return new Color(r.nextFloat(0, 1), r.nextFloat(0, 1), r.nextFloat(0, 1));
+	}
+
+	public static Color random() {
+		Random r = new Random();
+		return new Color(r.nextFloat(0, 1), r.nextFloat(0, 1), r.nextFloat(0, 1), r.nextFloat(0, 1));
 	}
 
 }

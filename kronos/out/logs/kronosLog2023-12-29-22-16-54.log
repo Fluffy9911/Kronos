@@ -1,0 +1,17 @@
+22:16:54.018 [main] DEBUG com.kronos.Kronos - Shaders Loaded:
+22:16:54.020 [main] DEBUG com.kronos.Kronos - Shader: texture, status? 
+22:16:54.020 [main] DEBUG com.kronos.Kronos - Shader: pp_tex, status? 
+22:16:54.118 [main] ERROR com.kronos.Kronos - File Path kronos/out/UI/components/persistance/test_component is null using resource identifier kronos.components.persistance 
+22:16:54.118 [main] DEBUG com.kronos.Kronos - File Loading caught a soft error, sending error in-case this is not a false alarm. Attempting fix
+java.io.FileNotFoundException: kronos\out\UI\components\persistance\test_component (The system cannot find the path specified)
+	at java.base/java.io.FileInputStream.open0(Native Method) ~[?:?]
+	at java.base/java.io.FileInputStream.open(FileInputStream.java:216) ~[?:?]
+	at java.base/java.io.FileInputStream.<init>(FileInputStream.java:157) ~[?:?]
+	at java.base/java.io.FileInputStream.<init>(FileInputStream.java:111) ~[?:?]
+	at java.base/java.io.FileReader.<init>(FileReader.java:60) ~[?:?]
+	at com.kronos.io.FileLoader.tryLoad(FileLoader.java:91) [classes/:?]
+	at com.kronos.io.FileLoader.tryRead(FileLoader.java:260) [classes/:?]
+	at com.kronos.io.config.ConfigFile.load(ConfigFile.java:26) [classes/:?]
+	at com.kronos.graphixs.g2d.ui.ComponentHandler.load(ComponentHandler.java:65) [classes/:?]
+	at com.kronos.Testing.main(Testing.java:76) [classes/:?]
+22:16:54.126 [main] DEBUG com.kronos.Kronos - Color Color [r=1.0, g=1.0, b=1.0, a=1.0] 
