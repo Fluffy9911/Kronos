@@ -174,10 +174,7 @@ public class Testing {
 			if (InputHandler.isKeyReleased(GLFW.GLFW_KEY_G)) {
 				a.setFps((int) (a.getFps() - 5));
 			}
-			pc.updateMovement();
-			pc.updateRotation();
-			pc.dd();
-			pc.calculatePositioning(900, 900);
+			pc.update();
 			draw.use();
 			draw.addUniform("as", ams);
 			draw.addUniform("ac", ac);

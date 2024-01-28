@@ -16,22 +16,23 @@ import com.kronos.io.Keys;
 
 public class PerspectiveCamera {
 
-	Vector3f position, up, lookat;
+	protected Vector3f position, up, lookat;
 
-	float fov, yaw, pitch;
-	float zoom;
-	float near, far;
-	int width = Kronos.config.getCurrent().width();
-	int height = Kronos.config.getCurrent().height();
+	protected float fov, yaw, pitch;
+	protected float zoom;
+	protected float near, far;
+	protected int screen_width = Kronos.config.getCurrent().width();
+	protected int screen_height = Kronos.config.getCurrent().height();
 	Matrix4f view, projection, model;
 //flags
-	public boolean usemouspos = true, mlock = false;
-	int lx = 0, ly = 0;
-	private float velocity = 1.5f;
+	protected boolean usemouspos = true, mlock = false, move = false;;
 
-	public static float SENSITIVITY = 0.025f;
+	protected int lastX = 0, lastY = 0;
+	protected float velocity = 1.5f;
 
-	private float coeff = 0.5f;
+	public static final float SENSITIVITY = 0.025f;
+
+	protected float coeff = 0.5f;
 
 	public PerspectiveCamera(Vector3f position, Vector3f up, Vector3f lookat) {
 		this.position = position;
@@ -43,9 +44,7 @@ public class PerspectiveCamera {
 		zoom = 1;
 		near = 1;
 		far = 1000;
-		view = new Matrix4f();
-		projection = new Matrix4f();
-		model = new Matrix4f();
+		resetMatricies();
 
 	}
 
@@ -59,9 +58,7 @@ public class PerspectiveCamera {
 		zoom = 1;
 		near = 1;
 		far = 1000;
-		view = new Matrix4f();
-		projection = new Matrix4f();
-		model = new Matrix4f();
+		resetMatricies();
 	}
 
 	public PerspectiveCamera(Vector3f position, Vector3f up, Vector3f lookat, float fov, float yaw, float pitch) {
@@ -74,9 +71,7 @@ public class PerspectiveCamera {
 		zoom = 1;
 		near = 1;
 		far = 1000;
-		view = new Matrix4f();
-		projection = new Matrix4f();
-		model = new Matrix4f();
+		resetMatricies();
 	}
 
 	public PerspectiveCamera(Vector3f position, Vector3f up, Vector3f lookat, float fov, float yaw, float pitch,
@@ -90,9 +85,7 @@ public class PerspectiveCamera {
 		this.zoom = zoom;
 		near = 1;
 		far = 1000;
-		view = new Matrix4f();
-		projection = new Matrix4f();
-		model = new Matrix4f();
+		resetMatricies();
 	}
 
 	public PerspectiveCamera(Vector3f position, Vector3f up, Vector3f lookat, float fov, float yaw, float pitch,
@@ -106,38 +99,40 @@ public class PerspectiveCamera {
 		this.zoom = zoom;
 		this.near = near;
 		this.far = far;
-		view = new Matrix4f();
-		projection = new Matrix4f();
-		model = new Matrix4f();
+		resetMatricies();
 	}
 
 	public void calculatePositioning(int width, int height) {
+		resetMatricies();
+
+		projection.perspective(fov, (width / height), near, far);
+
+		updateViewMatrix();
+
+		model.scale(zoom);
+
+	}
+
+	public void resetMatricies() {
 		view = new Matrix4f();
 		projection = new Matrix4f();
 		model = new Matrix4f();
-		projection.perspective(fov, (width / height), near, far);
-		updateViewMatrix();
-		model.scale(zoom);
-
-//		view.rotate(yaw, 1, 0, 0);
-//		view.rotate(pitch, 0, 1, 0);
-
 	}
 
 	public void move(Vector3f mov) {
 		position.add(mov);
-		calculatePositioning(width, height);
+		calculatePositioning(screen_width, screen_height);
+		move = true;
 	}
 
 	public void yaw(float ya, float easing) {
 		yaw = MathLerp.lerpSmooth(yaw + ya, yaw, easing);
-
-		// Math.floor(yaw);
+		move = true;
 	}
 
 	public void pitch(float pi, float easing) {
 		pitch = MathLerp.lerpSmooth(pitch + pi, pitch, easing);
-		// Math.floor(pitch);
+		move = true;
 	}
 
 	/**
@@ -149,30 +144,35 @@ public class PerspectiveCamera {
 
 			float movementValue = (velocity * coeff);
 			moveLeft(movementValue);
+			move = true;
 
 		}
 		if (InputHandler.isKeyPressed(Keys.D)) {
 			float movementValue = (velocity * coeff);
 			moveRight(movementValue);
+			move = true;
 		}
 
 		if (InputHandler.isKeyPressed(Keys.S)) {
 
 			float movementValue = (velocity * coeff);
 			moveBackward(movementValue);
-
+			move = true;
 		}
 		if (InputHandler.isKeyPressed(Keys.W)) {
 			float movementValue = (velocity * coeff);
 			moveForeward(movementValue);
+			move = true;
 		}
 		if (InputHandler.isKeyPressed(Keys.SPACE)) {
 			float movementValue = (velocity * coeff);
 			position.add(0, movementValue, 0);
+			move = true;
 		}
 		if (InputHandler.isKeyPressed(GLFW.GLFW_KEY_LEFT_SHIFT)) {
 			float movementValue = (velocity * coeff);
 			position.add(0, -movementValue, 0);
+			move = true;
 		}
 
 	}
@@ -195,8 +195,7 @@ public class PerspectiveCamera {
 			if (InputHandler.isKeyPressed(Keys.DOWN)) {
 				padd -= rotateSpeed; // Rotate right
 			}
-			// Clamp pitch to avoid flipping
-			// padd = (float) Math.max(-Math.PI / 2.0f, Math.min(Math.PI / 2.0f, pitch));
+
 			pitch(padd, 0.5f);
 			yaw(yadd, 0.5f);
 
@@ -205,19 +204,19 @@ public class PerspectiveCamera {
 			double mouseY = InputHandler.getLastMouseY();
 
 			// Calculate the change in mouse position
-			float deltaX = (float) mouseX - lx;
-			float deltaY = (float) mouseY - ly;
+			float deltaX = (float) mouseX - lastX;
+			float deltaY = (float) mouseY - lastY;
 
 			deltaX *= SENSITIVITY;
 			deltaY *= SENSITIVITY;
 
 			Vector3f mc = new Vector3f(deltaX, deltaY, 0);
 
-			lx = (int) mouseX;
-			ly = (int) mouseY;
+			lastX = (int) mouseX;
+			lastY = (int) mouseY;
 			updateCameraRotation(deltaX, deltaY);
 			mc = new Vector3f();
-			calculatePositioning(width, height);
+			calculatePositioning(screen_width, screen_height);
 			if (InputHandler.isKeyReleased(Keys.L)) {
 				mlock = !mlock;
 			}
@@ -230,18 +229,74 @@ public class PerspectiveCamera {
 
 					r.mouseMove((int) mp.x, (int) mp.y);
 				} catch (AWTException e) {
-					// TODO Auto-generated catch block
+
 					e.printStackTrace();
 				}
 
 			}
 		}
-		// calculatePositioning(width, height);
+
 	}
 
 	private void updateCameraRotation(float deltaX, float deltaY) {
 		yaw(deltaX, 0.5f);
 		pitch(deltaY, 0.5f);
+	}
+
+	private void updateViewMatrix() {
+
+		Vector3f direction = new Vector3f((float) (Math.cos(yaw) * Math.cos(pitch)), (float) Math.sin(pitch),
+				(float) (Math.sin(yaw) * Math.cos(pitch))).normalize();
+
+		Vector3f target = new Vector3f(position).add(direction);
+		lookat = target;
+
+		view.identity().lookAt(position, target, new Vector3f(0, 1, 0));
+	}
+
+	public void update() {
+		screen_width = Kronos.config.getCurrent().width();
+		screen_height = Kronos.config.getCurrent().height();
+
+		updateMovement();
+		updateRotation();
+
+		if (move) {
+			calculatePositioning(screen_width, screen_height);
+			move = false;
+		}
+	}
+
+	public void moveRight(float distance) {
+
+		Vector3f right = new Vector3f();
+		right.set(getDirection()).cross(up).normalize().mul(distance);
+		position.add(right);
+	}
+
+	public void moveLeft(float distance) {
+
+		Vector3f right = new Vector3f();
+		right.set(getDirection()).cross(up).normalize().mul(-distance);
+		position.add(right);
+	}
+
+	public void moveForeward(float amnt) {
+		Vector3f t = getDirection();
+		t.normalize().mul(amnt);
+		position.add(t);
+	}
+
+	public void moveBackward(float amnt) {
+		Vector3f t = getDirection();
+		t.normalize().mul(amnt);
+		position.sub(t);
+	}
+
+	public Vector3f getDirection() {
+		// Calculate the direction vector based on yaw and pitch
+		return new Vector3f((float) (Math.cos(yaw) * Math.cos(pitch)), (float) Math.sin(pitch),
+				(float) (Math.sin(yaw) * Math.cos(pitch))).normalize();
 	}
 
 	/**
@@ -328,12 +383,6 @@ public class PerspectiveCamera {
 		return model;
 	}
 
-	public void dd() {
-		if (InputHandler.isKeyReleased(GLFW.GLFW_KEY_Q)) {
-			System.out.println(toString());
-		}
-	}
-
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
@@ -366,9 +415,9 @@ public class PerspectiveCamera {
 		builder.append(", far=");
 		builder.append(far);
 		builder.append(", width=");
-		builder.append(width);
+		builder.append(screen_width);
 		builder.append(", height=");
-		builder.append(height);
+		builder.append(screen_height);
 		builder.append(", ");
 		if (view != null) {
 			builder.append("view=");
@@ -431,44 +480,32 @@ public class PerspectiveCamera {
 		return builder.toString();
 	}
 
-	private void updateViewMatrix() {
-		// Calculate the direction vector based on yaw and pitch
-		Vector3f direction = new Vector3f((float) (Math.cos(yaw) * Math.cos(pitch)), (float) Math.sin(pitch),
-				(float) (Math.sin(yaw) * Math.cos(pitch))).normalize();
-
-		// Calculate the target point based on the current position and direction
-		Vector3f target = new Vector3f(position).add(direction);
-		lookat = target;
-		// Update the view matrix
-		view.identity().lookAt(position, target, new Vector3f(0, 1, 0));
-	}
-
 	/**
 	 * @return the width
 	 */
 	public int getWidth() {
-		return width;
+		return screen_width;
 	}
 
 	/**
 	 * @param width the width to set
 	 */
 	public void setWidth(int width) {
-		this.width = width;
+		this.screen_width = width;
 	}
 
 	/**
 	 * @return the height
 	 */
 	public int getHeight() {
-		return height;
+		return screen_height;
 	}
 
 	/**
 	 * @param height the height to set
 	 */
 	public void setHeight(int height) {
-		this.height = height;
+		this.screen_height = height;
 	}
 
 	/**
@@ -553,52 +590,6 @@ public class PerspectiveCamera {
 	 */
 	public void setModel(Matrix4f model) {
 		this.model = model;
-	}
-
-	public void update() {
-		width = Kronos.config.getCurrent().width();
-		height = Kronos.config.getCurrent().height();
-	}
-
-	public void updateLR(float vel) {
-		Vector3f ld = lookat;
-		ld.normalize();
-		ld.rotateX(90);
-		ld.mul(vel);
-		position.add(ld);
-
-	}
-
-	public void moveRight(float distance) {
-
-		Vector3f right = new Vector3f();
-		right.set(getDirection()).cross(up).normalize().mul(distance);
-		position.add(right);
-	}
-
-	public void moveLeft(float distance) {
-
-		Vector3f right = new Vector3f();
-		right.set(getDirection()).cross(up).normalize().mul(-distance);
-		position.add(right);
-	}
-
-	public void moveForeward(float amnt) {
-		Vector3f t = getDirection();
-		t.normalize().mul(amnt);
-		position.add(t);
-	}
-
-	public void moveBackward(float amnt) {
-		Vector3f t = getDirection();
-		t.normalize().mul(amnt);
-		position.sub(t);
-	}
-
-	public Vector3f getDirection() {
-		// Calculate the direction vector based on yaw and pitch
-		return new Vector3f((float) (Math.cos(yaw) * Math.cos(pitch)), (float) Math.sin(pitch),
-				(float) (Math.sin(yaw) * Math.cos(pitch))).normalize();
 	}
 
 }
