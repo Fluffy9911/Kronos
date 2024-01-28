@@ -131,16 +131,16 @@ public class Testing {
 		Mesh quad = Builtin.screenQuad();
 		FontRenderer fr = FontRenderer.createDefault();
 
-		float ams = 0.5f;
-		Vector3f ac = Colors.White.asVector3f();
-		Light l = new Light(new Vector3f(0, 5, 0), new Vector3f(0, 0, 0), Colors.Green.asVector3f());
+		float ams = 1f;
+		Vector3f ac = Colors.Black.asVector3f();
+		Light l = new Light(new Vector3f(0, 5, 0), new Vector3f(0, 0, 0), Colors.White.asVector3f());
 		int cu = 20;
 
 		Kronos.startDrawing((a) -> {
 			GL40.glEnable(GL40.GL_DEPTH_TEST);
-			if (InputHandler.isKeyReleased(GLFW.GLFW_KEY_E)) {
-				l.setPosition(pc.getPosition());
-			}
+
+			l.setPosition(pc.getPosition());
+
 			if (InputHandler.isKeyReleased(GLFW.GLFW_KEY_R)) {
 				l.setPosition(pc.getLookat());
 			}
@@ -192,7 +192,7 @@ public class Testing {
 			// g.enablePPBuffer();
 			for (Iterator iterator = mms.iterator(); iterator.hasNext();) {
 				Mesh mesh = (Mesh) iterator.next();
-				mesh.renderNoInds(draw);
+				mesh.render(draw);
 			}
 			//
 			fr.renderText("Cam Position: " + pc.getPosition().toString() + " Camera Look: " + pc.getLookat().toString(),

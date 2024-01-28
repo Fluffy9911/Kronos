@@ -16,7 +16,7 @@ out vec4 fragOutput;
 
 void main() {
 
-float specularStrength = 0.5;
+float specularStrength = 1;
 
 
  float ambientStrength = as;

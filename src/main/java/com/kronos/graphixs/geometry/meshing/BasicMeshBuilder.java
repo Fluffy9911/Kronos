@@ -123,7 +123,7 @@ public class BasicMeshBuilder {
 		// Kronos.debug.getLogger().debug("Verts: {} indices: {}", vs, idn);
 		Mesh m = new Mesh(vs, idn, am, ia);
 		m.addAll(attribs);
-		return m.buildNoIndices();
+		return m.build();
 	}
 
 	/**
@@ -139,6 +139,10 @@ public class BasicMeshBuilder {
 		return List.of(new AttributeInfo("in_pos", 0, 3, GL40.GL_FLOAT, 9 * Float.BYTES, 0),
 				new AttributeInfo("in_color", 1, 3, GL40.GL_FLOAT, 9 * Float.BYTES, 3 * Float.BYTES),
 				new AttributeInfo("in_normal", 2, 3, GL40.GL_FLOAT, 9 * Float.BYTES, 6 * Float.BYTES));
+	}
+
+	public void addAllData(VertexBuffer vb) {
+		this.vertBuffer.addAll(vb.getVerts(), vb.getNormal(), vb.getColor());
 	}
 
 	public static interface BuilderImpl {
