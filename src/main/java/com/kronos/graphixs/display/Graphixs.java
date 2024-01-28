@@ -52,6 +52,8 @@ public class Graphixs {
 	String fs, vs;
 	public HashMap<String, Texture> textures;
 
+	public double DELTA_TIME = 0;
+
 	// modules
 	public ShapeRenderer shapeRenderer = new ShapeRenderer();
 
@@ -187,6 +189,7 @@ public class Graphixs {
 				while (screen.shouldRender()) {
 					screen.preRender();
 					r.run();
+					DELTA_TIME = fls.getDeltaTime();
 					screen.postRender();
 				}
 

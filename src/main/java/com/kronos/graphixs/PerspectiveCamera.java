@@ -19,6 +19,10 @@ public class PerspectiveCamera {
 	int height = Kronos.config.getCurrent().height();
 	Matrix4f view, projection, model;
 
+	private float velocity = 1.5f;
+
+	private float coeff = 0.5f;
+
 	public PerspectiveCamera(Vector3f position, Vector3f up, Vector3f lookat) {
 		this.position = position;
 		this.up = up;
@@ -126,31 +130,40 @@ public class PerspectiveCamera {
 		// Math.floor(pitch);
 	}
 
+	/**
+	 * Handles the cameras movement
+	 */
 	public void updateMovement() {
-		float moveSpeed = 0.1f; // You can adjust this value
-
-		Vector3f moveVector = new Vector3f();
 
 		if (InputHandler.isKeyPressed(Keys.A)) {
-			moveVector.add(-moveSpeed, 0, 0);
+
+			float movementValue = (velocity * coeff);
+			moveLeft(movementValue);
+
 		}
 		if (InputHandler.isKeyPressed(Keys.D)) {
-			moveVector.add(moveSpeed, 0, 0);
-		}
-		if (InputHandler.isKeyPressed(Keys.W)) {
-			moveVector.add(0, 0, -moveSpeed);
-		}
-		if (InputHandler.isKeyPressed(Keys.S)) {
-			moveVector.add(0, 0, moveSpeed);
-		}
-		if (InputHandler.isKeyPressed(Keys.SPACE)) {
-			moveVector.add(0, moveSpeed, 0);
-		}
-		if (InputHandler.isKeyPressed(GLFW.GLFW_KEY_LEFT_SHIFT)) {
-			moveVector.add(0, -moveSpeed, 0);
+			float movementValue = (velocity * coeff);
+			moveRight(movementValue);
 		}
 
-		move(moveVector);
+		if (InputHandler.isKeyPressed(Keys.S)) {
+
+			float movementValue = (velocity * coeff);
+			moveBackward(movementValue);
+
+		}
+		if (InputHandler.isKeyPressed(Keys.W)) {
+			float movementValue = (velocity * coeff);
+			moveForeward(movementValue);
+		}
+		if (InputHandler.isKeyPressed(Keys.SPACE)) {
+			float movementValue = (velocity * coeff);
+			position.add(0, movementValue, 0);
+		}
+		if (InputHandler.isKeyPressed(GLFW.GLFW_KEY_LEFT_SHIFT)) {
+			float movementValue = (velocity * coeff);
+			position.add(0, -movementValue, 0);
+		}
 
 	}
 
@@ -491,6 +504,47 @@ public class PerspectiveCamera {
 	public void update() {
 		width = Kronos.config.getCurrent().width();
 		height = Kronos.config.getCurrent().height();
+	}
+
+	public void updateLR(float vel) {
+		Vector3f ld = lookat;
+		ld.normalize();
+		ld.rotateX(90);
+		ld.mul(vel);
+		position.add(ld);
+
+	}
+
+	public void moveRight(float distance) {
+
+		Vector3f right = new Vector3f();
+		right.set(getDirection()).cross(up).normalize().mul(distance);
+		position.add(right);
+	}
+
+	public void moveLeft(float distance) {
+
+		Vector3f right = new Vector3f();
+		right.set(getDirection()).cross(up).normalize().mul(-distance);
+		position.add(right);
+	}
+
+	public void moveForeward(float amnt) {
+		Vector3f t = lookat;
+		t.normalize().mul(amnt);
+		position.add(t);
+	}
+
+	public void moveBackward(float amnt) {
+		Vector3f t = lookat;
+		t.normalize().mul(-amnt);
+		position.add(t);
+	}
+
+	public Vector3f getDirection() {
+		// Calculate the direction vector based on yaw and pitch
+		return new Vector3f((float) (Math.cos(yaw) * Math.cos(pitch)), (float) Math.sin(pitch),
+				(float) (Math.sin(yaw) * Math.cos(pitch))).normalize();
 	}
 
 }

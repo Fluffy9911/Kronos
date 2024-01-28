@@ -173,6 +173,47 @@ public abstract class FixedLoopSystem {
 
 		}
 
+		@Override
+		public double target() {
+			// TODO Auto-generated method stub
+			return fls.TARGET_FPS;
+		}
+
+	}
+
+	/**
+	 * @return the deltaTime
+	 */
+	public float getDeltaTime() {
+		return deltaTime;
+	}
+
+	/**
+	 * @return the running
+	 */
+	public boolean isRunning() {
+		return running;
+	}
+
+	/**
+	 * @return the fps
+	 */
+	public int getFps() {
+		return fps;
+	}
+
+	/**
+	 * @return the frameCount
+	 */
+	public int getFrameCount() {
+		return frameCount;
+	}
+
+	/**
+	 * @return the tARGET_FPS
+	 */
+	public double getTARGET_FPS() {
+		return TARGET_FPS;
 	}
 
 }

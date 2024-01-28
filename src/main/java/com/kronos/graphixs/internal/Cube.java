@@ -83,7 +83,7 @@ public class Cube {
 	}
 
 	public Vector3f get() {
-		return new Vector3f(c.getR(), c.getG(), c.getB());
+		return c.asVector3f();
 	}
 
 	public void applyVerts(BasicMeshBuilder buffer) {

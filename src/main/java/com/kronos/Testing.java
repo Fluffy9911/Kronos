@@ -11,6 +11,7 @@ import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL40;
 
 import com.kronos.core.event.EngineListener;
+import com.kronos.debug.DebugInputFields;
 import com.kronos.graphixs.Light;
 import com.kronos.graphixs.PerspectiveCamera;
 import com.kronos.graphixs.color.Color;
@@ -20,6 +21,7 @@ import com.kronos.graphixs.display.ScreenConfig;
 import com.kronos.graphixs.g2d.Graphixs2D;
 import com.kronos.graphixs.g2d.TextureBatch;
 import com.kronos.graphixs.g2d.builder.ShapeRenderer;
+import com.kronos.graphixs.g2d.fonts.FontRenderer;
 import com.kronos.graphixs.g2d.pixelcanvas.Canvas2D;
 import com.kronos.graphixs.geometry.Mesh;
 import com.kronos.graphixs.geometry.meshing.BasicMeshBuilder;
@@ -63,7 +65,7 @@ public class Testing {
 			@Override
 			public int updateTime() {
 				// TODO Auto-generated method stub
-				return 60;
+				return -1;
 			}
 
 			@Override
@@ -75,6 +77,7 @@ public class Testing {
 		});
 
 		Graphixs g = Kronos.graphixs;
+		DebugInputFields dbgif = new DebugInputFields();
 
 		Graphixs2D g2d = g.g2d;
 
@@ -126,11 +129,13 @@ public class Testing {
 			}
 		});
 		Mesh quad = Builtin.screenQuad();
+		FontRenderer fr = FontRenderer.createDefault();
 
 		float ams = 0.5f;
 		Vector3f ac = Colors.White.asVector3f();
 		Light l = new Light(new Vector3f(0, 5, 0), new Vector3f(0, 0, 0), Colors.Green.asVector3f());
 		int cu = 20;
+
 		Kronos.startDrawing((a) -> {
 			GL40.glEnable(GL40.GL_DEPTH_TEST);
 			if (InputHandler.isKeyReleased(GLFW.GLFW_KEY_E)) {
@@ -163,6 +168,12 @@ public class Testing {
 				mms.clear();
 				addRand(mms, i);
 			}
+			if (InputHandler.isKeyReleased(GLFW.GLFW_KEY_F)) {
+				a.setFps((int) (a.getFps() + 5));
+			}
+			if (InputHandler.isKeyReleased(GLFW.GLFW_KEY_G)) {
+				a.setFps((int) (a.getFps() - 5));
+			}
 			pc.updateMovement();
 			pc.updateRotation();
 			pc.dd();
@@ -184,6 +195,14 @@ public class Testing {
 				mesh.render(draw);
 			}
 			//
+			fr.renderText("Cam Position: " + pc.getPosition().toString() + " Camera Look: " + pc.getLookat().toString(),
+					0, 0, fr.useDefaultFont().deriveFont(20.5f), java.awt.Color.BLACK, tb);
+			fr.renderText("Meshes: " + i + " FPS: " + a.getFps() + "/" + a.target() + " Delta: " + a.getDeltaTime(), 0,
+					15, fr.useDefaultFont().deriveFont(20.5f), java.awt.Color.BLACK, tb);
+			// tb.drawTexture(0, 0, 200, 200, c.toTexture());
+			tb.render();
+			tb.end();
+
 			g.glErrors();
 			InputHandler.nextFrame();
 		});

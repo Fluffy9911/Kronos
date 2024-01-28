@@ -8,4 +8,6 @@ public interface LoopAccessor {
 
 	public void setFps(int fps);
 
+	public double target();
+
 }

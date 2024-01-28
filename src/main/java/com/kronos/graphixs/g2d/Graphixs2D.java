@@ -8,7 +8,6 @@ import org.lwjgl.opengl.GL40;
 import com.kronos.Kronos;
 import com.kronos.core.util.SListener;
 import com.kronos.graphixs.FrameBuffer;
-import com.kronos.graphixs.color.Colors;
 import com.kronos.graphixs.display.ScreenConfig;
 import com.kronos.graphixs.geometry.meshing.TexturedMesh;
 import com.kronos.graphixs.shaders.ShaderProgram;
@@ -35,8 +34,8 @@ public class Graphixs2D implements SListener {
 	public void batchRender(List<TexturedMesh> meshes) {
 		rendered_textures = 0;
 
-		graphixs_pane.start();
-		Kronos.graphixs.clearScreen(Colors.White);
+//		graphixs_pane.start();
+//		Kronos.graphixs.clearScreen(Colors.White);
 		// render
 
 		for (Iterator iterator = meshes.iterator(); iterator.hasNext();) {
@@ -49,7 +48,7 @@ public class Graphixs2D implements SListener {
 			tm.getTexture().unbind();
 		}
 
-		graphixs_pane.end();
+//		graphixs_pane.end();
 		GL40.glUseProgram(0);
 
 	}
