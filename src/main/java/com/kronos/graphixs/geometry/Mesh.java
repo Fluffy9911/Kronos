@@ -1,5 +1,7 @@
 package com.kronos.graphixs.geometry;
 
+import java.nio.FloatBuffer;
+import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -11,7 +13,11 @@ import org.lwjgl.opengl.GL30;
 import org.lwjgl.opengl.GL40;
 
 import com.kronos.graphixs.FrameBuffer;
+import com.kronos.graphixs.geometry.meshing.BasicMeshBuilder;
 import com.kronos.graphixs.shaders.Shader;
+
+import de.javagl.obj.Obj;
+import de.javagl.obj.ObjData;
 
 public class Mesh {
 	private int vaoID;
@@ -44,6 +50,11 @@ public class Mesh {
 		return this;
 	}
 
+	public Mesh buildNoIndices() {
+		buildVAO(v);
+		return this;
+	}
+
 	/**
 	 * @param vertices
 	 * @param indices
@@ -73,6 +84,53 @@ public class Mesh {
 		GL30.glBindVertexArray(0);
 	}
 
+	public static Mesh buildVAO(Obj o) {
+		FloatBuffer fb = ObjData.getVertices(o);
+		FloatBuffer n = ObjData.getNormals(o);
+		IntBuffer i = ObjData.getFaceVertexIndices(o);
+		int vaoID = GL30.glGenVertexArrays();
+		GL30.glBindVertexArray(vaoID);
+
+		// Create and bind the VBO (Vertex Buffer Object) for vertices
+		int vboID = GL15.glGenBuffers();
+		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vboID);
+		GL15.glBufferData(GL15.GL_ARRAY_BUFFER, fb, GL15.GL_STATIC_DRAW);
+
+		// Create and bind the EBO (Element Buffer Object) for indices
+		int eboID = GL15.glGenBuffers();
+		GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, eboID);
+		GL15.glBufferData(GL15.GL_ELEMENT_ARRAY_BUFFER, i, GL15.GL_STATIC_DRAW);
+		GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, 0);
+
+		ArrayList<AttributeInfo> attributeList = (ArrayList<AttributeInfo>) BasicMeshBuilder.getAttribs();
+		for (Iterator iterator = attributeList.iterator(); iterator.hasNext();) {
+			AttributeInfo ai = (AttributeInfo) iterator.next();
+
+			GL40.glVertexAttribPointer(ai.getLoc(), ai.size, ai.type, false, ai.stride, ai.offset);
+			GL40.glEnableVertexAttribArray(ai.getLoc());
+		}
+
+		GL30.glBindVertexArray(0);
+	}
+
+	private void buildVAO(float[] vertices) {
+		vaoID = GL30.glGenVertexArrays();
+
+		// Create and bind the VBO (Vertex Buffer Object) for vertices
+		vboID = GL15.glGenBuffers();
+		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vboID);
+		GL15.glBufferData(GL15.GL_ARRAY_BUFFER, vertices, GL15.GL_STATIC_DRAW);
+		GL30.glBindVertexArray(vaoID);
+		for (Iterator iterator = attributeList.iterator(); iterator.hasNext();) {
+			AttributeInfo ai = (AttributeInfo) iterator.next();
+
+			GL40.glVertexAttribPointer(ai.getLoc(), ai.size, ai.type, false, ai.stride, ai.offset);
+			GL40.glEnableVertexAttribArray(ai.getLoc());
+		}
+
+		GL30.glBindVertexArray(0);
+	}
+
 	public void addAttribute(String attributeName, int loc, int size, int type, int stride, int offset) {
 
 		attributeList.add(new AttributeInfo(attributeName, loc, size, type, stride, offset));
@@ -86,6 +144,16 @@ public class Mesh {
 		GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, eboID);
 		GL11.glDrawElements(GL11.GL_TRIANGLES, indexCount, GL11.GL_UNSIGNED_INT, 0);
 		GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, 0);
+		GL30.glBindVertexArray(0);
+		GL40.glUseProgram(0);
+	}
+
+	public void renderNoInds(Shader shader) {
+		// Bind the VAO and draw the mesh
+		GL40.glUseProgram(shader.getProgram_id());
+		GL30.glBindVertexArray(vaoID);
+
+		GL30.glDrawArrays(GL30.GL_TRIANGLES, 0, getVertCount());
 		GL30.glBindVertexArray(0);
 		GL40.glUseProgram(0);
 	}

@@ -123,7 +123,7 @@ public class BasicMeshBuilder {
 		// Kronos.debug.getLogger().debug("Verts: {} indices: {}", vs, idn);
 		Mesh m = new Mesh(vs, idn, am, ia);
 		m.addAll(attribs);
-		return m.build();
+		return m.buildNoIndices();
 	}
 
 	/**

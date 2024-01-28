@@ -13,11 +13,11 @@ import org.lwjgl.opengl.GL40;
 import com.kronos.core.event.EngineListener;
 import com.kronos.debug.DebugInputFields;
 import com.kronos.graphixs.Light;
-import com.kronos.graphixs.PerspectiveCamera;
 import com.kronos.graphixs.color.Color;
 import com.kronos.graphixs.color.Colors;
 import com.kronos.graphixs.display.Graphixs;
 import com.kronos.graphixs.display.ScreenConfig;
+import com.kronos.graphixs.display.camera.PerspectiveCamera;
 import com.kronos.graphixs.g2d.Graphixs2D;
 import com.kronos.graphixs.g2d.TextureBatch;
 import com.kronos.graphixs.g2d.builder.ShapeRenderer;
@@ -192,7 +192,7 @@ public class Testing {
 			// g.enablePPBuffer();
 			for (Iterator iterator = mms.iterator(); iterator.hasNext();) {
 				Mesh mesh = (Mesh) iterator.next();
-				mesh.render(draw);
+				mesh.renderNoInds(draw);
 			}
 			//
 			fr.renderText("Cam Position: " + pc.getPosition().toString() + " Camera Look: " + pc.getLookat().toString(),
@@ -215,12 +215,10 @@ public class Testing {
 
 			Cube cube = new Cube(r.nextInt(-1000, 1000), r.nextInt(-1000, 1000), r.nextInt(-1000, 1000),
 					r.nextInt(2, 100), Colors.randColor());
-			BasicMeshBuilder builder = new BasicMeshBuilder();
-
-			builder.rot(0.5f, 1, 1, 1);
-			cube.applyVerts(builder);
-			builder.addAll(BasicMeshBuilder.getAttribs());
-			Mesh cmesh = builder.build();
+			BasicMeshBuilder b = new BasicMeshBuilder();
+			cube.applyVerts(b);
+			b.addAll(BasicMeshBuilder.getAttribs());
+			Mesh cmesh = b.build();
 			mesh.add(cmesh);
 		}
 	}

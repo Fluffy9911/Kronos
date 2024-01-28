@@ -87,26 +87,56 @@ public class Cube {
 	}
 
 	public void applyVerts(BasicMeshBuilder buffer) {
-		int i = buffer.getIndex();
-//		if (i == 0) {
-		up(i += 1).add(buffer);
-//		} else {
-//			up(i).add(buffer);
-//		}
-		i = buffer.getIndex();
-		down(i += 1).add(buffer);
+		buffer.addVertex(new Vector3f(x, y - size, z), get(), new Vector3f(0, -1, 0));
+		buffer.addVertex(new Vector3f(x, y - size, z - size), get(), new Vector3f(0, -1, 0));
+		buffer.addVertex(new Vector3f(x + size, y - size, z - size), get(), new Vector3f(0, -1, 0));
+		buffer.addVertex(new Vector3f(x + size, y - size, z), get(), new Vector3f(0, -1, 0));
 
-		i = buffer.getIndex();
-		right(i += 1).add(buffer);
+		buffer.addVertex(new Vector3f(x, y, z), get(), new Vector3f(0, 1, 0));
+		buffer.addVertex(new Vector3f(x, y, z - size), get(), new Vector3f(0, -1, 0));
+		buffer.addVertex(new Vector3f(x + size, y, z - size), get(), new Vector3f(0, 1, 0));
+		buffer.addVertex(new Vector3f(x + size, y, z), get(), new Vector3f(0, 1, 0));
 
-		i = buffer.getIndex();
-		left(i += 1).add(buffer);
+		buffer.addVertex(new Vector3f(x, y - size, z), get(), new Vector3f(-1, 0, 0));
+		buffer.addVertex(new Vector3f(x, y - size, z + size), get(), new Vector3f(-1, 0, 0));
+		buffer.addVertex(new Vector3f(x, y, z + size), get(), new Vector3f(-1, 0, 0));
+		buffer.addVertex(new Vector3f(x, y, z), get(), new Vector3f(-1, 0, 0));
 
-		i = buffer.getIndex();
-		front(i += 1).add(buffer);
+		buffer.addVertex(new Vector3f(x + size, y - size, z), get(), new Vector3f(1, 0, 0));
+		buffer.addVertex(new Vector3f(x + size, y - size, z + size), get(), new Vector3f(1, 0, 0));
+		buffer.addVertex(new Vector3f(x + size, y, z + size), get(), new Vector3f(1, 0, 0));
+		buffer.addVertex(new Vector3f(x + size, y, z), get(), new Vector3f(1, 0, 0));
 
-		i = buffer.getIndex();
-		back(i += 1).add(buffer);
+		buffer.addVertex(new Vector3f(x, y - size, z + size), get(), new Vector3f(0, 0, 1));
+		buffer.addVertex(new Vector3f(x + size, y - size, z + size), get(), new Vector3f(0, 0, 1));
+		buffer.addVertex(new Vector3f(x + size, y, z + size), get(), new Vector3f(0, 0, 1));
+		buffer.addVertex(new Vector3f(x, y, z + size), get(), new Vector3f(0, 0, 1));
+
+		buffer.addVertex(new Vector3f(x, y - size, z), get(), new Vector3f(0, 0, -1));
+		buffer.addVertex(new Vector3f(x + size, y - size, z), get(), new Vector3f(0, 0, -1));
+		buffer.addVertex(new Vector3f(x + size, y, z), get(), new Vector3f(0, 0, -1));
+		buffer.addVertex(new Vector3f(x, y, z), get(), new Vector3f(0, 0, -1));
+
+		int[] indices = {
+				// Bottom face
+				0, 1, 2, 2, 3, 0,
+
+				// Top face
+				4, 5, 6, 6, 7, 4,
+
+				// Left face
+				8, 9, 10, 10, 11, 8,
+
+				// Right face
+				12, 13, 14, 14, 15, 12,
+
+				// Front face
+				16, 17, 18, 18, 19, 16,
+
+				// Back face
+				20, 21, 22, 22, 23, 20 };
+
+		buffer.addInd(indices);
 
 	}
 
@@ -137,7 +167,7 @@ public class Cube {
 		Vector3f v2 = new Vector3f(x + size, y, z + size);
 		Vector3f v3 = new Vector3f(x, y, z + size);
 		Vector3f v4 = new Vector3f(x, y, z);
-		Vector3f norm = new Vector3f(0, 1, 0);
+		Vector3f norm = new Vector3f(0, -1, 0);
 		buf.addVertex(v1, get(), norm);
 		buf.addVertex(v2, get(), norm);
 		buf.addVertex(v3, get(), norm);

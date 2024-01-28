@@ -1,10 +1,16 @@
-package com.kronos.graphixs;
+package com.kronos.graphixs.display.camera;
+
+import java.awt.AWTException;
+import java.awt.Robot;
+import java.awt.Toolkit;
 
 import org.joml.Matrix4f;
+import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFW;
 
 import com.kronos.Kronos;
+import com.kronos.dynamo.simple.MathLerp;
 import com.kronos.io.InputHandler;
 import com.kronos.io.Keys;
 
@@ -18,8 +24,12 @@ public class PerspectiveCamera {
 	int width = Kronos.config.getCurrent().width();
 	int height = Kronos.config.getCurrent().height();
 	Matrix4f view, projection, model;
-
+//flags
+	public boolean usemouspos = true, mlock = false;
+	int lx = 0, ly = 0;
 	private float velocity = 1.5f;
+
+	public static float SENSITIVITY = 0.025f;
 
 	private float coeff = 0.5f;
 
@@ -120,13 +130,13 @@ public class PerspectiveCamera {
 	}
 
 	public void yaw(float ya, float easing) {
-		yaw += ya;
+		yaw = MathLerp.lerpSmooth(yaw + ya, yaw, easing);
 
 		// Math.floor(yaw);
 	}
 
 	public void pitch(float pi, float easing) {
-		pitch += pi;
+		pitch = MathLerp.lerpSmooth(pitch + pi, pitch, easing);
 		// Math.floor(pitch);
 	}
 
@@ -168,26 +178,70 @@ public class PerspectiveCamera {
 	}
 
 	public void updateRotation() {
-		float rotateSpeed = 0.01f; // You can adjust this value
 		float yadd = 0;
 		float padd = 0;
-		if (InputHandler.isKeyPressed(Keys.LEFT)) {
-			yadd -= rotateSpeed; // Rotate left
+		if (!usemouspos) {
+			float rotateSpeed = 0.01f; // You can adjust this value
+
+			if (InputHandler.isKeyPressed(Keys.LEFT)) {
+				yadd -= rotateSpeed; // Rotate left
+			}
+			if (InputHandler.isKeyPressed(Keys.RIGHT)) {
+				yadd += rotateSpeed; // Rotate right
+			}
+			if (InputHandler.isKeyPressed(Keys.UP)) {
+				padd += rotateSpeed; // Rotate left
+			}
+			if (InputHandler.isKeyPressed(Keys.DOWN)) {
+				padd -= rotateSpeed; // Rotate right
+			}
+			// Clamp pitch to avoid flipping
+			// padd = (float) Math.max(-Math.PI / 2.0f, Math.min(Math.PI / 2.0f, pitch));
+			pitch(padd, 0.5f);
+			yaw(yadd, 0.5f);
+
+		} else {
+			double mouseX = InputHandler.getLastMouseX();
+			double mouseY = InputHandler.getLastMouseY();
+
+			// Calculate the change in mouse position
+			float deltaX = (float) mouseX - lx;
+			float deltaY = (float) mouseY - ly;
+
+			deltaX *= SENSITIVITY;
+			deltaY *= SENSITIVITY;
+
+			Vector3f mc = new Vector3f(deltaX, deltaY, 0);
+
+			lx = (int) mouseX;
+			ly = (int) mouseY;
+			updateCameraRotation(deltaX, deltaY);
+			mc = new Vector3f();
+			calculatePositioning(width, height);
+			if (InputHandler.isKeyReleased(Keys.L)) {
+				mlock = !mlock;
+			}
+			if (mlock) {
+				try {
+					Robot r = new Robot();
+					float cx = Toolkit.getDefaultToolkit().getScreenSize().width / 2;
+					float cy = Toolkit.getDefaultToolkit().getScreenSize().height / 2;
+					Vector2f mp = new Vector2f(cx, cy);
+
+					r.mouseMove((int) mp.x, (int) mp.y);
+				} catch (AWTException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+			}
 		}
-		if (InputHandler.isKeyPressed(Keys.RIGHT)) {
-			yadd += rotateSpeed; // Rotate right
-		}
-		if (InputHandler.isKeyPressed(Keys.UP)) {
-			padd += rotateSpeed; // Rotate left
-		}
-		if (InputHandler.isKeyPressed(Keys.DOWN)) {
-			padd -= rotateSpeed; // Rotate right
-		}
-		// Clamp pitch to avoid flipping
-		// padd = (float) Math.max(-Math.PI / 2.0f, Math.min(Math.PI / 2.0f, pitch));
-		pitch(padd, 0.5f);
-		yaw(yadd, 0.5f);
-		calculatePositioning(width, height);
+		// calculatePositioning(width, height);
+	}
+
+	private void updateCameraRotation(float deltaX, float deltaY) {
+		yaw(deltaX, 0.5f);
+		pitch(deltaY, 0.5f);
 	}
 
 	/**
@@ -530,15 +584,15 @@ public class PerspectiveCamera {
 	}
 
 	public void moveForeward(float amnt) {
-		Vector3f t = lookat;
+		Vector3f t = getDirection();
 		t.normalize().mul(amnt);
 		position.add(t);
 	}
 
 	public void moveBackward(float amnt) {
-		Vector3f t = lookat;
-		t.normalize().mul(-amnt);
-		position.add(t);
+		Vector3f t = getDirection();
+		t.normalize().mul(amnt);
+		position.sub(t);
 	}
 
 	public Vector3f getDirection() {

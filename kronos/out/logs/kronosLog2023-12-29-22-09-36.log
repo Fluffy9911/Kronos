@@ -1,3 +1,0 @@
-22:09:36.004 [main] ERROR com.kronos.Kronos - File Path kronos/out/UI/components/persistance/test_component is null using resource identifier kronos.components.persistance 
-22:09:36.005 [main] FATAL com.kronos.Kronos - ERROR kronos\out\UI\components\persistance\test_component (The system cannot find the path specified) 
-22:09:36.008 [main] DEBUG com.kronos.Kronos - Color Color [r=1.0, g=1.0, b=1.0, a=1.0] 

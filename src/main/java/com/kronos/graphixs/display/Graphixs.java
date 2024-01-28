@@ -2,6 +2,9 @@ package com.kronos.graphixs.display;
 
 import static org.lwjgl.glfw.GLFW.glfwInit;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -34,6 +37,10 @@ import com.kronos.graphixs.resources.Resource;
 import com.kronos.graphixs.resources.ResourceManager;
 import com.kronos.graphixs.shaders.Shader;
 import com.kronos.graphixs.shaders.ShaderProgram;
+
+import de.javagl.obj.Obj;
+import de.javagl.obj.ObjReader;
+import de.javagl.obj.ObjUtils;
 
 public class Graphixs {
 	boolean g_lock = true, dev = true;
@@ -388,6 +395,11 @@ public class Graphixs {
 
 	public class Targets {
 
+	}
+
+	public Obj readFile(String path) throws IOException {
+		FileInputStream stream = new FileInputStream(new File(path));
+		return ObjUtils.convertToRenderable(ObjReader.read(stream));
 	}
 
 }
