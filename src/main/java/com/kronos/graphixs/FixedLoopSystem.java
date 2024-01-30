@@ -1,9 +1,11 @@
 package com.kronos.graphixs;
 
+import java.util.concurrent.TimeUnit;
+
 public abstract class FixedLoopSystem {
 
 	private int updatesPerSecond;
-	float deltaTime = 0;
+	double deltaTime = 0;
 	int framenum = 0;
 	private long last = 0, current;
 	private boolean running = false;
@@ -97,8 +99,10 @@ public abstract class FixedLoopSystem {
 
 					update();
 					frameCount++;
+
+					this.deltaTime = now - lastRenderTime;
+
 					lastRenderTime = now;
-					deltaTime = (float) (now - lastRenderTime);
 					// Update the frames we got.
 					int thisSecond = (int) (lastUpdateTime / 1000000000);
 					if (thisSecond > lastSecondTime) {
@@ -162,9 +166,9 @@ public abstract class FixedLoopSystem {
 		}
 
 		@Override
-		public float getDeltaTime() {
+		public double getDeltaTime() {
 			// TODO Auto-generated method stub
-			return fls.deltaTime;
+			return TimeUnit.NANOSECONDS.toMillis((long) fls.deltaTime);
 		}
 
 		@Override
@@ -182,9 +186,9 @@ public abstract class FixedLoopSystem {
 	}
 
 	/**
-	 * @return the deltaTime
+	 * @return the deltaTime in NANOSECONDS
 	 */
-	public float getDeltaTime() {
+	public double getDeltaTime() {
 		return deltaTime;
 	}
 

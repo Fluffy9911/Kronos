@@ -4,44 +4,76 @@ import org.joml.Vector3f;
 
 public class Light {
 	private Vector3f position;
-	private Vector3f target;
-	private Vector3f color;
+	private Vector3f ambient, specular, diffuse;
 
-	public Light(Vector3f position, Vector3f target, Vector3f color) {
+	float linear, quad, constant;
+
+	public Light(Vector3f position, Vector3f ambient, Vector3f specular, Vector3f diffuse, float linear, float quad,
+			float constant) {
+		super();
 		this.position = position;
-		this.target = target;
-		this.color = color;
+		this.ambient = ambient;
+		this.specular = specular;
+		this.diffuse = diffuse;
+		this.linear = linear;
+		this.quad = quad;
+		this.constant = constant;
 	}
 
-	// Getter and Setter methods for the position
 	public Vector3f getPosition() {
 		return position;
+	}
+
+	public Vector3f getAmbient() {
+		return ambient;
+	}
+
+	public Vector3f getSpecular() {
+		return specular;
+	}
+
+	public Vector3f getDiffuse() {
+		return diffuse;
 	}
 
 	public void setPosition(Vector3f position) {
 		this.position = position;
 	}
 
-	// Getter and Setter methods for the target
-	public Vector3f getTarget() {
-		return target;
+	public void setAmbient(Vector3f ambient) {
+		this.ambient = ambient;
 	}
 
-	public void setTarget(Vector3f target) {
-		this.target = target;
+	public void setSpecular(Vector3f specular) {
+		this.specular = specular;
 	}
 
-	// Getter and Setter methods for the color
-	public Vector3f getColor() {
-		return color;
+	public void setDiffuse(Vector3f diffuse) {
+		this.diffuse = diffuse;
 	}
 
-	public void setColor(Vector3f color) {
-		this.color = color;
+	public void setLinear(float linear) {
+		this.linear = linear;
 	}
 
-	@Override
-	public String toString() {
-		return "Light [position=" + position + ", target=" + target + ", color=" + color + "]";
+	public void setQuad(float quad) {
+		this.quad = quad;
 	}
+
+	public void setConstant(float constant) {
+		this.constant = constant;
+	}
+
+	public float getLinear() {
+		return linear;
+	}
+
+	public float getQuad() {
+		return quad;
+	}
+
+	public float getConstant() {
+		return constant;
+	}
+
 }

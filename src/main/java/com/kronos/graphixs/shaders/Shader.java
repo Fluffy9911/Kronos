@@ -1,12 +1,21 @@
 package com.kronos.graphixs.shaders;
 
+import static org.lwjgl.opengl.GL30C.glBindBufferBase;
+import static org.lwjgl.opengl.GL43C.GL_BUFFER_BINDING;
+import static org.lwjgl.opengl.GL43C.GL_SHADER_STORAGE_BLOCK;
+import static org.lwjgl.opengl.GL43C.GL_SHADER_STORAGE_BUFFER;
+import static org.lwjgl.opengl.GL43C.glGetProgramResourceIndex;
+import static org.lwjgl.opengl.GL43C.glGetProgramResourceiv;
+
 import java.nio.FloatBuffer;
+import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 import org.joml.Matrix4f;
 import org.joml.Vector2f;
+import org.joml.Vector2i;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 import org.lwjgl.BufferUtils;
@@ -14,6 +23,7 @@ import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL40;
 
 import com.kronos.Kronos;
+import com.kronos.graphixs.Light;
 import com.kronos.graphixs.resources.Resource;
 
 public abstract class Shader implements Resource {
@@ -234,6 +244,56 @@ public abstract class Shader implements Resource {
 			GL20.glBindAttribLocation(pid, loc, name);
 		}
 
+	}
+
+	public Vector2i bindLightsSSBO(List<Light> lights) {
+		this.use();
+		IntBuffer props = BufferUtils.createIntBuffer(1);
+		IntBuffer params = BufferUtils.createIntBuffer(1);
+		props.put(0, GL_BUFFER_BINDING);
+		int lightIndex = glGetProgramResourceIndex(program_id, GL_SHADER_STORAGE_BLOCK, "Lights");
+
+		glGetProgramResourceiv(this.program_id, GL_SHADER_STORAGE_BLOCK, lightIndex, props, null, params);
+		int binding = params.get(0);
+
+		int ssboID = GL40.glGenBuffers();
+		FloatBuffer lightData = BufferUtils.createFloatBuffer(lights.size() * 20); // 4 floats per vector
+		GL40.glBindBuffer(GL_SHADER_STORAGE_BUFFER, ssboID);
+		for (Light light : lights) {
+			lightData.put(light.getPosition().x);
+			lightData.put(light.getPosition().y);
+			lightData.put(light.getPosition().z);
+			lightData.put(0.0f); // padding for alignment
+
+			lightData.put(light.getConstant());
+			lightData.put(light.getLinear());
+			lightData.put(light.getQuad());
+			lightData.put(0.0f); // padding for alignment
+
+			lightData.put(light.getAmbient().x);
+			lightData.put(light.getAmbient().y);
+			lightData.put(light.getAmbient().z);
+			lightData.put(0.0f); // padding for alignment
+
+			lightData.put(light.getDiffuse().x);
+			lightData.put(light.getDiffuse().y);
+			lightData.put(light.getDiffuse().z);
+			lightData.put(0.0f); // padding for alignment
+
+			lightData.put(light.getSpecular().x);
+			lightData.put(light.getSpecular().y);
+			lightData.put(light.getSpecular().z);
+			lightData.put(0.0f); // padding for alignment
+		}
+
+		lightData.flip();
+		GL40.glBufferData(GL_SHADER_STORAGE_BUFFER, lightData, GL40.GL_STATIC_DRAW);
+		GL40.glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
+		return new Vector2i(binding, ssboID);
+	}
+
+	public void bindSSBO(Vector2i buf) {
+		glBindBufferBase(GL_SHADER_STORAGE_BUFFER, buf.x, buf.y);
 	}
 
 }

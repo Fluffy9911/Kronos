@@ -1,12 +1,12 @@
-12:07:23.481 [main] DEBUG com.kronos.Kronos - Loaded Texture: slider with size of W: 512 H : 512
-12:07:23.482 [main] DEBUG com.kronos.Kronos - Loaded Texture: toggle_off with size of W: 4096 H : 4096
-12:07:23.482 [main] DEBUG com.kronos.Kronos - Loaded Texture: toggle_on with size of W: 4096 H : 4096
-12:07:23.483 [main] DEBUG com.kronos.Kronos - Loaded Texture: top with size of W: 512 H : 512
-12:07:23.483 [main] DEBUG com.kronos.Kronos - Loaded Texture: test_shape with size of W: 32 H : 32
-12:07:23.483 [main] DEBUG com.kronos.Kronos - Loaded Texture: button_base with size of W: 512 H : 512
-12:07:23.483 [main] DEBUG com.kronos.Kronos - Loaded Texture: slider_right with size of W: 512 H : 512
-12:07:23.483 [main] DEBUG com.kronos.Kronos - Loaded Texture: up with size of W: 512 H : 512
-12:07:23.483 [main] DEBUG com.kronos.Kronos - Loaded Texture: down with size of W: 512 H : 512
-12:07:23.483 [main] DEBUG com.kronos.Kronos - Loaded Texture: slider_left with size of W: 512 H : 512
-12:07:23.691 [main] DEBUG com.kronos.Kronos - Starting Shape Building proccess
-12:07:23.767 [main] DEBUG com.kronos.Kronos - Color Color [r=1.0, g=1.0, b=1.0, a=1.0] 
+18:34:36.017 [main] DEBUG com.kronos.Kronos - Loaded Texture: slider with size of W: 512 H : 512
+18:34:36.019 [main] DEBUG com.kronos.Kronos - Loaded Texture: toggle_off with size of W: 4096 H : 4096
+18:34:36.019 [main] DEBUG com.kronos.Kronos - Loaded Texture: toggle_on with size of W: 4096 H : 4096
+18:34:36.019 [main] DEBUG com.kronos.Kronos - Loaded Texture: top with size of W: 512 H : 512
+18:34:36.019 [main] DEBUG com.kronos.Kronos - Loaded Texture: test_shape with size of W: 32 H : 32
+18:34:36.019 [main] DEBUG com.kronos.Kronos - Loaded Texture: button_base with size of W: 512 H : 512
+18:34:36.019 [main] DEBUG com.kronos.Kronos - Loaded Texture: slider_right with size of W: 512 H : 512
+18:34:36.020 [main] DEBUG com.kronos.Kronos - Loaded Texture: up with size of W: 512 H : 512
+18:34:36.020 [main] DEBUG com.kronos.Kronos - Loaded Texture: down with size of W: 512 H : 512
+18:34:36.020 [main] DEBUG com.kronos.Kronos - Loaded Texture: slider_left with size of W: 512 H : 512
+18:34:36.190 [main] DEBUG com.kronos.Kronos - Starting Shape Building proccess
+18:34:36.250 [main] DEBUG com.kronos.Kronos - Color Color [r=0.0, g=0.0, b=0.0, a=1.0] 

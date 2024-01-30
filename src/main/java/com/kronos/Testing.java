@@ -1,7 +1,6 @@
 package com.kronos;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -12,7 +11,6 @@ import org.lwjgl.opengl.GL40;
 
 import com.kronos.core.event.EngineListener;
 import com.kronos.debug.DebugInputFields;
-import com.kronos.graphixs.Light;
 import com.kronos.graphixs.color.Color;
 import com.kronos.graphixs.color.Colors;
 import com.kronos.graphixs.display.Graphixs;
@@ -27,6 +25,7 @@ import com.kronos.graphixs.geometry.Mesh;
 import com.kronos.graphixs.geometry.meshing.BasicMeshBuilder;
 import com.kronos.graphixs.geometry.meshing.Builtin;
 import com.kronos.graphixs.internal.Cube;
+import com.kronos.graphixs.scene.Scene3D;
 import com.kronos.graphixs.shaders.ShaderProgram;
 import com.kronos.io.Config;
 import com.kronos.io.InputHandler;
@@ -41,13 +40,13 @@ public class Testing {
 			@Override
 			public int width() {
 				// TODO Auto-generated method stub
-				return 900;
+				return 1000;
 			}
 
 			@Override
 			public int height() {
 				// TODO Auto-generated method stub
-				return 900;
+				return 1000;
 			}
 
 			@Override
@@ -59,7 +58,7 @@ public class Testing {
 			@Override
 			public Color getClearColor() {
 				// TODO Auto-generated method stub
-				return Colors.White;
+				return Colors.Black;
 			}
 
 			@Override
@@ -131,19 +130,11 @@ public class Testing {
 		Mesh quad = Builtin.screenQuad();
 		FontRenderer fr = FontRenderer.createDefault();
 
-		float ams = 1f;
-		Vector3f ac = Colors.Black.asVector3f();
-		Light l = new Light(new Vector3f(0, 5, 0), new Vector3f(0, 0, 0), Colors.White.asVector3f());
-		int cu = 20;
-
+		Scene3D scene = new Scene3D(draw, pc);
+		scene.setMeshes(mms);
 		Kronos.startDrawing((a) -> {
 			GL40.glEnable(GL40.GL_DEPTH_TEST);
 
-			l.setPosition(pc.getPosition());
-
-			if (InputHandler.isKeyReleased(GLFW.GLFW_KEY_R)) {
-				l.setPosition(pc.getLookat());
-			}
 			if (InputHandler.isKeyReleased(GLFW.GLFW_KEY_Z)) {
 				pc.setZoom(pc.getZoom() + 0.1f);
 			}
@@ -167,6 +158,8 @@ public class Testing {
 			if (InputHandler.isKeyReleased(GLFW.GLFW_KEY_M)) {
 				mms.clear();
 				addRand(mms, i);
+				scene.setMeshes(mms);
+				scene.redoLights(new Random());
 			}
 			if (InputHandler.isKeyReleased(GLFW.GLFW_KEY_F)) {
 				a.setFps((int) (a.getFps() + 5));
@@ -175,27 +168,17 @@ public class Testing {
 				a.setFps((int) (a.getFps() - 5));
 			}
 			pc.update();
-			draw.use();
-			draw.addUniform("as", ams);
-			draw.addUniform("ac", ac);
 
-			draw.addUniform("lp", l.getPosition());
-			draw.addUniform("lightColor", l.getColor());
-			draw.addUniform("viewPos", pc.getLookat());
+			scene.prepare();
+			scene.render();
 
-			draw.addUniform("proj", pc.getProjection());
-			draw.addUniform("view", pc.getView());
-			// draw.addUniform("model", pc.getModel());
-			// g.enablePPBuffer();
-			for (Iterator iterator = mms.iterator(); iterator.hasNext();) {
-				Mesh mesh = (Mesh) iterator.next();
-				mesh.render(draw);
-			}
 			//
 			fr.renderText("Cam Position: " + pc.getPosition().toString() + " Camera Look: " + pc.getLookat().toString(),
-					0, 0, fr.useDefaultFont().deriveFont(20.5f), java.awt.Color.BLACK, tb);
-			fr.renderText("Meshes: " + i + " FPS: " + a.getFps() + "/" + a.target() + " Delta: " + a.getDeltaTime(), 0,
-					15, fr.useDefaultFont().deriveFont(20.5f), java.awt.Color.BLACK, tb);
+					0, 0, fr.useDefaultFont().deriveFont(20.5f), java.awt.Color.WHITE, tb);
+			fr.renderText(
+					"Meshes: " + i + "Scene Lights: " + scene.lights() + " FPS: " + a.getFps() + "/" + a.target()
+							+ " Delta: " + a.getDeltaTime(),
+					0, 15, fr.useDefaultFont().deriveFont(20.5f), java.awt.Color.WHITE, tb);
 			// tb.drawTexture(0, 0, 200, 200, c.toTexture());
 			tb.render();
 			tb.end();
@@ -210,8 +193,8 @@ public class Testing {
 		for (int i = 0; i < a; i++) {
 			Random r = new Random();
 
-			Cube cube = new Cube(r.nextInt(-1000, 1000), r.nextInt(-1000, 1000), r.nextInt(-1000, 1000),
-					r.nextInt(2, 100), Colors.randColor());
+			Cube cube = new Cube(r.nextInt(-2000, 2000), r.nextInt(-2000, 2000), r.nextInt(-2000, 2000),
+					r.nextInt(10, 200), Colors.randColor());
 			BasicMeshBuilder b = new BasicMeshBuilder();
 			cube.applyVerts(b);
 			b.addAll(BasicMeshBuilder.getAttribs());

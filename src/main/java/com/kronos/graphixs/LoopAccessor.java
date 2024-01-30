@@ -4,7 +4,7 @@ public interface LoopAccessor {
 
 	public double getFps();
 
-	public float getDeltaTime();
+	public double getDeltaTime();
 
 	public void setFps(int fps);
 
