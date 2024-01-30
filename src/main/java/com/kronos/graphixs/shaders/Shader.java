@@ -292,6 +292,28 @@ public abstract class Shader implements Resource {
 		return new Vector2i(binding, ssboID);
 	}
 
+	public Vector2i bindBufferObject(BufferObject bo, String bufferName) {
+		this.use();
+		IntBuffer props = BufferUtils.createIntBuffer(1);
+		IntBuffer params = BufferUtils.createIntBuffer(1);
+		props.put(0, GL_BUFFER_BINDING);
+		int index = glGetProgramResourceIndex(program_id, GL_SHADER_STORAGE_BLOCK, bufferName);
+
+		glGetProgramResourceiv(this.program_id, GL_SHADER_STORAGE_BLOCK, index, props, null, params);
+		int binding = params.get(0);
+
+		int ssboID = GL40.glGenBuffers();
+		FloatBuffer bufferdata = BufferUtils.createFloatBuffer(bo.getSize());
+		GL40.glBindBuffer(GL_SHADER_STORAGE_BUFFER, ssboID);
+
+		bo.append(bufferdata);
+
+		bufferdata.flip();
+		GL40.glBufferData(GL_SHADER_STORAGE_BUFFER, bufferdata, GL40.GL_STATIC_DRAW);
+		GL40.glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
+		return new Vector2i(binding, ssboID);
+	}
+
 	public void bindSSBO(Vector2i buf) {
 		glBindBufferBase(GL_SHADER_STORAGE_BUFFER, buf.x, buf.y);
 	}

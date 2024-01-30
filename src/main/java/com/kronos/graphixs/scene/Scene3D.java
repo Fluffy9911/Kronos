@@ -11,13 +11,20 @@ import java.util.Random;
 import org.joml.Vector2i;
 import org.joml.Vector3f;
 
+import com.kronos.Kronos;
 import com.kronos.Testing;
 import com.kronos.graphixs.Light;
+import com.kronos.graphixs.color.Color;
 import com.kronos.graphixs.color.Colors;
+import com.kronos.graphixs.display.Texture;
 import com.kronos.graphixs.display.camera.PerspectiveCamera;
 import com.kronos.graphixs.geometry.Mesh;
 import com.kronos.graphixs.geometry.meshing.BasicMeshBuilder;
 import com.kronos.graphixs.internal.Cube;
+import com.kronos.graphixs.rendering.RenderTarget;
+import com.kronos.graphixs.rendering.RenderTarget.TargetConfig;
+import com.kronos.graphixs.rendering.buffers.MeshBuffer;
+import com.kronos.graphixs.shaders.Shader3D;
 import com.kronos.graphixs.shaders.ShaderProgram;
 import com.kronos.io.InputHandler;
 import com.kronos.io.Keys;
@@ -28,7 +35,7 @@ import com.kronos.io.Keys;
 public class Scene3D {
 	List<Light> lights;
 	List<Mesh> meshes;
-	ShaderProgram draw;
+	Shader3D draw;
 	PerspectiveCamera pc;
 	Vector2i li;
 	String[] displays;
@@ -39,24 +46,49 @@ public class Scene3D {
 	int mmax = 20;
 	int lmax = 5;
 	int v = 0;
+	RenderTarget tt;
+	int uq = 1;
 
 	public Scene3D(ShaderProgram draw, PerspectiveCamera pc) {
 		super();
-		this.draw = draw;
+		this.draw = (Shader3D) draw;
 		this.pc = pc;
 		lights = new ArrayList<>();
 		meshes = new ArrayList<>();
 
 		Random r = new Random();
 		redoLights(r);
+		((Shader3D) draw).setCamera(pc);
+		tt = new RenderTarget((Shader3D) draw, "test_buffer", new TargetConfig() {
 
+			@Override
+			public int width() {
+				// TODO Auto-generated method stub
+				return 1920 * uq;
+			}
+
+			@Override
+			public int height() {
+				// TODO Auto-generated method stub
+				return 1080 * uq;
+			}
+
+			@Override
+			public Color clear() {
+				// TODO Auto-generated method stub
+				return Colors.Black;
+			}
+
+		});
+		tt.setMeshes(new MeshBuffer<Mesh>((ArrayList<Mesh>) meshes));
 	}
 
 	public void handleInputs() {
 		genDisplays();
 		op = new String[] { "increase meshes by 10", "decrease meshes by 10", "increase lights by 1",
 				"decrease lights by 1", "increase far clip", "increase camera velocity by 1",
-				"decrease camera velocity by 1", "spawn light at position" };
+				"decrease camera velocity by 1", "spawn light at position", "upscale quality",
+				"upscale and render scene to texture" };
 		opr = op[val];
 		if (InputHandler.isKeyReleased(Keys.M)) {
 			val++;
@@ -83,22 +115,22 @@ public class Scene3D {
 			if (val == 0) {
 				mmax += 10;
 				Testing.addRand(meshes, mmax);
-
+				tt.setMeshes(new MeshBuffer<Mesh>((ArrayList<Mesh>) meshes));
 			}
 			if (val == 1) {
 				mmax -= 10;
 				Testing.addRand(meshes, mmax);
-
+				tt.setMeshes(new MeshBuffer<Mesh>((ArrayList<Mesh>) meshes));
 			}
 			if (val == 2) {
 				lmax++;
 				redoLights(new Random());
-
+				tt.setMeshes(new MeshBuffer<Mesh>((ArrayList<Mesh>) meshes));
 			}
 			if (val == 3) {
 				lmax--;
 				redoLights(new Random());
-
+				tt.setMeshes(new MeshBuffer<Mesh>((ArrayList<Mesh>) meshes));
 			}
 			if (val == 4) {
 				pc.setFar(pc.getFar() * 2);
@@ -117,6 +149,32 @@ public class Scene3D {
 			}
 			if (val == 7) {
 				randomLight(pc.getPosition());
+			}
+			if (val == 8) {
+				uq++;
+				tt.setConfig(new TargetConfig() {
+
+					@Override
+					public int width() {
+						// TODO Auto-generated method stub
+						return 1920 * uq;
+					}
+
+					@Override
+					public int height() {
+						// TODO Auto-generated method stub
+						return 1080 * uq;
+					}
+
+					@Override
+					public Color clear() {
+						// TODO Auto-generated method stub
+						return Colors.Black;
+					}
+				});
+			}
+			if (val == 9) {
+				renderToTex();
 			}
 			genDisplays();
 		}
@@ -182,49 +240,85 @@ public class Scene3D {
 
 	public void prepare() {
 //cam uniforms
-		draw.use();
-		// lights.get(0).setPosition(pc.getPosition());
-
-		draw.addUniform("proj", pc.getProjection());
-		draw.addUniform("view", pc.getView());
-		draw.addUniform("model", pc.getModel());
-		draw.addUniform("omodel", pc.getModel());
-
-		draw.addUniform("viewPos", pc.getLookat());
+		draw.setAttribs();
 
 		li = draw.bindLightsSSBO(lights);
-		// lights
-//		for (int i = 0; i < lights.size(); i++) {
-//			Light l = lights.get(i);
-//			draw.addUniform("lights[" + i + "].position", l.getPosition());
-//
-//			draw.addUniform("lights[" + i + "].constant", 1);
-//			draw.addUniform("lights[" + i + "].linear", l.getLinear());
-//			draw.addUniform("lights[" + i + "].quadratic", l.getQuad());
-//			draw.addUniform("lights[" + i + "].ambient", l.getAmbient());
-//			draw.addUniform("lights[" + i + "].diffuse", l.getDiffuse());
-//			draw.addUniform("lights[" + i + "].specular", l.getSpecular());
-////			draw.addUniform("lights[" + i + "].cutOff", 0.15f);
-////			draw.addUniform("lights[" + i + "].outerCutOff", 0.15f);
-////			draw.addUniform("lights[" + i + "].direction", rvec(new Random(), 2, 2, 2));
-//		}
-		// material
 
-//		draw.addUniform("material.ambient", 0.75f);
 	}
 
 	/**
 	 * 
 	 */
 	public void render() {
+//		draw.setAttribs();
+//
+//		li = draw.bindLightsSSBO(lights);
 		draw.bindSSBO(li);
 		draw.addUniform("material.strength", 1f);
+		tt.setTargetCamera(pc);
+		tt.getMeshes().setDraw(draw);
+		Texture r = tt.render((s, m) -> {
+			m.setDraw((ShaderProgram) s);
+			m.drawBuffer();
+		});
+		Kronos.graphixs.clearScreen(Colors.Black);
 		for (Iterator iterator = meshes.iterator(); iterator.hasNext();) {
 			Mesh mesh = (Mesh) iterator.next();
 
 			mesh.render(draw);
 		}
+//		TextureBatch tb = Kronos.graphixs.g2d.createBatch();
+//		tb.drawTexture(0, 70, 400, 400, r);
+//		tb.render();
+//		tb.end();
 
+	}
+
+	public void renderToTex() {
+		int cw = this.pc.getWidth();
+		int ch = this.pc.getHeight();
+		tt.setConfig(new TargetConfig() {
+
+			@Override
+			public int width() {
+				// TODO Auto-generated method stub
+				return 1920 * uq;
+			}
+
+			@Override
+			public int height() {
+				// TODO Auto-generated method stub
+				return 1080 * uq;
+			}
+
+			@Override
+			public Color clear() {
+				// TODO Auto-generated method stub
+				return Colors.Black;
+			}
+		});
+		tt.rebuildBuffer();
+		this.pc.setWidth(1920 * uq);
+		this.pc.setHeight(1080 * uq);
+		this.pc.calculatePositioning(1920 * uq, 1080 * uq);
+		prepare();
+		System.out.println(pc.toString());
+		draw.bindSSBO(li);
+		draw.addUniform("material.strength", 1f);
+		tt.setTargetCamera(pc);
+		tt.getMeshes().setDraw(draw);
+		Texture r = tt.render((s, m) -> {
+			m.setDraw((ShaderProgram) s);
+			m.drawBuffer();
+		});
+		r.bind();
+		System.out.println(r.getWidth() + ":" + r.getHeight());
+		Kronos.graphixs.writeTextureOut("testShot", 1920 * uq, 1080 * uq);
+		this.pc.setHeight(cw);
+		this.pc.setWidth(ch);
+		this.pc.setMoved(true);
+		this.pc.calculatePositioning(cw, ch);
+		this.pc.update();
 	}
 
 	public List<Light> getLights() {

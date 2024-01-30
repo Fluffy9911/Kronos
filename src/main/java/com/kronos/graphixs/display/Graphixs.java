@@ -33,9 +33,11 @@ import com.kronos.graphixs.g2d.ScreenProvider;
 import com.kronos.graphixs.g2d.builder.ShapeRenderer;
 import com.kronos.graphixs.geometry.Mesh;
 import com.kronos.graphixs.geometry.meshing.Builtin;
+import com.kronos.graphixs.rendering.RenderTarget.TargetConfig;
 import com.kronos.graphixs.resources.Resource;
 import com.kronos.graphixs.resources.ResourceManager;
 import com.kronos.graphixs.shaders.Shader;
+import com.kronos.graphixs.shaders.Shader3D;
 import com.kronos.graphixs.shaders.ShaderProgram;
 
 import de.javagl.obj.Obj;
@@ -147,8 +149,8 @@ public class Graphixs {
 					Kronos.loader.tryLoad("shaders/highlighted_g.fs")));
 			createShader("pp_tex", new ShaderProgram(Kronos.loader.tryLoad("shaders/vertex.vs"),
 					Kronos.loader.tryLoad("shaders/fragment.fs")));
-			createShader("3d", new ShaderProgram(Kronos.loader.tryLoad("shaders/threed.vs"),
-					Kronos.loader.tryLoad("shaders/basiccolor.fs")));
+			createShader("3d", new Shader3D(Kronos.loader.tryLoad("shaders/threed.vs"),
+					Kronos.loader.tryLoad("shaders/basiccolor.fs"), null));
 
 			fs = Kronos.loader.tryLoad("shaders/texture.fs");
 			vs = Kronos.loader.tryLoad("shaders/fragment.fs");
@@ -185,6 +187,17 @@ public class Graphixs {
 		}
 
 		screen.makeWindowVisible(window_id, config.updateTime());
+	}
+
+	public FrameBuffer requestBufferCreation(String id, TargetConfig tc) {
+		FrameBuffer fb = new FrameBuffer(tc.width(), tc.height(), true);
+		l.debug("FrameBuffer built to: w: {} h: {}", tc.width(), tc.height());
+		this.createBuffer(id, fb);
+		return fb;
+	}
+
+	public void createBuffer(String id, FrameBuffer fb) {
+		this.buffers.put(id, fb);
 	}
 
 	public void render(Runnable r) {
@@ -253,6 +266,16 @@ public class Graphixs {
 		// Save the pixel data as a PNG file
 		STBImageWrite.stbi_write_png(Kronos.loader.createFilePath("test/out", name + ".png"), config.width(),
 				config.height(), 4, buffer, 0);
+	}
+
+	public void writeTextureOut(String name, int w, int h) {
+		test(l);
+		ByteBuffer buffer = BufferUtils.createByteBuffer(w * h * 4);
+		GL11.glReadPixels(0, 0, w, h, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buffer);
+
+		// Save the pixel data as a PNG file
+		l.debug("Writing texture out: W {} H: {}", w, h);
+		STBImageWrite.stbi_write_png(Kronos.loader.createFilePath("test/out", name + ".png"), w, h, 4, buffer, 0);
 	}
 
 	public void enablePPBuffer() {
@@ -400,6 +423,15 @@ public class Graphixs {
 	public Obj readFile(String path) throws IOException {
 		FileInputStream stream = new FileInputStream(new File(path));
 		return ObjUtils.convertToRenderable(ObjReader.read(stream));
+	}
+
+	/**
+	 * 
+	 */
+	public void closeResources() {
+		this.logChanges("Resource Manager was requested to cleaup resources");
+		this.manager.close();
+
 	}
 
 }

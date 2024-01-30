@@ -71,7 +71,9 @@ public class Screen implements Resource {
 		GLFW.glfwSetWindowCloseCallback(id, new GLFWWindowCloseCallback() {
 			@Override
 			public void invoke(long window) {
+				Kronos.graphixs.closeResources();
 				glfwSetWindowShouldClose(window, true);
+
 				System.exit(0);
 			}
 		});

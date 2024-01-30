@@ -1,43 +1,15 @@
 package com.kronos.graphixs.display.camera;
 
-import java.awt.AWTException;
-import java.awt.Robot;
-import java.awt.Toolkit;
-
 import org.joml.Matrix4f;
-import org.joml.Vector2f;
 import org.joml.Vector3f;
-import org.lwjgl.glfw.GLFW;
 
-import com.kronos.Kronos;
-import com.kronos.dynamo.simple.MathLerp;
-import com.kronos.io.InputHandler;
-import com.kronos.io.Keys;
-
-public class PerspectiveCamera {
-
-	protected Vector3f position, up, lookat;
-
-	protected float fov, yaw, pitch;
-	protected float zoom;
-	protected float near, far;
-	protected int screen_width = Kronos.config.getCurrent().width();
-	protected int screen_height = Kronos.config.getCurrent().height();
-	Matrix4f view, projection, model;
-//flags
-	protected boolean usemouspos = true, mlock = false, move = false;;
-
-	protected int lastX = 0, lastY = 0;
-	protected float velocity = 1.5f;
-
-	public static final float SENSITIVITY = 0.025f;
-
-	protected float coeff = 0.5f;
+public class PerspectiveCamera extends Camera {
 
 	public PerspectiveCamera(Vector3f position, Vector3f up, Vector3f lookat) {
+		super();
 		this.position = position;
 		this.up = up;
-		this.lookat = lookat;
+		this.looking = lookat;
 		fov = 90;
 		yaw = 0;
 		pitch = 0;
@@ -49,9 +21,10 @@ public class PerspectiveCamera {
 	}
 
 	public PerspectiveCamera(Vector3f position, Vector3f up, Vector3f lookat, float fov) {
+		super();
 		this.position = position;
 		this.up = up;
-		this.lookat = lookat;
+		this.looking = lookat;
 		this.fov = fov;
 		yaw = 0;
 		pitch = 0;
@@ -62,9 +35,10 @@ public class PerspectiveCamera {
 	}
 
 	public PerspectiveCamera(Vector3f position, Vector3f up, Vector3f lookat, float fov, float yaw, float pitch) {
+		super();
 		this.position = position;
 		this.up = up;
-		this.lookat = lookat;
+		this.looking = lookat;
 		this.fov = fov;
 		this.yaw = yaw;
 		this.pitch = pitch;
@@ -76,9 +50,10 @@ public class PerspectiveCamera {
 
 	public PerspectiveCamera(Vector3f position, Vector3f up, Vector3f lookat, float fov, float yaw, float pitch,
 			float zoom) {
+		super();
 		this.position = position;
 		this.up = up;
-		this.lookat = lookat;
+		this.looking = lookat;
 		this.fov = fov;
 		this.yaw = yaw;
 		this.pitch = pitch;
@@ -90,9 +65,10 @@ public class PerspectiveCamera {
 
 	public PerspectiveCamera(Vector3f position, Vector3f up, Vector3f lookat, float fov, float yaw, float pitch,
 			float zoom, float near, float far) {
+		super();
 		this.position = position;
 		this.up = up;
-		this.lookat = lookat;
+		this.looking = lookat;
 		this.fov = fov;
 		this.yaw = yaw;
 		this.pitch = pitch;
@@ -102,285 +78,18 @@ public class PerspectiveCamera {
 		resetMatricies();
 	}
 
-	public void calculatePositioning(int width, int height) {
-		resetMatricies();
-
-		projection.perspective(fov, (width / height), near, far);
-
-		updateViewMatrix();
-
-		model.scale(zoom);
-
-	}
-
-	public void resetMatricies() {
-		view = new Matrix4f();
-		projection = new Matrix4f();
-		model = new Matrix4f();
-	}
-
-	public void move(Vector3f mov) {
-		position.add(mov);
-		calculatePositioning(screen_width, screen_height);
-		move = true;
-	}
-
-	public void yaw(float ya, float easing) {
-		yaw = MathLerp.lerpSmooth(yaw + ya, yaw, easing);
-		move = true;
-	}
-
-	public void pitch(float pi, float easing) {
-		pitch = MathLerp.lerpSmooth(pitch + pi, pitch, easing);
-		move = true;
-	}
-
-	/**
-	 * Handles the cameras movement
-	 */
-	public void updateMovement() {
-
-		if (InputHandler.isKeyPressed(Keys.A)) {
-
-			float movementValue = (velocity * coeff);
-			moveLeft(movementValue);
-			move = true;
-
-		}
-		if (InputHandler.isKeyPressed(Keys.D)) {
-			float movementValue = (velocity * coeff);
-			moveRight(movementValue);
-			move = true;
-		}
-
-		if (InputHandler.isKeyPressed(Keys.S)) {
-
-			float movementValue = (velocity * coeff);
-			moveBackward(movementValue);
-			move = true;
-		}
-		if (InputHandler.isKeyPressed(Keys.W)) {
-			float movementValue = (velocity * coeff);
-			moveForeward(movementValue);
-			move = true;
-		}
-		if (InputHandler.isKeyPressed(Keys.SPACE)) {
-			float movementValue = (velocity * coeff);
-			position.add(0, movementValue, 0);
-			move = true;
-		}
-		if (InputHandler.isKeyPressed(GLFW.GLFW_KEY_LEFT_SHIFT)) {
-			float movementValue = (velocity * coeff);
-			position.add(0, -movementValue, 0);
-			move = true;
-		}
-
-	}
-
-	public void updateRotation() {
-		float yadd = 0;
-		float padd = 0;
-		if (!usemouspos) {
-			float rotateSpeed = 0.01f; // You can adjust this value
-
-			if (InputHandler.isKeyPressed(Keys.LEFT)) {
-				yadd -= rotateSpeed; // Rotate left
-			}
-			if (InputHandler.isKeyPressed(Keys.RIGHT)) {
-				yadd += rotateSpeed; // Rotate right
-			}
-			if (InputHandler.isKeyPressed(Keys.UP)) {
-				padd += rotateSpeed; // Rotate left
-			}
-			if (InputHandler.isKeyPressed(Keys.DOWN)) {
-				padd -= rotateSpeed; // Rotate right
-			}
-
-			pitch(padd, 0.5f);
-			yaw(yadd, 0.5f);
-
-		} else {
-			double mouseX = InputHandler.getLastMouseX();
-			double mouseY = InputHandler.getLastMouseY();
-
-			// Calculate the change in mouse position
-			float deltaX = (float) mouseX - lastX;
-			float deltaY = (float) mouseY - lastY;
-
-			deltaX *= SENSITIVITY;
-			deltaY *= SENSITIVITY;
-
-			Vector3f mc = new Vector3f(deltaX, deltaY, 0);
-
-			lastX = (int) mouseX;
-			lastY = (int) mouseY;
-			updateCameraRotation(deltaX, deltaY);
-			mc = new Vector3f();
-			calculatePositioning(screen_width, screen_height);
-			if (InputHandler.isKeyReleased(Keys.L)) {
-				mlock = !mlock;
-			}
-			if (mlock) {
-				try {
-					Robot r = new Robot();
-					float cx = Toolkit.getDefaultToolkit().getScreenSize().width / 2;
-					float cy = Toolkit.getDefaultToolkit().getScreenSize().height / 2;
-					Vector2f mp = new Vector2f(cx, cy);
-
-					r.mouseMove((int) mp.x, (int) mp.y);
-				} catch (AWTException e) {
-
-					e.printStackTrace();
-				}
-
-			}
-		}
-
-	}
-
-	private void updateCameraRotation(float deltaX, float deltaY) {
-		yaw(deltaX, 0.5f);
-		pitch(deltaY, 0.5f);
-	}
-
-	private void updateViewMatrix() {
-
-		Vector3f direction = new Vector3f((float) (Math.cos(yaw) * Math.cos(pitch)), (float) Math.sin(pitch),
-				(float) (Math.sin(yaw) * Math.cos(pitch))).normalize();
-
-		Vector3f target = new Vector3f(position).add(direction);
-		lookat = target;
-
-		view.identity().lookAt(position, target, new Vector3f(0, 1, 0));
-	}
-
+	@Override
 	public void update() {
-		screen_width = Kronos.config.getCurrent().width();
-		screen_height = Kronos.config.getCurrent().height();
+//		screen_width = Kronos.config.getCurrent().width();
+//		screen_height = Kronos.config.getCurrent().height();
 
 		updateMovement();
 		updateRotation();
 
 		if (move) {
-			calculatePositioning(screen_width, screen_height);
+			calculatePositioning(getWidth(), getHeight());
 			move = false;
 		}
-	}
-
-	public void moveRight(float distance) {
-
-		Vector3f right = new Vector3f();
-		right.set(getDirection()).cross(up).normalize().mul(distance);
-		position.add(right);
-	}
-
-	public void moveLeft(float distance) {
-
-		Vector3f right = new Vector3f();
-		right.set(getDirection()).cross(up).normalize().mul(-distance);
-		position.add(right);
-	}
-
-	public void moveForeward(float amnt) {
-		Vector3f t = getDirection();
-		t.normalize().mul(amnt);
-		position.add(t);
-	}
-
-	public void moveBackward(float amnt) {
-		Vector3f t = getDirection();
-		t.normalize().mul(amnt);
-		position.sub(t);
-	}
-
-	public Vector3f getDirection() {
-		// Calculate the direction vector based on yaw and pitch
-		return new Vector3f((float) (Math.cos(yaw) * Math.cos(pitch)), (float) Math.sin(pitch),
-				(float) (Math.sin(yaw) * Math.cos(pitch))).normalize();
-	}
-
-	/**
-	 * @return the position
-	 */
-	public Vector3f getPosition() {
-		return position;
-	}
-
-	/**
-	 * @return the up
-	 */
-	public Vector3f getUp() {
-		return up;
-	}
-
-	/**
-	 * @return the lookat
-	 */
-	public Vector3f getLookat() {
-		return lookat;
-	}
-
-	/**
-	 * @return the fov
-	 */
-	public float getFov() {
-		return fov;
-	}
-
-	/**
-	 * @return the yaw
-	 */
-	public float getYaw() {
-		return yaw;
-	}
-
-	/**
-	 * @return the pitch
-	 */
-	public float getPitch() {
-		return pitch;
-	}
-
-	/**
-	 * @return the zoom
-	 */
-	public float getZoom() {
-		return zoom;
-	}
-
-	/**
-	 * @return the near
-	 */
-	public float getNear() {
-		return near;
-	}
-
-	/**
-	 * @return the far
-	 */
-	public float getFar() {
-		return far;
-	}
-
-	/**
-	 * @return the view
-	 */
-	public Matrix4f getView() {
-		return view;
-	}
-
-	/**
-	 * @return the projection
-	 */
-	public Matrix4f getProjection() {
-		return projection;
-	}
-
-	/**
-	 * @return the model
-	 */
-	public Matrix4f getModel() {
-		return model;
 	}
 
 	@Override
@@ -397,9 +106,9 @@ public class PerspectiveCamera {
 			builder.append(up);
 			builder.append(", ");
 		}
-		if (lookat != null) {
+		if (looking != null) {
 			builder.append("lookat=");
-			builder.append(lookat);
+			builder.append(looking);
 			builder.append(", ");
 		}
 		builder.append("fov=");
@@ -526,7 +235,7 @@ public class PerspectiveCamera {
 	 * @param lookat the lookat to set
 	 */
 	public void setLookat(Vector3f lookat) {
-		this.lookat = lookat;
+		this.looking = lookat;
 	}
 
 	/**
@@ -592,6 +301,7 @@ public class PerspectiveCamera {
 		this.model = model;
 	}
 
+	@Override
 	public float getVelocity() {
 		return velocity;
 	}

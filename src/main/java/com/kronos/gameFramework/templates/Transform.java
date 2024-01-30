@@ -6,6 +6,9 @@ import java.io.ObjectOutput;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 import org.joml.Matrix3dc;
 import org.joml.Matrix3fc;
@@ -28,8 +31,10 @@ import org.joml.Vector3ic;
 import com.kronos.dynamo.simple.MathLerp;
 
 public class Transform implements Template {
-	Vector3f position, up, looking;
-	public float velocity, yaw, pitch;
+	protected Vector3f position, up, looking;
+	protected float velocity, yaw, pitch;
+	List<Transform> children;
+	public static final Vector3f no_pos = new Vector3f();
 
 	public Transform(Vector3f position) {
 		super();
@@ -39,6 +44,7 @@ public class Transform implements Template {
 		velocity = 0;
 		yaw = 0;
 		pitch = 0;
+		children = new ArrayList<>();
 	}
 
 	boolean update = false;
@@ -46,11 +52,19 @@ public class Transform implements Template {
 	public void yaw(float ya, float easing) {
 		yaw = MathLerp.lerpSmooth(yaw + ya, yaw, easing);
 		update = true;
+		for (Iterator iterator = children.iterator(); iterator.hasNext();) {
+			Transform c = (Transform) iterator.next();
+			c.yaw(ya, easing);
+		}
 	}
 
 	public void pitch(float pi, float easing) {
 		pitch = MathLerp.lerpSmooth(pitch + pi, pitch, easing);
 		update = true;
+		for (Iterator iterator = children.iterator(); iterator.hasNext();) {
+			Transform c = (Transform) iterator.next();
+			c.pitch(pi, easing);
+		}
 	}
 
 	public Vector3f getDirection() {
@@ -64,6 +78,10 @@ public class Transform implements Template {
 		Vector3f right = new Vector3f();
 		right.set(getDirection()).cross(up).normalize().mul(distance);
 		position.add(right);
+		for (Iterator iterator = children.iterator(); iterator.hasNext();) {
+			Transform c = (Transform) iterator.next();
+			c.moveRight(distance);
+		}
 	}
 
 	public void moveLeft(float distance) {
@@ -71,18 +89,39 @@ public class Transform implements Template {
 		Vector3f right = new Vector3f();
 		right.set(getDirection()).cross(up).normalize().mul(-distance);
 		position.add(right);
+		for (Iterator iterator = children.iterator(); iterator.hasNext();) {
+			Transform c = (Transform) iterator.next();
+			c.moveLeft(distance);
+		}
 	}
 
 	public void moveForeward(float amnt) {
 		Vector3f t = getDirection();
 		t.normalize().mul(amnt);
 		position.add(t);
+		for (Iterator iterator = children.iterator(); iterator.hasNext();) {
+			Transform c = (Transform) iterator.next();
+			c.moveForeward(amnt);
+		}
 	}
 
 	public void moveBackward(float amnt) {
 		Vector3f t = getDirection();
 		t.normalize().mul(amnt);
 		position.sub(t);
+		for (Iterator iterator = children.iterator(); iterator.hasNext();) {
+			Transform c = (Transform) iterator.next();
+			c.moveBackward(amnt);
+		}
+	}
+
+	public void addChild(Transform t) {
+		this.children.add(t);
+
+	}
+
+	public void parentTo(Transform t) {
+		t.addChild(this);
 	}
 
 	@Override
@@ -762,6 +801,35 @@ public class Transform implements Template {
 	@Override
 	public Object clone() throws CloneNotSupportedException {
 		return position.clone();
+	}
+
+	/**
+	 * clamps this vector to stay within the borders defined
+	 * 
+	 * @param min
+	 * @param max
+	 */
+	public void clampInside(Vector3f min, Vector3f max) {
+		this.set(Math.max(min.x, Math.min(this.x(), max.x)), this.y(), this.z());
+		this.set(this.x(), Math.max(min.y, Math.min(this.y(), max.y)), this.z());
+		this.set(this.x(), this.y(), Math.max(min.z, Math.min(this.z(), max.z)));
+
+	}
+
+	/**
+	 * This vector cannot enter the positions bounding box
+	 * 
+	 * @param min
+	 * @param max
+	 */
+	public void clampOutside(Vector3f min, Vector3f max) {
+		this.set(Math.min(min.x, Math.max(this.x(), max.x)), this.y(), this.z());
+		this.set(this.x(), Math.min(min.y, Math.max(this.y(), max.y)), this.z());
+		this.set(this.x(), this.y(), Math.min(min.z, Math.max(this.z(), max.z)));
+	}
+
+	public static Transform createTransform(Vector3f pos) {
+		return new Transform(pos);
 	}
 
 }
