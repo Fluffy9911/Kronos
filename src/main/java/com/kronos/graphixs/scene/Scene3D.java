@@ -255,4 +255,10 @@ public class Scene3D {
 		return opr;
 	}
 
+	public void scenePTest() {
+		Testing.addRand(meshes, 10000);
+		lmax = 5;
+		redoLights(new Random());
+	}
+
 }

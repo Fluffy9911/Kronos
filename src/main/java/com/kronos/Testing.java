@@ -63,7 +63,7 @@ public class Testing {
 			@Override
 			public int updateTime() {
 				// TODO Auto-generated method stub
-				return -1;
+				return 0;
 			}
 
 			@Override
@@ -131,6 +131,7 @@ public class Testing {
 
 		Scene3D scene = new Scene3D(draw, pc);
 		scene.setMeshes(mms);
+		// scene.scenePTest();
 		Kronos.startDrawing((a) -> {
 			GL40.glEnable(GL40.GL_DEPTH_TEST);
 
