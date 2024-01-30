@@ -185,4 +185,9 @@ public class Texture {
 		return height;
 	}
 
+	public void bindLoc(int l) {
+		GL40.glActiveTexture(GL40.GL_TEXTURE0 + l);
+		GL11.glBindTexture(GL11.GL_TEXTURE_2D, textureId);
+	}
+
 }
