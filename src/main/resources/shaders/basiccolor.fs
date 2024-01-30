@@ -21,6 +21,7 @@ struct Light{
     vec3 diffuse;
     vec3 specular;
     
+    float dis;
   
 };
 
@@ -67,7 +68,7 @@ vec3 CalcSpotLight(Light light, vec3 normal, vec3 fragPos, vec3 viewDir)
     float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.strength);
     // attenuation
     float distance = length(light.position - fragPos);
-    distance /= 16;
+    distance /= light.dis;
     float attenuation = 1.0 / (light.constant + light.linear * distance + light.quadratic * (distance * distance));    
     // combine results
     vec3 ambient = (light.ambient *2) * f_color;

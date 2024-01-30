@@ -283,7 +283,7 @@ public abstract class Shader implements Resource {
 			lightData.put(light.getSpecular().x);
 			lightData.put(light.getSpecular().y);
 			lightData.put(light.getSpecular().z);
-			lightData.put(0.0f); // padding for alignment
+			lightData.put(light.getDis()); // padding for alignment
 		}
 
 		lightData.flip();

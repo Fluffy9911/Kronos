@@ -7,6 +7,7 @@ public class Light {
 	private Vector3f ambient, specular, diffuse;
 
 	float linear, quad, constant;
+	float dis = 16;
 
 	public Light(Vector3f position, Vector3f ambient, Vector3f specular, Vector3f diffuse, float linear, float quad,
 			float constant) {
@@ -74,6 +75,14 @@ public class Light {
 
 	public float getConstant() {
 		return constant;
+	}
+
+	public float getDis() {
+		return dis;
+	}
+
+	public void setDis(float dis) {
+		this.dis = dis;
 	}
 
 }

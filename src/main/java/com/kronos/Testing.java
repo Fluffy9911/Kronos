@@ -6,7 +6,6 @@ import java.util.Map;
 import java.util.Random;
 
 import org.joml.Vector3f;
-import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL40;
 
 import com.kronos.core.event.EngineListener;
@@ -135,50 +134,17 @@ public class Testing {
 		Kronos.startDrawing((a) -> {
 			GL40.glEnable(GL40.GL_DEPTH_TEST);
 
-			if (InputHandler.isKeyReleased(GLFW.GLFW_KEY_Z)) {
-				pc.setZoom(pc.getZoom() + 0.1f);
-			}
-			if (InputHandler.isKeyReleased(GLFW.GLFW_KEY_X)) {
-				Kronos.config.setCurrent(g.getConfig());
-				pc.update();
-			}
-			if (InputHandler.isKeyReleased(GLFW.GLFW_KEY_C)) {
-				pc.setFar(pc.getFar() + 100f);
-			}
-			if (InputHandler.isKeyReleased(GLFW.GLFW_KEY_V)) {
-				pc.setFar(pc.getFar() - 100f);
-			}
-			if (InputHandler.isKeyReleased(GLFW.GLFW_KEY_B)) {
-				i += 10;
-
-			}
-			if (InputHandler.isKeyReleased(GLFW.GLFW_KEY_N)) {
-				i = (int) ((i * .5) + i);
-			}
-			if (InputHandler.isKeyReleased(GLFW.GLFW_KEY_M)) {
-				mms.clear();
-				addRand(mms, i);
-				scene.setMeshes(mms);
-				scene.redoLights(new Random());
-			}
-			if (InputHandler.isKeyReleased(GLFW.GLFW_KEY_F)) {
-				a.setFps((int) (a.getFps() + 5));
-			}
-			if (InputHandler.isKeyReleased(GLFW.GLFW_KEY_G)) {
-				a.setFps((int) (a.getFps() - 5));
-			}
 			pc.update();
 
 			scene.prepare();
 			scene.render();
-
+			scene.handleInputs();
 			//
 			fr.renderText("Cam Position: " + pc.getPosition().toString() + " Camera Look: " + pc.getLookat().toString(),
 					0, 0, fr.useDefaultFont().deriveFont(20.5f), java.awt.Color.WHITE, tb);
-			fr.renderText(
-					"Meshes: " + i + "Scene Lights: " + scene.lights() + " FPS: " + a.getFps() + "/" + a.target()
-							+ " Delta: " + a.getDeltaTime(),
-					0, 15, fr.useDefaultFont().deriveFont(20.5f), java.awt.Color.WHITE, tb);
+			fr.renderText(scene.getDisplay() + " FPS: " + a.getFps() + "/" + a.target() + " Delta: " + a.getDeltaTime(),
+					0, 20, fr.useDefaultFont().deriveFont(20.5f), java.awt.Color.WHITE, tb);
+			fr.renderText(scene.getOpr(), 0, 35, fr.useDefaultFont().deriveFont(20.5f), java.awt.Color.WHITE, tb);
 			// tb.drawTexture(0, 0, 200, 200, c.toTexture());
 			tb.render();
 			tb.end();

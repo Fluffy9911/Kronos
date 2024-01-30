@@ -592,4 +592,12 @@ public class PerspectiveCamera {
 		this.model = model;
 	}
 
+	public float getVelocity() {
+		return velocity;
+	}
+
+	public void setVelocity(float velocity) {
+		this.velocity = velocity;
+	}
+
 }
