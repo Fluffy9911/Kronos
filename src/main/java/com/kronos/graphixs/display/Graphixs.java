@@ -45,7 +45,7 @@ import de.javagl.obj.ObjReader;
 import de.javagl.obj.ObjUtils;
 
 public class Graphixs {
-	boolean g_lock = true, dev = true;
+	boolean g_lock = true, dev = false;
 	private ScreenConfig config;
 	private Screen screen;
 	private ResourceManager manager = new ResourceManager();
@@ -365,6 +365,17 @@ public class Graphixs {
 		m.cleanup();
 	}
 
+	public void drawTexture(double x, double y, double w, double h, Texture t, ShaderProgram sp) {
+		Mesh m = Builtin.textured_quad((float) x, (float) y, (float) w, (float) h);
+		t.bind();
+		sp.use();
+		sp.setUniforms();
+		m.render(sp);
+		t.unbind();
+		m.cleanup();
+		GL40.glUseProgram(0);
+	}
+
 	public void glErrors() {
 		int gl = GL46.glGetError();
 		if (gl != 0)
@@ -434,4 +445,12 @@ public class Graphixs {
 
 	}
 
+	public void createTexture(String name, String path) {
+		l.debug("loaded texture: {}", name);
+		textures.put(name, new Texture(Kronos.loader.tryLoadImage(path)));
+	}
+
+	public Texture getTexture(String id) {
+		return textures.get(id);
+	}
 }

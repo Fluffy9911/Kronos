@@ -14,6 +14,7 @@ import org.joml.Matrix3dc;
 import org.joml.Matrix3fc;
 import org.joml.Matrix3x2fc;
 import org.joml.Matrix4dc;
+import org.joml.Matrix4f;
 import org.joml.Matrix4fc;
 import org.joml.Matrix4x3fc;
 import org.joml.Quaternionf;
@@ -32,7 +33,8 @@ import com.kronos.dynamo.simple.MathLerp;
 
 public class Transform implements Template {
 	protected Vector3f position, up, looking;
-	protected float velocity, yaw, pitch;
+	Matrix4f trans = new Matrix4f();
+	protected float velocity, yaw, pitch, rotatex, rotatey, rotatez;
 	List<Transform> children;
 	public static final Vector3f no_pos = new Vector3f();
 
@@ -45,6 +47,7 @@ public class Transform implements Template {
 		yaw = 0;
 		pitch = 0;
 		children = new ArrayList<>();
+
 	}
 
 	boolean update = false;
@@ -832,4 +835,35 @@ public class Transform implements Template {
 		return new Transform(pos);
 	}
 
+	public Matrix4f configure() {
+		trans.identity();
+		trans.rotate(rotatex, 1, 0, 0);
+		trans.rotate(rotatey, 0, 1, 0);
+		trans.rotate(rotatez, 0, 0, 1);
+		return trans;
+	}
+
+	public void addXrot(float ang) {
+		rotatex += ang;
+	}
+
+	public void addYrot(float ang) {
+		rotatey += ang;
+	}
+
+	public void addZrot(float ang) {
+		rotatez += ang;
+	}
+
+	public void subXrot(float ang) {
+		rotatex -= ang;
+	}
+
+	public void subYrot(float ang) {
+		rotatey -= ang;
+	}
+
+	public void subZrot(float ang) {
+		rotatez -= ang;
+	}
 }

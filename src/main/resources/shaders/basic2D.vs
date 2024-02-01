@@ -5,7 +5,7 @@ in vec2 uv;
 
 uniform mat4 proj;
 uniform mat4 transform;
-
+uniform mat4 view;
 out vec2 uv_p;
 
 void main() {
@@ -14,7 +14,7 @@ void main() {
 
 	uv_p = uv;
 	
-    gl_Position =  proj* transform*vec4(in_pos, 1.0);
+    gl_Position =  proj* view*transform*vec4(in_pos, 1.0);
     
 }
 

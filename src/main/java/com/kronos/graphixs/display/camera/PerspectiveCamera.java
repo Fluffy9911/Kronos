@@ -4,6 +4,7 @@ import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
 public class PerspectiveCamera extends Camera {
+	boolean nomove = false;
 
 	public PerspectiveCamera(Vector3f position, Vector3f up, Vector3f lookat) {
 		super();
@@ -82,10 +83,10 @@ public class PerspectiveCamera extends Camera {
 	public void update() {
 //		screen_width = Kronos.config.getCurrent().width();
 //		screen_height = Kronos.config.getCurrent().height();
-
-		updateMovement();
-		updateRotation();
-
+		if (!nomove) {
+			updateMovement();
+			updateRotation();
+		}
 		if (move) {
 			calculatePositioning(getWidth(), getHeight());
 			move = false;
@@ -308,6 +309,14 @@ public class PerspectiveCamera extends Camera {
 
 	public void setVelocity(float velocity) {
 		this.velocity = velocity;
+	}
+
+	public boolean isNomove() {
+		return nomove;
+	}
+
+	public void setNomove(boolean nomove) {
+		this.nomove = nomove;
 	}
 
 }
