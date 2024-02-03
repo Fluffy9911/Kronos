@@ -118,6 +118,23 @@ public class Kronos {
 	}
 
 	/**
+	 * Starts kronos with dev features turned on
+	 * 
+	 * @param sc
+	 */
+	public static void startInDev(ScreenConfig sc) {
+		defaultKronosInit();
+		for (Iterator iterator = listeners.iterator(); iterator.hasNext();) {
+			EngineListener el = (EngineListener) iterator.next();
+			el.engineStart();
+		}
+		graphixs.startGlSequenceDev(debug.getLogger());
+		graphixs.createScreen(sc);
+		config = new CoreConfig(graphixs, graphixs.g2d, loader, new InternalAssetLoader(config_loc), debug.getLogger());
+		config.setCurrent(graphixs.getConfig());
+	}
+
+	/**
 	 * @param sc
 	 * @param l
 	 */

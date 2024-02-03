@@ -17,7 +17,7 @@ import java.util.function.UnaryOperator;
 import java.util.stream.Stream;
 
 import com.kronos.graphixs.geometry.Mesh;
-import com.kronos.graphixs.shaders.ShaderProgram;
+import com.kronos.graphixs.shaders.render.ShaderProgram;
 
 /**
  * 

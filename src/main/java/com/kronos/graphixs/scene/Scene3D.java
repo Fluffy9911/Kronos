@@ -24,8 +24,8 @@ import com.kronos.graphixs.internal.Cube;
 import com.kronos.graphixs.rendering.RenderTarget;
 import com.kronos.graphixs.rendering.RenderTarget.TargetConfig;
 import com.kronos.graphixs.rendering.buffers.MeshBuffer;
-import com.kronos.graphixs.shaders.Shader3D;
-import com.kronos.graphixs.shaders.ShaderProgram;
+import com.kronos.graphixs.shaders.builtin.Shader3D;
+import com.kronos.graphixs.shaders.render.ShaderProgram;
 import com.kronos.io.InputHandler;
 import com.kronos.io.Keys;
 
@@ -240,7 +240,7 @@ public class Scene3D {
 
 	public void prepare() {
 //cam uniforms
-		draw.setAttribs();
+		draw.setAttribs(draw);
 
 		li = draw.bindLightsSSBO(lights);
 

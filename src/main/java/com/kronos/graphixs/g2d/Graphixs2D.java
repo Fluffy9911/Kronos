@@ -10,7 +10,7 @@ import com.kronos.core.util.SListener;
 import com.kronos.graphixs.FrameBuffer;
 import com.kronos.graphixs.display.ScreenConfig;
 import com.kronos.graphixs.geometry.meshing.TexturedMesh;
-import com.kronos.graphixs.shaders.ShaderProgram;
+import com.kronos.graphixs.shaders.render.ShaderProgram;
 import com.kronos.io.Config;
 
 public class Graphixs2D implements SListener {
@@ -40,7 +40,7 @@ public class Graphixs2D implements SListener {
 
 		for (Iterator iterator = meshes.iterator(); iterator.hasNext();) {
 			TexturedMesh tm = (TexturedMesh) iterator.next();
-			GL40.glUseProgram(tm.getDraw().getProgram_id());
+			GL40.glUseProgram(tm.getDraw().getShaderProgramID());
 			tm.getDraw().addUniform("proj", provider.collectTransform());
 
 			tm.render();

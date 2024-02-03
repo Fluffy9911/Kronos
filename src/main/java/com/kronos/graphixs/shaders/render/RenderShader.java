@@ -1,4 +1,4 @@
-package com.kronos.graphixs.shaders;
+package com.kronos.graphixs.shaders.render;
 
 import static org.lwjgl.opengl.GL30C.glBindBufferBase;
 import static org.lwjgl.opengl.GL43C.GL_BUFFER_BINDING;
@@ -24,48 +24,51 @@ import org.lwjgl.opengl.GL40;
 
 import com.kronos.Kronos;
 import com.kronos.graphixs.Light;
-import com.kronos.graphixs.resources.Resource;
+import com.kronos.graphixs.shaders.BaseShader;
+import com.kronos.graphixs.shaders.ShaderUtils;
+import com.kronos.graphixs.shaders.bufferobjects.BufferObject;
 
-public abstract class Shader implements Resource {
-	public String vs, fs;
-	int program_id = -1;
+public abstract class RenderShader extends BaseShader implements ShaderUniform {
+	public String vertexSource, fragmentSource;
+	int programId = -1;
 
-	private int vid, fid;
-	List<ShaderAttribute> attribs;
+	private int vertexId = -1, fragmentId = -1;
+	ArrayList<ShaderAttribute> attributes;
 
-	public Shader(String vs, String fs) {
-		this.vs = vs;
-		this.fs = fs;
-		attribs = new ArrayList<>();
+	public RenderShader(String vs, String fs) {
+		this.vertexSource = vs;
+		this.fragmentSource = fs;
+		attributes = new ArrayList<>();
 
 	}
 
+	@Override
 	public abstract void setAttribs();
 
 	public void addAttribute(String attributeName, int loc) {
-		attribs.add(new ShaderAttribute(attributeName, loc));
+		attributes.add(new ShaderAttribute(attributeName, loc));
 	}
 
 	public int getAttribute(String name) {
-		return GL20.glGetAttribLocation(program_id, name);
+		return GL20.glGetAttribLocation(programId, name);
 	}
 
 	public void appendVectorArray(Vector3f[] vects, String name, int loc) {
-		Kronos.debug.getLogger().debug("Binding: {} To programid: {} at location: {}", name, program_id, loc);
+		Kronos.debug.getLogger().debug("Binding: {} To programid: {} at location: {}", name, programId, loc);
 		FloatBuffer fb = createVecBuffer(vects);
 		int bufferId = GL40.glGenBuffers();
 		GL40.glBindBuffer(GL40.GL_UNIFORM_BUFFER, bufferId);
 		GL40.glBufferData(GL40.GL_UNIFORM_BUFFER, fb, GL40.GL_STATIC_DRAW);
 		GL40.glBindBuffer(GL40.GL_UNIFORM_BUFFER, 0);
 
-		int blockIndex = GL40.glGetUniformBlockIndex(program_id, name);
+		int blockIndex = GL40.glGetUniformBlockIndex(programId, name);
 		if (blockIndex == -1) {
 			Kronos.debug.getLogger().error("Uniform block index not found for: {}", name);
 			// Handle the error appropriately, e.g., throw an exception or return.
 			return;
 		}
 
-		GL40.glUniformBlockBinding(program_id, blockIndex, loc);
+		GL40.glUniformBlockBinding(programId, blockIndex, loc);
 		int error = GL40.glGetError();
 		if (error != GL40.GL_NO_ERROR) {
 			Kronos.debug.getLogger().error("Failed to set uniform block binding. Error code: {}", error);
@@ -94,8 +97,9 @@ public abstract class Shader implements Resource {
 		return fb;
 	}
 
+	@Override
 	public void addUniform(String id, int value) {
-		int location = GL20.glGetUniformLocation(program_id, id);
+		int location = GL20.glGetUniformLocation(programId, id);
 		if (location != -1) {
 			GL20.glUniform1i(location, value);
 		} else {
@@ -103,8 +107,9 @@ public abstract class Shader implements Resource {
 		}
 	}
 
+	@Override
 	public void addUniform(String id, float value) {
-		int location = GL20.glGetUniformLocation(program_id, id);
+		int location = GL20.glGetUniformLocation(programId, id);
 		if (location != -1) {
 			GL20.glUniform1f(location, value);
 		} else {
@@ -112,8 +117,9 @@ public abstract class Shader implements Resource {
 		}
 	}
 
+	@Override
 	public void addUniform(String id, Vector4f vec4) {
-		int location = GL20.glGetUniformLocation(program_id, id);
+		int location = GL20.glGetUniformLocation(programId, id);
 		if (location != -1) {
 			GL20.glUniform4f(location, vec4.x, vec4.y, vec4.z, vec4.w);
 		} else {
@@ -121,8 +127,9 @@ public abstract class Shader implements Resource {
 		}
 	}
 
+	@Override
 	public void addUniform(String id, Vector3f vec4) {
-		int location = GL20.glGetUniformLocation(program_id, id);
+		int location = GL20.glGetUniformLocation(programId, id);
 		if (location != -1) {
 			GL20.glUniform3f(location, vec4.x, vec4.y, vec4.z);
 		} else {
@@ -130,8 +137,9 @@ public abstract class Shader implements Resource {
 		}
 	}
 
+	@Override
 	public void addUniform(String id, Vector2f vec4) {
-		int location = GL20.glGetUniformLocation(program_id, id);
+		int location = GL20.glGetUniformLocation(programId, id);
 		if (location != -1) {
 			GL20.glUniform2f(location, vec4.x, vec4.y);
 		} else {
@@ -139,8 +147,9 @@ public abstract class Shader implements Resource {
 		}
 	}
 
+	@Override
 	public void addUniform(String id, Matrix4f mat4) {
-		int location = GL20.glGetUniformLocation(program_id, id);
+		int location = GL20.glGetUniformLocation(programId, id);
 		if (location != -1) {
 			float[] matrixData = new float[16];
 			mat4.get(matrixData);
@@ -153,107 +162,113 @@ public abstract class Shader implements Resource {
 	public void compileShader() {
 		setAttribs();
 		int vertexShaderID = GL20.glCreateShader(GL20.GL_VERTEX_SHADER);
-		GL20.glShaderSource(vertexShaderID, vs);
+		GL20.glShaderSource(vertexShaderID, vertexSource);
 		GL20.glCompileShader(vertexShaderID);
-		checkShaderCompilationStatus(vertexShaderID, "Vertex Shader");
+		ShaderUtils.checkShaderCompilationStatus(this, vertexShaderID, "Vertex RenderShader");
 
 		int fragmentShaderID = GL20.glCreateShader(GL20.GL_FRAGMENT_SHADER);
-		GL20.glShaderSource(fragmentShaderID, fs);
+		GL20.glShaderSource(fragmentShaderID, fragmentSource);
 		GL20.glCompileShader(fragmentShaderID);
-		checkShaderCompilationStatus(fragmentShaderID, "Fragment Shader");
+		ShaderUtils.checkShaderCompilationStatus(this, fragmentShaderID, "Fragment RenderShader");
 
-		program_id = GL20.glCreateProgram();
-		GL20.glAttachShader(program_id, vertexShaderID);
-		GL20.glAttachShader(program_id, fragmentShaderID);
-		vid = vertexShaderID;
-		fid = fragmentShaderID;
-		link();
+		programId = GL20.glCreateProgram();
+		GL20.glAttachShader(programId, vertexShaderID);
+		GL20.glAttachShader(programId, fragmentShaderID);
+		vertexId = vertexShaderID;
+		fragmentId = fragmentShaderID;
+		linkProgram();
 
 	}
 
 	/**
 	 * @param vertexShaderID
 	 * @param fragmentShaderID
+	 * @deprecated Use {@link #linkProgram()} instead
 	 */
+	@Deprecated
 	private void link() {
+		linkProgram();
+	}
 
-		for (Iterator iterator = attribs.iterator(); iterator.hasNext();) {
+	/**
+	 * @param vertexShaderID
+	 * @param fragmentShaderID
+	 */
+	private void linkProgram() {
+
+		for (Iterator iterator = attributes.iterator(); iterator.hasNext();) {
 			ShaderAttribute sa = (ShaderAttribute) iterator.next();
-			sa.apply(program_id);
+			sa.apply(programId);
 		}
-		GL20.glLinkProgram(program_id);
-		GL20.glValidateProgram(program_id);
+		GL20.glLinkProgram(programId);
+		GL20.glValidateProgram(programId);
 
-		GL20.glDeleteShader(vid);
-		GL20.glDeleteShader(fid);
+		GL20.glDeleteShader(vertexId);
+		GL20.glDeleteShader(fragmentId);
 	}
 
-	private void checkShaderCompilationStatus(int shaderID, String shaderType) {
-		int status = GL20.glGetShaderi(shaderID, GL20.GL_COMPILE_STATUS);
-		if (status != GL20.GL_TRUE) {
-			String infoLog = GL20.glGetShaderInfoLog(shaderID);
-			Kronos.debug.getLogger().error("Error compiling " + shaderType + ":");
-			Kronos.debug.getLogger().error(infoLog);
-		}
+	/**
+	 * @deprecated Use
+	 *             {@link ShaderUtils#checkShaderCompilationStatus(RenderShader,int,String)}
+	 *             instead
+	 */
+	@Deprecated
+	public static void checkShaderCompilationStatus(RenderShader renderShader, int shaderID, String shaderType) {
+		ShaderUtils.checkShaderCompilationStatus(renderShader, shaderID, shaderType);
 	}
 
+	@Deprecated
 	public String getShaderCompilationStatus() {
-		return GL20.glGetProgramInfoLog(program_id);
+		return GL20.glGetProgramInfoLog(programId);
 
 	}
 
 	/**
 	 * @return the program_id
 	 */
-	public int getProgram_id() {
-		return program_id;
+	public int getShaderProgramID() {
+		return programId;
 	}
 
 	/**
 	 * @return the vid
 	 */
-	public int getVid() {
-		return vid;
+	public int getVertexShaderID() {
+		return vertexId;
 	}
 
 	/**
 	 * @return the fid
 	 */
-	public int getFid() {
-		return fid;
+	public int getFragmentShaderID() {
+		return fragmentId;
 	}
 
+	@Override
 	public abstract void setUniforms();
 
+	@Override
 	public void use() {
 
-		GL40.glUseProgram(program_id);
+		GL40.glUseProgram(programId);
 		setUniforms();
 	}
 
-	public static class ShaderAttribute {
-		String name;
-		int loc;
-
-		public ShaderAttribute(String name, int loc) {
-			this.name = name;
-			this.loc = loc;
-		}
-
-		public void apply(int pid) {
-			GL20.glBindAttribLocation(pid, loc, name);
-		}
-
-	}
-
+	/**
+	 * 
+	 * @deprecated Use {@link #bindBufferObject(BufferObject, String)} instead
+	 * @param lights
+	 * @return
+	 */
+	@Deprecated
 	public Vector2i bindLightsSSBO(List<Light> lights) {
 		this.use();
 		IntBuffer props = BufferUtils.createIntBuffer(1);
 		IntBuffer params = BufferUtils.createIntBuffer(1);
 		props.put(0, GL_BUFFER_BINDING);
-		int lightIndex = glGetProgramResourceIndex(program_id, GL_SHADER_STORAGE_BLOCK, "Lights");
+		int lightIndex = glGetProgramResourceIndex(programId, GL_SHADER_STORAGE_BLOCK, "Lights");
 
-		glGetProgramResourceiv(this.program_id, GL_SHADER_STORAGE_BLOCK, lightIndex, props, null, params);
+		glGetProgramResourceiv(this.programId, GL_SHADER_STORAGE_BLOCK, lightIndex, props, null, params);
 		int binding = params.get(0);
 
 		int ssboID = GL40.glGenBuffers();
@@ -292,14 +307,15 @@ public abstract class Shader implements Resource {
 		return new Vector2i(binding, ssboID);
 	}
 
+	@Override
 	public Vector2i bindBufferObject(BufferObject bo, String bufferName) {
 		this.use();
 		IntBuffer props = BufferUtils.createIntBuffer(1);
 		IntBuffer params = BufferUtils.createIntBuffer(1);
 		props.put(0, GL_BUFFER_BINDING);
-		int index = glGetProgramResourceIndex(program_id, GL_SHADER_STORAGE_BLOCK, bufferName);
+		int index = glGetProgramResourceIndex(programId, GL_SHADER_STORAGE_BLOCK, bufferName);
 
-		glGetProgramResourceiv(this.program_id, GL_SHADER_STORAGE_BLOCK, index, props, null, params);
+		glGetProgramResourceiv(this.programId, GL_SHADER_STORAGE_BLOCK, index, props, null, params);
 		int binding = params.get(0);
 
 		int ssboID = GL40.glGenBuffers();

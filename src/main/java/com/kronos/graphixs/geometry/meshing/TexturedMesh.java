@@ -6,13 +6,14 @@ import com.kronos.Kronos;
 import com.kronos.graphixs.display.Texture;
 import com.kronos.graphixs.g2d.ScreenCord;
 import com.kronos.graphixs.geometry.Mesh;
-import com.kronos.graphixs.shaders.Shader;
+import com.kronos.graphixs.shaders.render.RenderShader;
+import com.kronos.graphixs.shaders.render.ShaderUniform;
 
 public class TexturedMesh {
 	Mesh mesh;
 	Texture texture;
 	ScreenCord cord;
-	Shader draw;
+	RenderShader draw;
 
 	public TexturedMesh(Texture texture, ScreenCord cord) {
 		super();
@@ -46,7 +47,7 @@ public class TexturedMesh {
 
 	}
 
-	public Shader getDraw() {
+	public ShaderUniform getDraw() {
 		return draw;
 	}
 

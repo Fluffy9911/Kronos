@@ -10,8 +10,8 @@ import com.kronos.graphixs.display.Texture;
 import com.kronos.graphixs.display.camera.Camera;
 import com.kronos.graphixs.geometry.Mesh;
 import com.kronos.graphixs.rendering.buffers.MeshBuffer;
-import com.kronos.graphixs.shaders.Shader;
-import com.kronos.graphixs.shaders.Shader3D;
+import com.kronos.graphixs.shaders.builtin.Shader3D;
+import com.kronos.graphixs.shaders.render.ShaderUniform;
 
 /**
  * 
@@ -73,7 +73,7 @@ public class RenderTarget {
 
 	public static interface BufferRender {
 
-		public void render(Shader s, MeshBuffer<Mesh> meshes);
+		public void render(ShaderUniform s, MeshBuffer<Mesh> meshes);
 
 	}
 

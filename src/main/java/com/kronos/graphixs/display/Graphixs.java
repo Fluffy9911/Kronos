@@ -36,9 +36,10 @@ import com.kronos.graphixs.geometry.meshing.Builtin;
 import com.kronos.graphixs.rendering.RenderTarget.TargetConfig;
 import com.kronos.graphixs.resources.Resource;
 import com.kronos.graphixs.resources.ResourceManager;
-import com.kronos.graphixs.shaders.Shader;
-import com.kronos.graphixs.shaders.Shader3D;
-import com.kronos.graphixs.shaders.ShaderProgram;
+import com.kronos.graphixs.shaders.builtin.Shader3D;
+import com.kronos.graphixs.shaders.render.RenderShader;
+import com.kronos.graphixs.shaders.render.ShaderProgram;
+import com.kronos.graphixs.shaders.render.ShaderUniform;
 
 import de.javagl.obj.Obj;
 import de.javagl.obj.ObjReader;
@@ -53,7 +54,7 @@ public class Graphixs {
 	private Logger l = Kronos.debug.getLogger();
 	public Mesh post_process_quad;
 	public HashMap<String, FrameBuffer> buffers = new HashMap<>();
-	private HashMap<String, Shader> shaders = new HashMap<String, Shader>();
+	private HashMap<String, RenderShader> shaders = new HashMap<String, RenderShader>();
 	private long window_id = -1;
 
 	public Graphixs2D g2d;
@@ -66,7 +67,7 @@ public class Graphixs {
 	// modules
 	public ShapeRenderer shapeRenderer = new ShapeRenderer();
 
-	public void createShader(String id, Shader s) {
+	public void createShader(String id, RenderShader s) {
 		test(l);
 		s.compileShader();
 		l.info("Compiled and registered shaderid: {}", id);
@@ -98,6 +99,23 @@ public class Graphixs {
 	}
 
 	public void startGlSequence(Logger l) {
+		l.debug("Starting OPENGL");
+		if (!glfwInit()) {
+			throw new IllegalStateException("Unable to initialize GLFW");
+		}
+		l.debug("GL Version: {} ", GLFW.glfwGetVersionString());
+		l.debug("GL Started");
+		g_lock = false;
+		events = new ListMap<String, GraphicEvent>();
+		textures = new HashMap<>();
+		Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+			manager.close();
+		}));
+
+	}
+
+	public void startGlSequenceDev(Logger l) {
+		dev = true;
 		l.debug("Starting OPENGL");
 		if (!glfwInit()) {
 			throw new IllegalStateException("Unable to initialize GLFW");
@@ -160,10 +178,10 @@ public class Graphixs {
 				(ShaderProgram) shaders.get("texture"));
 
 		l.debug("Shaders Loaded:");
-		for (Map.Entry<String, Shader> entry : shaders.entrySet()) {
+		for (Map.Entry<String, RenderShader> entry : shaders.entrySet()) {
 			String key = entry.getKey();
-			Shader val = entry.getValue();
-			l.debug("Shader: {}, status? {}", key, val.getShaderCompilationStatus());
+			RenderShader val = entry.getValue();
+			l.debug("RenderShader: {}, status? {}", key, val.getShaderCompilationStatus());
 		}
 		l.debug("Loading textures");
 		if (dev) {
@@ -294,7 +312,7 @@ public class Graphixs {
 		buffers.get("edge_detection").end();
 	}
 
-	public void drawPPQuad(Shader shader) {
+	public void drawPPQuad(RenderShader shader) {
 
 		GL40.glActiveTexture(GL40.GL_TEXTURE0);
 		buffers.get("post_proccess").bindTexture();
@@ -306,11 +324,11 @@ public class Graphixs {
 		buffers.get("post_proccess").unbindTexture();
 	}
 
-	public void drawPPQuad(Shader shader, FrameBuffer fb) {
+	public void drawPPQuad(RenderShader shader, FrameBuffer fb) {
 		post_process_quad.renderPPO(shader, fb);
 	}
 
-	public <T extends Shader> T getShader(String id) {
+	public <T extends ShaderUniform> T getShader(String id) {
 		return (T) shaders.get(id);
 	}
 
@@ -331,7 +349,7 @@ public class Graphixs {
 		return buffers.get(string);
 	}
 
-	public void renderEdge(Shader s) {
+	public void renderEdge(RenderShader s) {
 		// enableEdgeBuffer();
 		post_process_quad.renderPPO(s, getBuffer("post_proccess"));
 		// writeTextureOut("edge_test");
@@ -346,7 +364,7 @@ public class Graphixs {
 		disablePPBuffer();
 	}
 
-	public void drawToScreen(Shader s) {
+	public void drawToScreen(RenderShader s) {
 		GL40.glEnable(GL40.GL_TEXTURE_2D);
 		buffers.get("edge_detection").bindTexture();
 		buffers.get("post_proccess").bindTexture();

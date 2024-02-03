@@ -1,6 +1,6 @@
 package com.kronos.graphixs.display;
 
-import com.kronos.graphixs.shaders.ShaderProgram;
+import com.kronos.graphixs.shaders.render.ShaderProgram;
 
 public class TextureProgram extends ShaderProgram {
 

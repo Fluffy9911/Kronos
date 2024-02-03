@@ -1,9 +1,10 @@
 /**
  * 
  */
-package com.kronos.graphixs.shaders;
+package com.kronos.graphixs.shaders.builtin;
 
 import com.kronos.graphixs.display.camera.Camera;
+import com.kronos.graphixs.shaders.render.ShaderProgram;
 
 /**
  * 

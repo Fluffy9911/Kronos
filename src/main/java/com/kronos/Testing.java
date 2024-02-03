@@ -9,7 +9,6 @@ import org.joml.Vector3f;
 import org.lwjgl.opengl.GL40;
 
 import com.kronos.core.event.EngineListener;
-import com.kronos.debug.DebugInputFields;
 import com.kronos.graphixs.color.Color;
 import com.kronos.graphixs.color.Colors;
 import com.kronos.graphixs.display.Graphixs;
@@ -25,7 +24,7 @@ import com.kronos.graphixs.geometry.meshing.BasicMeshBuilder;
 import com.kronos.graphixs.geometry.meshing.Builtin;
 import com.kronos.graphixs.internal.Cube;
 import com.kronos.graphixs.scene.Scene3D;
-import com.kronos.graphixs.shaders.ShaderProgram;
+import com.kronos.graphixs.shaders.render.ShaderProgram;
 import com.kronos.io.Config;
 import com.kronos.io.InputHandler;
 
@@ -34,7 +33,7 @@ public class Testing {
 
 	public static void main(String[] args) {
 
-		Kronos.start(new ScreenConfig() {
+		Kronos.startInDev(new ScreenConfig() {
 
 			@Override
 			public int width() {
@@ -75,7 +74,6 @@ public class Testing {
 		});
 
 		Graphixs g = Kronos.graphixs;
-		DebugInputFields dbgif = new DebugInputFields();
 
 		Graphixs2D g2d = g.g2d;
 

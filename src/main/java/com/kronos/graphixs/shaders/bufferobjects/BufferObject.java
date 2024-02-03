@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.kronos.graphixs.shaders;
+package com.kronos.graphixs.shaders.bufferobjects;
 
 import java.nio.FloatBuffer;
 import java.util.ArrayList;

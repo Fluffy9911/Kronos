@@ -1,8 +1,9 @@
-package com.kronos.graphixs.shaders;
+package com.kronos.graphixs.shaders.builtin;
 
 import org.joml.Vector2f;
 
 import com.kronos.Kronos;
+import com.kronos.graphixs.shaders.render.ShaderProgram;
 
 public class PixelatedShaderProgram extends ShaderProgram {
 	Vector2f view;

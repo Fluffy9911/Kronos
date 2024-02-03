@@ -5,7 +5,7 @@ package com.kronos.graphixs.shaders.builtin;
 
 import org.joml.Matrix4f;
 
-import com.kronos.graphixs.shaders.ShaderProgram;
+import com.kronos.graphixs.shaders.render.ShaderProgram;
 
 /**
  * 
