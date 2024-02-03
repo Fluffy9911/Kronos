@@ -34,6 +34,12 @@ public interface ShaderUniform {
 
 	void use();
 
-	Vector2i bindBufferObject(BufferObject bo, String bufferName);
+	/**
+	 * @param bo
+	 * @param bufferName
+	 * @param renderShader
+	 * @return
+	 */
+	Vector2i bindBufferObject(BufferObject bo, String bufferName, RenderShader renderShader);
 
 }

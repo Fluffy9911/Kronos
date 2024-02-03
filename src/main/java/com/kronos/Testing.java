@@ -130,8 +130,9 @@ public class Testing {
 		Scene3D scene = new Scene3D(draw, pc);
 		scene.setMeshes(mms);
 		// scene.scenePTest();
+		GL40.glEnable(GL40.GL_DEPTH_TEST);
+
 		Kronos.startDrawing((a) -> {
-			GL40.glEnable(GL40.GL_DEPTH_TEST);
 
 			pc.update();
 

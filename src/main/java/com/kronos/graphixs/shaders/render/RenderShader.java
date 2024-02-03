@@ -1,6 +1,5 @@
 package com.kronos.graphixs.shaders.render;
 
-import static org.lwjgl.opengl.GL30C.glBindBufferBase;
 import static org.lwjgl.opengl.GL43C.GL_BUFFER_BINDING;
 import static org.lwjgl.opengl.GL43C.GL_SHADER_STORAGE_BLOCK;
 import static org.lwjgl.opengl.GL43C.GL_SHADER_STORAGE_BUFFER;
@@ -13,11 +12,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.joml.Matrix4f;
-import org.joml.Vector2f;
 import org.joml.Vector2i;
 import org.joml.Vector3f;
-import org.joml.Vector4f;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL40;
@@ -28,9 +24,8 @@ import com.kronos.graphixs.shaders.BaseShader;
 import com.kronos.graphixs.shaders.ShaderUtils;
 import com.kronos.graphixs.shaders.bufferobjects.BufferObject;
 
-public abstract class RenderShader extends BaseShader implements ShaderUniform {
+public abstract class RenderShader extends BaseShader {
 	public String vertexSource, fragmentSource;
-	int programId = -1;
 
 	private int vertexId = -1, fragmentId = -1;
 	ArrayList<ShaderAttribute> attributes;
@@ -98,73 +93,9 @@ public abstract class RenderShader extends BaseShader implements ShaderUniform {
 	}
 
 	@Override
-	public void addUniform(String id, int value) {
-		int location = GL20.glGetUniformLocation(programId, id);
-		if (location != -1) {
-			GL20.glUniform1i(location, value);
-		} else {
-			Kronos.debug.getLogger().error("Uniform " + id + " not found in shader.");
-		}
-	}
-
-	@Override
-	public void addUniform(String id, float value) {
-		int location = GL20.glGetUniformLocation(programId, id);
-		if (location != -1) {
-			GL20.glUniform1f(location, value);
-		} else {
-			Kronos.debug.getLogger().error("Uniform " + id + " not found in shader.");
-		}
-	}
-
-	@Override
-	public void addUniform(String id, Vector4f vec4) {
-		int location = GL20.glGetUniformLocation(programId, id);
-		if (location != -1) {
-			GL20.glUniform4f(location, vec4.x, vec4.y, vec4.z, vec4.w);
-		} else {
-			Kronos.debug.getLogger().error("Uniform " + id + " not found in shader.");
-		}
-	}
-
-	@Override
-	public void addUniform(String id, Vector3f vec4) {
-		int location = GL20.glGetUniformLocation(programId, id);
-		if (location != -1) {
-			GL20.glUniform3f(location, vec4.x, vec4.y, vec4.z);
-		} else {
-			Kronos.debug.getLogger().error("Uniform " + id + " not found in shader.");
-		}
-	}
-
-	@Override
-	public void addUniform(String id, Vector2f vec4) {
-		int location = GL20.glGetUniformLocation(programId, id);
-		if (location != -1) {
-			GL20.glUniform2f(location, vec4.x, vec4.y);
-		} else {
-			Kronos.debug.getLogger().error("Uniform " + id + " not found in shader.");
-		}
-	}
-
-	@Override
-	public void addUniform(String id, Matrix4f mat4) {
-		int location = GL20.glGetUniformLocation(programId, id);
-		if (location != -1) {
-			float[] matrixData = new float[16];
-			mat4.get(matrixData);
-			GL20.glUniformMatrix4fv(location, false, matrixData);
-		} else {
-			Kronos.debug.getLogger().error("Uniform " + id + " not found in shader.");
-		}
-	}
-
 	public void compileShader() {
 		setAttribs();
-		int vertexShaderID = GL20.glCreateShader(GL20.GL_VERTEX_SHADER);
-		GL20.glShaderSource(vertexShaderID, vertexSource);
-		GL20.glCompileShader(vertexShaderID);
-		ShaderUtils.checkShaderCompilationStatus(this, vertexShaderID, "Vertex RenderShader");
+		int vertexShaderID = compileAndCreateShader();
 
 		int fragmentShaderID = GL20.glCreateShader(GL20.GL_FRAGMENT_SHADER);
 		GL20.glShaderSource(fragmentShaderID, fragmentSource);
@@ -178,6 +109,17 @@ public abstract class RenderShader extends BaseShader implements ShaderUniform {
 		fragmentId = fragmentShaderID;
 		linkProgram();
 
+	}
+
+	/**
+	 * @return
+	 */
+	public int compileAndCreateShader() {
+		int vertexShaderID = GL20.glCreateShader(GL20.GL_VERTEX_SHADER);
+		GL20.glShaderSource(vertexShaderID, vertexSource);
+		GL20.glCompileShader(vertexShaderID);
+		ShaderUtils.checkShaderCompilationStatus(this, vertexShaderID, "Vertex RenderShader");
+		return vertexShaderID;
 	}
 
 	/**
@@ -213,7 +155,7 @@ public abstract class RenderShader extends BaseShader implements ShaderUniform {
 	 *             instead
 	 */
 	@Deprecated
-	public static void checkShaderCompilationStatus(RenderShader renderShader, int shaderID, String shaderType) {
+	public static void checkShaderCompilationStatus(BaseShader renderShader, int shaderID, String shaderType) {
 		ShaderUtils.checkShaderCompilationStatus(renderShader, shaderID, shaderType);
 	}
 
@@ -305,33 +247,6 @@ public abstract class RenderShader extends BaseShader implements ShaderUniform {
 		GL40.glBufferData(GL_SHADER_STORAGE_BUFFER, lightData, GL40.GL_STATIC_DRAW);
 		GL40.glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
 		return new Vector2i(binding, ssboID);
-	}
-
-	@Override
-	public Vector2i bindBufferObject(BufferObject bo, String bufferName) {
-		this.use();
-		IntBuffer props = BufferUtils.createIntBuffer(1);
-		IntBuffer params = BufferUtils.createIntBuffer(1);
-		props.put(0, GL_BUFFER_BINDING);
-		int index = glGetProgramResourceIndex(programId, GL_SHADER_STORAGE_BLOCK, bufferName);
-
-		glGetProgramResourceiv(this.programId, GL_SHADER_STORAGE_BLOCK, index, props, null, params);
-		int binding = params.get(0);
-
-		int ssboID = GL40.glGenBuffers();
-		FloatBuffer bufferdata = BufferUtils.createFloatBuffer(bo.getSize());
-		GL40.glBindBuffer(GL_SHADER_STORAGE_BUFFER, ssboID);
-
-		bo.append(bufferdata);
-
-		bufferdata.flip();
-		GL40.glBufferData(GL_SHADER_STORAGE_BUFFER, bufferdata, GL40.GL_STATIC_DRAW);
-		GL40.glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
-		return new Vector2i(binding, ssboID);
-	}
-
-	public void bindSSBO(Vector2i buf) {
-		glBindBufferBase(GL_SHADER_STORAGE_BUFFER, buf.x, buf.y);
 	}
 
 }

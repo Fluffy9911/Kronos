@@ -40,7 +40,7 @@ public class Graphixs2D implements SListener {
 
 		for (Iterator iterator = meshes.iterator(); iterator.hasNext();) {
 			TexturedMesh tm = (TexturedMesh) iterator.next();
-			GL40.glUseProgram(tm.getDraw().getShaderProgramID());
+			tm.getDraw().use();
 			tm.getDraw().addUniform("proj", provider.collectTransform());
 
 			tm.render();

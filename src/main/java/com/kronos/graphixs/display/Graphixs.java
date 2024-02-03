@@ -18,6 +18,8 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 import org.lwjgl.opengl.GL40;
+import org.lwjgl.opengl.GL43;
+import org.lwjgl.opengl.GL43C;
 import org.lwjgl.opengl.GL46;
 import org.lwjgl.stb.STBImageWrite;
 
@@ -470,5 +472,17 @@ public class Graphixs {
 
 	public Texture getTexture(String id) {
 		return textures.get(id);
+	}
+
+	public void endableCullingCCW(int type) {
+		GL43C.glEnable(GL43.GL_CULL_FACE);
+		GL43C.glCullFace(type);
+		GL43C.glFrontFace(GL40.GL_CCW);
+	}
+
+	public void endableCullingCW(int type) {
+		GL43C.glEnable(GL43.GL_CULL_FACE);
+		GL43C.glCullFace(type);
+		GL43C.glFrontFace(GL40.GL_CW);
 	}
 }

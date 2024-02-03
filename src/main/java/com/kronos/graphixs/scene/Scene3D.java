@@ -81,6 +81,7 @@ public class Scene3D {
 
 		});
 		tt.setMeshes(new MeshBuffer<Mesh>((ArrayList<Mesh>) meshes));
+		pc.setFar(20000);
 	}
 
 	public void handleInputs() {
@@ -240,7 +241,7 @@ public class Scene3D {
 
 	public void prepare() {
 //cam uniforms
-		draw.setAttribs(draw);
+		draw.setAttribs();
 
 		li = draw.bindLightsSSBO(lights);
 
