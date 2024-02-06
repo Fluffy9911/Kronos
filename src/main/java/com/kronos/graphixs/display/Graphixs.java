@@ -136,13 +136,14 @@ public class Graphixs {
 		window_id = screen.init(config);
 		manager.add(screen);
 		screen.load();
+		createShader("texture", new TextureProgram(Kronos.loader.tryLoad("shaders/texture.vs"),
+				Kronos.loader.tryLoad("shaders/texture.fs")));
 		if (dev) {
 			buffers.put("edge_detection", new FrameBuffer(config.width(), config.height(), true));
 			buffers.put("post_proccess", new FrameBuffer(config.width(), config.height(), true));
 			buffers.put("graphixs2d_pane", new FrameBuffer(config.width(), config.height(), true));
 			post_process_quad = Builtin.screenQuad();
-			createShader("texture", new TextureProgram(Kronos.loader.tryLoad("shaders/texture.vs"),
-					Kronos.loader.tryLoad("shaders/texture.fs")));
+
 			createShader("highlight", new HighlightProgram(Kronos.loader.tryLoad("shaders/texture.vs"),
 					Kronos.loader.tryLoad("shaders/highlight.fs")));
 			createShader("highlight_g", new HighlightProgram(Kronos.loader.tryLoad("shaders/texture.vs"),
@@ -271,7 +272,7 @@ public class Graphixs {
 	public void writeTextureOut(String name, int w, int h) {
 		test(l);
 		ByteBuffer buffer = BufferUtils.createByteBuffer(w * h * 4);
-		GL11.glReadPixels(0, 0, w, h, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buffer);
+		GL11.glReadPixels(0, 0, w, h, GL11.GL_RGBA16, GL11.GL_UNSIGNED_BYTE, buffer);
 
 		// Save the pixel data as a PNG file
 		l.debug("Writing texture out: W {} H: {}", w, h);

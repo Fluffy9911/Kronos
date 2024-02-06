@@ -110,15 +110,15 @@ public class Texture {
 				buffer.put((byte) ((pixel >> 16) & 0xFF)); // Red component
 				buffer.put((byte) ((pixel >> 8) & 0xFF)); // Green component
 				buffer.put((byte) (pixel & 0xFF)); // Blue component
-				if ((byte) ((pixel >> 24) & 0xFF) == 0)
-					buffer.put((byte) 0); // Alpha component
-				else
-					buffer.put((byte) ((pixel >> 24) & 0xFF)); // Alpha component
+//				if ((byte) ((pixel >> 24) & 0xFF) == 0)
+//					buffer.put((byte) 1); // Alpha component
+//				else
+				buffer.put((byte) ((pixel >> 24) & 0xFF)); // Alpha component
 			}
 		}
 
 		buffer.flip();
-
+		System.out.println("built");
 		textureId = GL11.glGenTextures();
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, textureId);
 

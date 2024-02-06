@@ -1,5 +1,11 @@
 package com.kronos.graphixs.g2d.pixelcanvas;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+
 import com.kronos.graphixs.color.Color;
 import com.kronos.graphixs.display.Texture;
 
@@ -121,4 +127,20 @@ public class Canvas2D {
 		return t;
 	}
 
+	public void outToLOC(String name) {
+		BufferedImage img = new BufferedImage(width, height, BufferedImage.OPAQUE);
+		int[][] t = new int[width][height];
+		for (int i = 0; i < t.length; i++) {
+			for (int j = 0; j < t[i].length; j++) {
+				img.setRGB(i, j, canvas[i][j]);
+			}
+		}
+		try {
+			ImageIO.write(img, "png",
+					new File("C:\\Users\\James.M\\OneDrive\\Desktop\\testfolder\\o\\" + name + ".png"));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 }

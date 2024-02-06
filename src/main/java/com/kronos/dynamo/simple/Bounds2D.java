@@ -161,4 +161,11 @@ public class Bounds2D {
 
 		return projected_rect;
 	}
+
+	@Override
+	public String toString() {
+		return "Bounds2D [x=" + x + ", y=" + y + ", width=" + width + ", height=" + height + ", factor=" + factor
+				+ ", velocity=" + velocity + ", friction=" + friction + "]";
+	}
+
 }

@@ -636,7 +636,9 @@ public class Transform implements Template {
 
 	@Override
 	public String toString() {
-		return position.toString();
+		return "Transform [position=" + position + ", up=" + up + ", looking=" + looking + ", trans=" + trans
+				+ ", velocity=" + velocity + ", yaw=" + yaw + ", pitch=" + pitch + ", rotatex=" + rotatex + ", rotatey="
+				+ rotatey + ", rotatez=" + rotatez + ", children=" + children + ", update=" + update + "]";
 	}
 
 	public String toString(NumberFormat formatter) {
