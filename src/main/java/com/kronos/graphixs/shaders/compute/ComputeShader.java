@@ -16,6 +16,12 @@ public abstract class ComputeShader extends BaseShader {
 	protected int shaderID = -1;
 	Vector3i size = new Vector3i(1, 1, 1);
 
+	public ComputeShader(String source, Vector3i size) {
+		super();
+		this.source = source;
+		this.size = size;
+	}
+
 	@Override
 	public void load() {
 		// TODO Auto-generated method stub
@@ -31,7 +37,10 @@ public abstract class ComputeShader extends BaseShader {
 	@Override
 	public void compileShader() {
 		shaderID = compileAndCreateShader(GL43C.GL_COMPUTE_SHADER, source, "COMPUTE");
+
 		programId = linkAndAttach(shaderID);
+		this.shaderLogger.debug(this.getShaderCompilationStatus());
+
 	}
 
 	/**
@@ -50,6 +59,7 @@ public abstract class ComputeShader extends BaseShader {
 
 	@Override
 	public void use() {
+		GL43C.glUseProgram(programId);
 		GL43C.glDispatchCompute(size.x, size.y, size.z);
 	}
 

@@ -9,6 +9,7 @@ import org.joml.Vector2i;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 
+import com.kronos.graphixs.shaders.BaseShader;
 import com.kronos.graphixs.shaders.bufferobjects.BufferObject;
 
 /**
@@ -40,6 +41,6 @@ public interface ShaderUniform {
 	 * @param renderShader
 	 * @return
 	 */
-	Vector2i bindBufferObject(BufferObject bo, String bufferName, RenderShader renderShader);
+	Vector2i bindBufferObject(BufferObject bo, String bufferName, BaseShader renderShader);
 
 }

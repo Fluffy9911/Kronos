@@ -24,9 +24,9 @@ import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL40;
 
 import com.kronos.Kronos;
+import com.kronos.graphixs.display.Graphixs;
 import com.kronos.graphixs.resources.Resource;
 import com.kronos.graphixs.shaders.bufferobjects.BufferObject;
-import com.kronos.graphixs.shaders.render.RenderShader;
 import com.kronos.graphixs.shaders.render.ShaderUniform;
 
 /**
@@ -36,6 +36,12 @@ public abstract class BaseShader implements Resource, ShaderUniform {
 	protected Logger shaderLogger = Kronos.debug.getLogger();
 	protected int programId = -1;
 
+	@Deprecated
+	public String getShaderCompilationStatus() {
+		return GL20.glGetProgramInfoLog(programId);
+
+	}
+
 	public void logShaderError(String error) {
 		shaderLogger.error("Shader Has Thrown an error: {}", error);
 	}
@@ -43,9 +49,13 @@ public abstract class BaseShader implements Resource, ShaderUniform {
 	public abstract void compileShader();
 
 	public int compileAndCreateShader(int type, String source, String t) {
+		Graphixs g = Kronos.graphixs;
 		int shaderID = GL20.glCreateShader(type);
+		g.glErrors();
 		GL20.glShaderSource(shaderID, source);
+		g.glErrors();
 		GL20.glCompileShader(shaderID);
+		g.glErrors();
 		ShaderUtils.checkShaderCompilationStatus(shaderID, t);
 		return shaderID;
 	}
@@ -135,7 +145,7 @@ public abstract class BaseShader implements Resource, ShaderUniform {
 	}
 
 	@Override
-	public Vector2i bindBufferObject(BufferObject bo, String bufferName, RenderShader renderShader) {
+	public Vector2i bindBufferObject(BufferObject bo, String bufferName, BaseShader renderShader) {
 		renderShader.use();
 		IntBuffer props = BufferUtils.createIntBuffer(1);
 		IntBuffer params = BufferUtils.createIntBuffer(1);

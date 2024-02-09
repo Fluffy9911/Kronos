@@ -159,12 +159,6 @@ public abstract class RenderShader extends BaseShader {
 		ShaderUtils.checkShaderCompilationStatus(renderShader, shaderID, shaderType);
 	}
 
-	@Deprecated
-	public String getShaderCompilationStatus() {
-		return GL20.glGetProgramInfoLog(programId);
-
-	}
-
 	/**
 	 * @return the program_id
 	 */

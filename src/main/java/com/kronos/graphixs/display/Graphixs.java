@@ -38,6 +38,7 @@ import com.kronos.graphixs.geometry.meshing.Builtin;
 import com.kronos.graphixs.rendering.RenderTarget.TargetConfig;
 import com.kronos.graphixs.resources.Resource;
 import com.kronos.graphixs.resources.ResourceManager;
+import com.kronos.graphixs.shaders.BaseShader;
 import com.kronos.graphixs.shaders.builtin.Shader3D;
 import com.kronos.graphixs.shaders.render.RenderShader;
 import com.kronos.graphixs.shaders.render.ShaderProgram;
@@ -48,7 +49,7 @@ import de.javagl.obj.ObjReader;
 import de.javagl.obj.ObjUtils;
 
 public class Graphixs {
-	boolean g_lock = true, dev = false;
+	boolean g_lock = true, dev = true;
 	private ScreenConfig config;
 	private Screen screen;
 	private ResourceManager manager = new ResourceManager();
@@ -56,7 +57,7 @@ public class Graphixs {
 	private Logger l = Kronos.debug.getLogger();
 	public Mesh post_process_quad;
 	public HashMap<String, FrameBuffer> buffers = new HashMap<>();
-	private HashMap<String, RenderShader> shaders = new HashMap<String, RenderShader>();
+	private HashMap<String, BaseShader> shaders = new HashMap<String, BaseShader>();
 	private long window_id = -1;
 
 	public Graphixs2D g2d;
@@ -69,7 +70,7 @@ public class Graphixs {
 	// modules
 	public ShapeRenderer shapeRenderer = new ShapeRenderer();
 
-	public void createShader(String id, RenderShader s) {
+	public void createShader(String id, BaseShader s) {
 		test(l);
 		s.compileShader();
 		l.info("Compiled and registered shaderid: {}", id);
@@ -171,6 +172,8 @@ public class Graphixs {
 					Kronos.loader.tryLoad("shaders/fragment.fs")));
 			createShader("3d", new Shader3D(Kronos.loader.tryLoad("shaders/threed.vs"),
 					Kronos.loader.tryLoad("shaders/basiccolor.fs"), null));
+//			createShader("rtcp",
+//					new RTCompute(Kronos.loader.tryLoad("shaders/rtcompute.cp"), new Vector3i(400, 400, 1), 400, 400));
 
 			fs = Kronos.loader.tryLoad("shaders/texture.fs");
 			vs = Kronos.loader.tryLoad("shaders/fragment.fs");
@@ -180,9 +183,9 @@ public class Graphixs {
 				(ShaderProgram) shaders.get("texture"));
 
 		l.debug("Shaders Loaded:");
-		for (Map.Entry<String, RenderShader> entry : shaders.entrySet()) {
+		for (Map.Entry<String, BaseShader> entry : shaders.entrySet()) {
 			String key = entry.getKey();
-			RenderShader val = entry.getValue();
+			BaseShader val = entry.getValue();
 			l.debug("RenderShader: {}, status? {}", key, val.getShaderCompilationStatus());
 		}
 		l.debug("Loading textures");
@@ -281,11 +284,13 @@ public class Graphixs {
 	public void writeTextureOut(String name) {
 		test(l);
 		ByteBuffer buffer = BufferUtils.createByteBuffer(config.width() * config.height() * 4);
-		GL11.glReadPixels(0, 0, config.width(), config.height(), GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buffer);
+		GL43C.glMemoryBarrier(GL43C.GL_SHADER_IMAGE_ACCESS_BARRIER_BIT);
+		GL11.glReadPixels(0, 0, config.width(), config.height(), GL40.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buffer);
 
 		// Save the pixel data as a PNG file
-		STBImageWrite.stbi_write_png(Kronos.loader.createFilePath("test/out", name + ".png"), config.width(),
-				config.height(), 4, buffer, 0);
+		boolean v = STBImageWrite.stbi_write_png(Kronos.loader.createFilePath("test/out", name + ".png"),
+				config.width(), config.height(), 4, buffer, 0);
+
 	}
 
 	public void writeTextureOut(String name, int w, int h) {
@@ -380,7 +385,7 @@ public class Graphixs {
 		Mesh m = Builtin.textured_quad((float) x, (float) y, (float) w, (float) h);
 		t.bind();
 		shaders.get("texture").addUniform("tex", t.textureId);
-		m.render(shaders.get("texture"));
+		m.render((RenderShader) shaders.get("texture"));
 		t.unbind();
 		m.cleanup();
 	}
