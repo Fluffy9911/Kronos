@@ -16,7 +16,7 @@ import com.kronos.Kronos;
  */
 public class Connector {
 	InetSocketAddress connect;
-	Connection c;
+	public Connection c;
 	Logger l;
 	int po;
 
@@ -39,6 +39,7 @@ public class Connector {
 	}
 
 	public void openClient() {
+		l.debug("{}", this.connect.getAddress().getHostAddress());
 		this.c = new Connection(connect);
 
 		this.c.tryConnectClient(l);
