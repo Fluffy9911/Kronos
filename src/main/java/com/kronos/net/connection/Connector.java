@@ -33,6 +33,7 @@ public class Connector {
 		this.l = Kronos.debug.getLogger();
 		this.c = new Connection(new Socket(), new Socket());
 		l.debug("Connector Created at host: {} Connecting to: {}", local.getHostName(), connect.getHostName());
+		l.debug("{} {}", local.getAddress().getHostAddress(), connect.getAddress().getHostAddress());
 		try {
 			this.c.local.bind(local);
 			l.debug("Bound local address");
