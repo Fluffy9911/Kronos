@@ -16,8 +16,8 @@ public class NTest {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		Connector cn = new Connector(new InetSocketAddress("", 0));
-
+		Connector cn = new Connector(new InetSocketAddress("192.168.219.9", 0));
+		cn.open(true);
 	}
 
 }

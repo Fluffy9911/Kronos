@@ -5,6 +5,7 @@ package com.kronos.net.connection;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.LinkedList;
 import java.util.Scanner;
@@ -13,11 +14,11 @@ import java.util.Scanner;
  * 
  */
 public class Connection {
-	Socket local;
+	ServerSocket local;
 	Socket connection;
 	LinkedList<String> databuffer;
 
-	public Socket getLocal() {
+	public ServerSocket getLocal() {
 		return local;
 	}
 
@@ -40,7 +41,7 @@ public class Connection {
 		os.close();
 	}
 
-	public Connection(Socket local, Socket connection) {
+	public Connection(ServerSocket local, Socket connection) {
 		super();
 		this.local = local;
 		this.connection = connection;

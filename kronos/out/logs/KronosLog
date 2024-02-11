@@ -1,4 +1,5 @@
-18:42:19.457 [main] INFO  com.kronos.Kronos - Dubugger created
-18:42:19.470 [main] DEBUG com.kronos.Kronos - Connector Created at host: DESKTOP-IORE1F2 Connecting to: localhost
-18:42:19.470 [main] DEBUG com.kronos.Kronos - 192.168.219.20 127.0.0.1
-18:42:19.471 [main] DEBUG com.kronos.Kronos - Bound local address
+18:53:30.949 [main] INFO  com.kronos.Kronos - Dubugger created
+18:53:30.964 [main] DEBUG com.kronos.Kronos - Connector Created at host: DESKTOP-IORE1F2 Connecting to: 192.168.219.9
+18:53:30.964 [main] DEBUG com.kronos.Kronos - 192.168.219.20 192.168.219.9
+18:53:30.965 [main] DEBUG com.kronos.Kronos - Bound local address
+18:53:30.965 [main] DEBUG com.kronos.Kronos - Starting Connection
