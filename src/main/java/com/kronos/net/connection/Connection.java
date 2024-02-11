@@ -5,11 +5,13 @@ package com.kronos.net.connection;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.nio.CharBuffer;
 import java.util.Iterator;
 import java.util.LinkedList;
 
@@ -113,6 +115,7 @@ public class Connection {
 			this.connection.connect(ss);
 			this.isWaiting = false;
 			this.isConnected = true;
+			l.debug("Connected to server");
 			this.loopServer();
 		} catch (UnknownHostException e) {
 			l.error("UnknownHost: the destination IP could not be resolved. {}", e);
@@ -133,11 +136,14 @@ public class Connection {
 	}
 
 	public void listenOnInput() throws IOException {
-		InputStream s = System.in;
 
-		if (s.available() != 0) {
-			String i = new String(s.readAllBytes());
+		InputStreamReader s = new InputStreamReader(System.in);
+		if (s.ready()) {
+			CharBuffer cb = CharBuffer.allocate(Integer.MAX_VALUE);
+			s.read(cb);
 
+			String i = new String(cb.array());
+			System.out.println(i);
 			if (i.equals("BUF")) {
 				for (Iterator iterator = databuffer.iterator(); iterator.hasNext();) {
 					String string = (String) iterator.next();
@@ -153,15 +159,15 @@ public class Connection {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-			} else {
-				try {
-					System.out.println("Sending...");
-					send(i);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
 			}
+			try {
+				System.out.println("Sending...");
+				send(i);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
 			return;
 		}
 		return;
