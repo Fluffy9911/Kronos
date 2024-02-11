@@ -3,6 +3,7 @@
  */
 package com.kronos.net.connection;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -11,7 +12,6 @@ import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.nio.CharBuffer;
 import java.util.Iterator;
 import java.util.LinkedList;
 
@@ -137,12 +137,10 @@ public class Connection {
 
 	public void listenOnInput() throws IOException {
 
-		InputStreamReader s = new InputStreamReader(System.in);
+		BufferedReader s = new BufferedReader(new InputStreamReader(System.in));
 		if (s.ready()) {
-			CharBuffer cb = CharBuffer.allocate(Integer.MAX_VALUE);
-			s.read(cb);
 
-			String i = new String(cb.array());
+			String i = s.readLine();
 			System.out.println(i);
 			if (i.equals("BUF")) {
 				for (Iterator iterator = databuffer.iterator(); iterator.hasNext();) {
