@@ -4,6 +4,7 @@
 package com.kronos.net.connection;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
@@ -11,7 +12,6 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.Scanner;
 
 import org.apache.logging.log4j.Logger;
 
@@ -34,24 +34,41 @@ public class Connection {
 		return connection;
 	}
 
-	@SuppressWarnings("resource")
 	public void listen() throws IOException {
 
-		Scanner s = new Scanner(connection.getInputStream());
-		while (s.hasNext()) {
-			databuffer.add(s.next());
+		InputStream s = connection.getInputStream();
+
+		if (s.available() != 0) {
+			databuffer.add(new String(s.readAllBytes()));
+			return;
 		}
 
-		for (Iterator iterator = databuffer.iterator(); iterator.hasNext();) {
-			String string = (String) iterator.next();
-			System.out.println(string);
+		return;
+	}
+
+	public void loopServer() {
+		while (isConnected) {
+
+			try {
+				listen();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			try {
+				listenOnInput();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+			}
+
 		}
+
 	}
 
 	public void send(String s) throws IOException {
 		OutputStream os = connection.getOutputStream();
 		os.write(s.getBytes());
-
+		return;
 	}
 
 	public Connection(ServerSocket server) {
@@ -80,11 +97,12 @@ public class Connection {
 			l.debug("Connected! ");
 			this.isWaiting = false;
 			this.isConnected = true;
+			loopServer();
 		} catch (IOException e) {
 			l.error("IO: an IO error occured. {}", e);
 
 		}
-
+		l.debug("Done!");
 	}
 
 	public void tryConnectClient(Logger l) {
@@ -95,6 +113,7 @@ public class Connection {
 			this.connection.connect(ss);
 			this.isWaiting = false;
 			this.isConnected = true;
+			this.loopServer();
 		} catch (UnknownHostException e) {
 			l.error("UnknownHost: the destination IP could not be resolved. {}", e);
 		} catch (IOException e) {
@@ -111,6 +130,42 @@ public class Connection {
 	 */
 	public String readNextInBuffer() {
 		return databuffer.pop();
+	}
+
+	public void listenOnInput() throws IOException {
+		InputStream s = System.in;
+
+		if (s.available() != 0) {
+			String i = new String(s.readAllBytes());
+
+			if (i.equals("BUF")) {
+				for (Iterator iterator = databuffer.iterator(); iterator.hasNext();) {
+					String string = (String) iterator.next();
+					System.out.println(string);
+				}
+
+			}
+			if (i.equals("CLOSE")) {
+				isConnected = false;
+				try {
+					this.local.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			} else {
+				try {
+					System.out.println("Sending...");
+					send(i);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			return;
+		}
+		return;
+
 	}
 
 }
