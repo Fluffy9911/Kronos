@@ -264,6 +264,7 @@ public class Connection {
 			this.isWaiting = false;
 			this.isConnected = true;
 			this.side = Side.SERVER;
+			this.innitServer();
 			l.debug("Client: {}", connection.getInetAddress().getHostAddress());
 		} catch (IOException e) {
 			l.error("IO: an IO error occured. {}", e);
@@ -282,6 +283,7 @@ public class Connection {
 			this.isConnected = true;
 			l.debug("Connected to server");
 			this.side = Side.CLIENT;
+			this.innitClient();
 		} catch (UnknownHostException e) {
 			l.error("UnknownHost: the destination IP could not be resolved. {}", e);
 		} catch (IOException e) {

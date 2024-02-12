@@ -52,6 +52,10 @@ public abstract class Packet {
 
 	public byte[] send(String input, SecretKey key) throws Exception {
 		this.sent = System.currentTimeMillis();
+		System.out.println(input);
+		if (input == null) {
+			return new String("null").getBytes();
+		}
 		return encrypt(input, key);
 	}
 
