@@ -191,7 +191,7 @@ public class Connection {
 		if (next.equals("BUF")) {
 			for (Iterator iterator = databuffer.iterator(); iterator.hasNext();) {
 				String string = (String) iterator.next();
-				System.out.println(string);
+
 			}
 			return;
 		}
@@ -233,7 +233,7 @@ public class Connection {
 		if (!cp.equals("null") && !cp.equals(s)) {
 			Packet p = registered.get(cp);
 			try {
-				System.out.println("packet received: " + cp);
+
 				p.receive(s.getBytes(), key);
 
 				if (this.getSide() == Side.SERVER) {

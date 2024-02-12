@@ -5,6 +5,7 @@ package com.kronos.net;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.util.Random;
 
 import com.kronos.io.Config;
 import com.kronos.net.connection.Connector;
@@ -29,12 +30,15 @@ public class NTestServer {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		Config c = new Config();
-		c.appendInt("test_int", 0);
-		c.appendLong("time", System.currentTimeMillis());
-		cn.c.sendPacket("handshake");
-		cn.c.sendPacket("config", new ConfigPacket(c));
 
+		cn.c.sendPacket("handshake");
+		for (int i = 0; i < 10; i++) {
+			Random r = new Random();
+			Config c = new Config();
+			c.appendInt("test_int", r.nextInt(64365436));
+			c.appendLong("time", System.currentTimeMillis());
+			cn.c.sendPacket("config", new ConfigPacket(c));
+		}
 	}
 
 }
