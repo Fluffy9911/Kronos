@@ -23,6 +23,8 @@ public class Kronos {
 
 	private static HashMap<String, Config> registeredConfig;
 
+	public static String version = "KRONOS1a1.0";
+
 	// config
 	public static Config k_config = new Config();
 

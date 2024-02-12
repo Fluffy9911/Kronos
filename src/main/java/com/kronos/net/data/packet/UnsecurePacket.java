@@ -27,15 +27,15 @@ public class UnsecurePacket extends Packet {
 	@Override
 	public void dealWithInputData(String dat) {
 		Gson g = new Gson();
-		// System.out.println(dat);
+
 		cfg = g.fromJson(dat, Config.class);
-		// System.out.println(cfg.toString());
+
 	}
 
 	@Override
 	public void receive(byte[] input, SecretKey key) throws Exception {
 		String d = new String(input);
-		System.out.println("Recieved: " + d);
+
 		this.dealWithInputData(d);
 	}
 

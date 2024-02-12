@@ -14,16 +14,20 @@ import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
 
+import org.apache.logging.log4j.Logger;
+
+import com.kronos.Kronos;
+import com.kronos.net.data.packet.Side;
 import com.kronos.net.encryption.EncryptionUtils;
 
 /**
  * 
  */
 public abstract class Packet {
-	byte[] data;
+
 	long sent, recieved;
-	byte pid;
-	public static byte MAX_PID = 0;
+
+	protected Logger plog = Kronos.debug.getLogger();
 
 	public static SecretKey getKeyFromPassword(String password, String salt)
 			throws NoSuchAlgorithmException, InvalidKeySpecException {
@@ -44,9 +48,6 @@ public abstract class Packet {
 		super();
 		sent = -1;
 		recieved = -1;
-		data = new byte[] {};
-		pid = MAX_PID;
-		MAX_PID++;
 
 	}
 
@@ -82,12 +83,10 @@ public abstract class Packet {
 
 	public abstract Object getCurrent();
 
-	@SuppressWarnings("unused")
 	private String decrypt(String input, SecretKey key) throws Exception {
 		return EncryptionUtils.decryptString(input, key);
 	}
 
-	@SuppressWarnings("unused")
 	private byte[] encrypt(String input, SecretKey key) throws Exception {
 
 		return EncryptionUtils.encryptString(input, key).getBytes();
@@ -104,5 +103,13 @@ public abstract class Packet {
 	public abstract void sentServerSide();
 
 	public abstract void recieveServerSide();
+
+	public boolean shouldSend(Side s) {
+		return true;
+	}
+
+	public boolean shouldRecieve(Side s) {
+		return true;
+	}
 
 }

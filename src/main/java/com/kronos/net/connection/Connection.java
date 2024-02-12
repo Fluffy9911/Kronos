@@ -1,6 +1,3 @@
-/**
- * 
- */
 package com.kronos.net.connection;
 
 import java.io.IOException;
@@ -28,45 +25,53 @@ import org.apache.logging.log4j.Logger;
 
 import com.kronos.Kronos;
 import com.kronos.core.util.BufferedStreamReader;
+import com.kronos.net.data.ConnectionData;
 import com.kronos.net.data.Packet;
 import com.kronos.net.data.packet.ConfigPacket;
 import com.kronos.net.data.packet.HandShake;
 import com.kronos.net.data.packet.Side;
 import com.kronos.net.data.packet.UnsecurePacket;
 
-/**
- * 
- */
 public class Connection {
-	ServerSocket local;
-	Socket connection;
-	LinkedList<String> databuffer, cbuf;
-	InetSocketAddress ss;
-	BufferedStreamReader bs, si;
-	Side side;
-	HashMap<String, Packet> registered;
 
+	private ServerSocket local;
+	private Socket connection;
+	private LinkedList<String> databuffer, cbuf;
+	private InetSocketAddress ss;
+	private BufferedStreamReader bs, si;
+	private HashMap<String, Packet> registered;
 	private SecretKey key = null;
-
-	boolean isServer = true, isConnected = false, isWaiting = true, handshake = false;
+	private ConnectionData data;
+	private boolean isServer = true, isConnected = false, isWaiting = true, handshake = false;
 	private ArrayList<String> datalog;
+	private String cp = "null";
 
 	{
-
 		datalog = new ArrayList<>();
-
 	}
-	String cp = "null";
+
+	public Connection(ServerSocket server) {
+		this.local = server;
+		this.isServer = true;
+		this.databuffer = new LinkedList<>();
+		this.cbuf = new LinkedList<>();
+		this.registerPackets();
+	}
+
+	public Connection(InetSocketAddress s) {
+		this.databuffer = new LinkedList<>();
+		this.cbuf = new LinkedList<>();
+		this.ss = s;
+		this.isServer = false;
+		this.registerPackets();
+	}
 
 	public void setDatabuffer(LinkedList<String> databuffer) {
-
 		this.databuffer = databuffer;
 	}
 
 	public void setCbuf(LinkedList<String> cbuf) {
-
 		this.cbuf = cbuf;
-
 	}
 
 	public void registerPackets() {
@@ -90,59 +95,24 @@ public class Connection {
 
 	public void listen() throws IOException {
 		bs = new BufferedStreamReader() {
-
 			@Override
 			public void onRecieve(String s) {
-				if (!cp.equals("null") && cp != s) {
-					Packet p = registered.get(cp);
-					try {
-						System.out.println("packet recieved: " + cp);
-						p.receive(s.getBytes(), key);
-
-						if (side == Side.SERVER) {
-							p.recieveServerSide();
-						}
-						if (side == Side.CLIENT) {
-							p.recieveClientSide();
-						}
-						cp = "null";
-					} catch (InvalidKeyException | NoSuchPaddingException | NoSuchAlgorithmException
-							| InvalidAlgorithmParameterException | BadPaddingException | IllegalBlockSizeException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (Exception e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}
-				if (registered.containsKey(s)) {
-					cp = s;
-
-				} else {
-					cp = "null";
-				}
-
-				appendData("input msg", s, "CONNECTION RECIEVED DATA");
-				databuffer.add(s);
+				handleReceivedData(s);
 			}
-
 		};
 		bs.begin(Executors.newCachedThreadPool(), connection.getInputStream());
 	}
 
 	public void listenTerminal() throws IOException {
 		si = new BufferedStreamReader() {
-
 			@Override
 			public void onRecieve(String s) {
-				appendData("input terminal", s, "TERMINAL RECIEVED DATA");
 				try {
-					listenOnInput(s);
+					handleTerminalInput(s);
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-
 			}
 
 		};
@@ -151,111 +121,33 @@ public class Connection {
 
 	public void send(String s) throws IOException {
 		PrintWriter out = new PrintWriter(connection.getOutputStream(), false);
-
 		out.println(s);
-
 		out.flush();
-		return;
 	}
 
 	public void sendPacket(String p) {
-
 		try {
 			send(p);
 			Packet pa = registered.get(p);
 			send(new String(pa.send(pa.getToSend(), key)));
-			if (side == Side.SERVER) {
-				pa.sentServerSide();
-			}
-			if (side == Side.CLIENT) {
-				pa.sentClientSide();
-			}
-		} catch (InvalidKeyException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (NoSuchPaddingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (NoSuchAlgorithmException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InvalidAlgorithmParameterException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (BadPaddingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalBlockSizeException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			handleSentPacket(pa);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			handleException(e);
 		}
 	}
 
 	public void sendPacket(String p, Packet pa) {
-
 		try {
 			send(p);
-
 			send(new String(pa.send(pa.getToSend(), key)));
-			if (side == Side.SERVER) {
-				pa.sentServerSide();
-			}
-			if (side == Side.CLIENT) {
-				pa.sentClientSide();
-			}
-		} catch (InvalidKeyException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (NoSuchPaddingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (NoSuchAlgorithmException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InvalidAlgorithmParameterException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (BadPaddingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalBlockSizeException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			handleSentPacket(pa);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			handleException(e);
 		}
 	}
 
-	public Connection(ServerSocket server) {
-		super();
-		this.local = server;
-		this.isServer = true;
-
-		databuffer = new LinkedList<>();
-		cbuf = new LinkedList<>();
-		this.registerPackets();
-	}
-
-	public Connection(InetSocketAddress s) {
-		databuffer = new LinkedList<>();
-		cbuf = new LinkedList<>();
-		ss = s;
-		this.isServer = false;
-		this.registerPackets();
-	}
-
-	public LinkedList<String> getDatabuffer() {
-		return databuffer;
+	public String readNextInBuffer() {
+		return databuffer.pop();
 	}
 
 	public void tryConnectServer(Logger l) {
@@ -263,15 +155,14 @@ public class Connection {
 		this.isWaiting = true;
 		try {
 			this.connection = local.accept();
-			l.debug("Connected! ");
+			l.debug("Connected!");
 			this.isWaiting = false;
 			this.isConnected = true;
-			this.side = Side.SERVER;
-			this.innitServer();
+			this.data = new ConnectionData(System.currentTimeMillis(), Side.SERVER, this.local.getLocalPort());
+			this.initServer();
 			l.debug("Client: {}", connection.getInetAddress().getHostAddress());
 		} catch (IOException e) {
-			l.error("IO: an IO error occured. {}", e);
-
+			handleException(e);
 		}
 		l.debug("Connected to Client");
 	}
@@ -282,32 +173,21 @@ public class Connection {
 		try {
 			this.connection = new Socket();
 			this.connection.connect(ss);
+			this.data = new ConnectionData(System.currentTimeMillis(), Side.CLIENT, ss.getPort());
 			this.isWaiting = false;
 			this.isConnected = true;
 			l.debug("Connected to server");
-			this.side = Side.CLIENT;
-			this.innitClient();
-		} catch (UnknownHostException e) {
-			l.error("UnknownHost: the destination IP could not be resolved. {}", e);
-		} catch (IOException e) {
-			l.error("IO: an IO error occured. {}", e);
 
+			this.initClient();
+		} catch (UnknownHostException e) {
+			handleException(e);
+		} catch (IOException e) {
+			handleException(e);
 		}
 		l.debug("Client connected");
-
-	}
-
-	/**
-	 * the buffer behaves like a stack
-	 * 
-	 * @return
-	 */
-	public String readNextInBuffer() {
-		return databuffer.pop();
 	}
 
 	public void listenOnInput(String next) throws IOException {
-
 		if (next.equals("BUF")) {
 			for (Iterator iterator = databuffer.iterator(); iterator.hasNext();) {
 				String string = (String) iterator.next();
@@ -320,11 +200,10 @@ public class Connection {
 			return;
 		}
 		send(next);
-
 	}
 
 	public void connectionError(String s) {
-		Kronos.debug.getLogger().debug("A connection error has occured: {}", s);
+		Kronos.debug.getLogger().debug("A connection error has occurred: {}", s);
 	}
 
 	public void log(String s) {
@@ -332,13 +211,14 @@ public class Connection {
 	}
 
 	public void appendDataSilent(String msg, String dat, String side) {
-		datalog.add("Recieved Data: " + dat + " On Side: " + side + " Extra Info: " + msg);
+		String log = "Received Data: " + dat + " On Side: " + side + " Extra Info: " + msg;
+		datalog.add(log);
 	}
 
 	public void appendData(String msg, String dat, String side) {
-		String s = "Recieved Data: " + dat + " On Side: " + side + " Extra Info: " + msg;
-		datalog.add(s);
-		log(s);
+		String log = "Received Data: " + dat + " On Side: " + side + " Extra Info: " + msg;
+		datalog.add(log);
+		log(log);
 	}
 
 	public SecretKey getKey() {
@@ -349,20 +229,68 @@ public class Connection {
 		this.key = key;
 	}
 
-	public void innitClient() {
-		for (Map.Entry<String, Packet> entry : registered.entrySet()) {
-			String key = entry.getKey();
-			Packet val = entry.getValue();
-			val.initClientSide();
+	private void handleReceivedData(String s) {
+		if (!cp.equals("null") && !cp.equals(s)) {
+			Packet p = registered.get(cp);
+			try {
+				System.out.println("packet received: " + cp);
+				p.receive(s.getBytes(), key);
+
+				if (this.getSide() == Side.SERVER) {
+					p.recieveServerSide();
+				}
+				if (this.getSide() == Side.CLIENT) {
+					p.recieveClientSide();
+				}
+				cp = "null";
+			} catch (InvalidKeyException | NoSuchPaddingException | NoSuchAlgorithmException
+					| InvalidAlgorithmParameterException | BadPaddingException | IllegalBlockSizeException e) {
+				handleException(e);
+			} catch (Exception e) {
+				handleException(e);
+			}
+		}
+		if (registered.containsKey(s)) {
+			cp = s;
+		} else {
+			cp = "null";
+		}
+
+		appendData("input msg", s, "CONNECTION RECEIVED DATA");
+		databuffer.add(s);
+	}
+
+	private void handleTerminalInput(String s) throws IOException {
+		appendData("input terminal", s, "TERMINAL RECEIVED DATA");
+		listenOnInput(s);
+	}
+
+	private void handleSentPacket(Packet pa) {
+		if (this.getSide() == Side.SERVER) {
+			pa.sentServerSide();
+		}
+		if (this.getSide() == Side.CLIENT) {
+			pa.sentClientSide();
 		}
 	}
 
-	public void innitServer() {
+	private void handleException(Exception e) {
+		e.printStackTrace();
+	}
+
+	private void initClient() {
 		for (Map.Entry<String, Packet> entry : registered.entrySet()) {
-			String key = entry.getKey();
-			Packet val = entry.getValue();
-			val.initServerSide();
+			entry.getValue().initClientSide();
 		}
 	}
 
+	private void initServer() {
+		for (Map.Entry<String, Packet> entry : registered.entrySet()) {
+			entry.getValue().initServerSide();
+		}
+	}
+
+	public Side getSide() {
+		return data.getSide();
+	}
 }
