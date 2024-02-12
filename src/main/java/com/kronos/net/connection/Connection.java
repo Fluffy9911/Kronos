@@ -3,9 +3,7 @@
  */
 package com.kronos.net.connection;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
@@ -13,8 +11,12 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.concurrent.Executors;
 
 import org.apache.logging.log4j.Logger;
+
+import com.kronos.Kronos;
+import com.kronos.core.util.BufferedStreamReader;
 
 /**
  * 
@@ -22,10 +24,25 @@ import org.apache.logging.log4j.Logger;
 public class Connection {
 	ServerSocket local;
 	Socket connection;
-	LinkedList<String> databuffer;
+	LinkedList<String> databuffer, cbuf;
 	InetSocketAddress ss;
-
+	BufferedStreamReader bs, si;
 	boolean isServer = true, isConnected = false, isWaiting = true, handshake = false;
+
+	public void setDatabuffer(LinkedList<String> databuffer) {
+
+		this.databuffer = databuffer;
+	}
+
+	public void setCbuf(LinkedList<String> cbuf) {
+
+		this.cbuf = cbuf;
+
+	}
+
+	public LinkedList<String> getCbuf() {
+		return cbuf;
+	}
 
 	public ServerSocket getLocal() {
 		return local;
@@ -36,39 +53,39 @@ public class Connection {
 	}
 
 	public void listen() throws IOException {
+		bs = new BufferedStreamReader() {
 
-		BufferedReader s = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+			@Override
+			public void onRecieve(String s) {
+				databuffer.add(s);
+			}
 
-		if (s.ready()) {
-			databuffer.add(s.readLine());
-			return;
-		}
-
-		return;
+		};
+		bs.begin(Executors.newCachedThreadPool(), connection.getInputStream());
 	}
 
-	public void loopServer() {
-		while (isConnected) {
+	public void listenTerminal() throws IOException {
+		si = new BufferedStreamReader() {
 
-			try {
-				listen();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			@Override
+			public void onRecieve(String s) {
+				try {
+					listenOnInput(s);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
 			}
-			try {
-				listenOnInput();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-			}
 
-		}
-
+		};
+		bs.begin(Executors.newCachedThreadPool(), System.in);
 	}
 
 	public void send(String s) throws IOException {
 		OutputStream os = connection.getOutputStream();
 		os.write(s.getBytes());
+		System.out.println("Sent: " + s);
 		return;
 	}
 
@@ -78,10 +95,12 @@ public class Connection {
 		this.isServer = true;
 
 		databuffer = new LinkedList<>();
+		cbuf = new LinkedList<>();
 	}
 
 	public Connection(InetSocketAddress s) {
 		databuffer = new LinkedList<>();
+		cbuf = new LinkedList<>();
 		ss = s;
 		this.isServer = false;
 	}
@@ -98,12 +117,12 @@ public class Connection {
 			l.debug("Connected! ");
 			this.isWaiting = false;
 			this.isConnected = true;
-			loopServer();
+			l.debug("Client: {}", connection.getInetAddress().getHostAddress());
 		} catch (IOException e) {
 			l.error("IO: an IO error occured. {}", e);
 
 		}
-		l.debug("Done!");
+		l.debug("Connected to Client");
 	}
 
 	public void tryConnectClient(Logger l) {
@@ -115,13 +134,14 @@ public class Connection {
 			this.isWaiting = false;
 			this.isConnected = true;
 			l.debug("Connected to server");
-			this.loopServer();
+
 		} catch (UnknownHostException e) {
 			l.error("UnknownHost: the destination IP could not be resolved. {}", e);
 		} catch (IOException e) {
 			l.error("IO: an IO error occured. {}", e);
 
 		}
+		l.debug("Client connected");
 
 	}
 
@@ -134,41 +154,25 @@ public class Connection {
 		return databuffer.pop();
 	}
 
-	public void listenOnInput() throws IOException {
+	public void listenOnInput(String next) throws IOException {
 
-		BufferedReader s = new BufferedReader(new InputStreamReader(System.in));
-		if (s.ready()) {
-
-			String i = s.readLine();
-			System.out.println(i);
-			if (i.equals("BUF")) {
-				for (Iterator iterator = databuffer.iterator(); iterator.hasNext();) {
-					String string = (String) iterator.next();
-					System.out.println(string);
-				}
-
+		System.out.println(next);
+		if (next.equals("BUF")) {
+			for (Iterator iterator = databuffer.iterator(); iterator.hasNext();) {
+				String string = (String) iterator.next();
+				System.out.println(string);
 			}
-			if (i.equals("CLOSE")) {
-				isConnected = false;
-				try {
-					this.local.close();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-			try {
-				System.out.println("Sending...");
-				send(i);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
 			return;
 		}
-		return;
+		if (next.equals("END")) {
+			this.connection.close();
+			return;
+		}
+		send(next);
 
 	}
 
+	public void connectionError(String s) {
+		Kronos.debug.getLogger().debug("A connection error has occured: {}", s);
+	}
 }

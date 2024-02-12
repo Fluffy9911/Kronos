@@ -54,4 +54,12 @@ public class Connector {
 		}
 	}
 
+	public void listen() throws IOException {
+		c.listen();
+	}
+
+	public String readNextInBuffer() {
+		return c.readNextInBuffer();
+	}
+
 }

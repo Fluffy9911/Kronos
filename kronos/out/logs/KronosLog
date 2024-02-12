@@ -1,1 +1,3 @@
-11:40:17.942 [main] DEBUG com.kronos.Kronos - Connected! 
+20:30:34.382 [main] INFO  com.kronos.Kronos - Dubugger created
+20:30:34.394 [main] DEBUG com.kronos.Kronos - Server Opened
+20:30:34.394 [main] DEBUG com.kronos.Kronos - Starting Server Connect
