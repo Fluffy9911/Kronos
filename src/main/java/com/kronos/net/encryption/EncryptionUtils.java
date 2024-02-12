@@ -21,6 +21,9 @@ public class EncryptionUtils {
 
 	public static String encryptString(String plaintext, SecretKey secretKey) throws Exception {
 		Cipher cipher = Cipher.getInstance("AES");
+		if (secretKey == null) {
+			throw new NullPointerException("Key is NULL");
+		}
 		cipher.init(Cipher.ENCRYPT_MODE, secretKey);
 		byte[] encryptedBytes = cipher.doFinal(plaintext.getBytes());
 		return Base64.getEncoder().encodeToString(encryptedBytes);
@@ -28,6 +31,9 @@ public class EncryptionUtils {
 
 	public static String decryptString(String ciphertext, SecretKey secretKey) throws Exception {
 		Cipher cipher = Cipher.getInstance("AES");
+		if (secretKey == null) {
+			throw new NullPointerException("Key is NULL");
+		}
 		cipher.init(Cipher.DECRYPT_MODE, secretKey);
 		byte[] decryptedBytes = cipher.doFinal(Base64.getDecoder().decode(ciphertext));
 		return new String(decryptedBytes);
@@ -35,7 +41,7 @@ public class EncryptionUtils {
 
 	private static SecretKey generateSecretKey() throws Exception {
 		KeyGenerator keyGenerator = KeyGenerator.getInstance("AES");
-		keyGenerator.init(256); // You can choose key size based on your security needs
+		keyGenerator.init(1024); // You can choose key size based on your security needs
 		return keyGenerator.generateKey();
 	}
 
