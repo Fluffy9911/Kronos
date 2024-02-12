@@ -69,7 +69,9 @@ public abstract class Packet {
 	 * @throws Exception
 	 */
 	public void receive(byte[] input, SecretKey key) throws Exception {
+
 		String dat = decrypt(new String(input), key);
+
 		dealWithInputData(dat);
 
 	}

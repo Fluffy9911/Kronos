@@ -1,3 +1,9 @@
-15:21:02.193 [main] DEBUG com.kronos.Kronos - Connected! 
-15:21:02.202 [main] DEBUG com.kronos.Kronos - Client: 192.168.219.9
-15:21:02.202 [main] DEBUG com.kronos.Kronos - Connected to Client
+15:30:59.757 [main] INFO  com.kronos.Kronos - Dubugger created
+15:30:59.768 [main] DEBUG com.kronos.Kronos - 192.168.219.20
+15:30:59.780 [main] DEBUG com.kronos.Kronos - Starting Client Connect desktop-iore1f2.local
+15:30:59.791 [main] DEBUG com.kronos.Kronos - Connected to server
+15:30:59.791 [main] DEBUG com.kronos.Kronos - Client connected
+15:30:59.844 [pool-3-thread-1] DEBUG com.kronos.Kronos - Recieved Data: handshake On Side: CONNECTION RECIEVED DATA Extra Info: input msg
+15:30:59.915 [pool-3-thread-1] DEBUG com.kronos.Kronos - Recieved Data: 68E+SlibM3RLKFCfHFiciHhklD+xdPcYRySLpCVfK29cf86QUWN3l+TBH3VOGbT4pmjst1bHIUjD+Oz39vgdsThRIbfe4BmoXvuXEl62RR8= On Side: CONNECTION RECIEVED DATA Extra Info: input msg
+15:30:59.916 [pool-3-thread-1] DEBUG com.kronos.Kronos - Recieved Data: config On Side: CONNECTION RECIEVED DATA Extra Info: input msg
+15:30:59.917 [pool-3-thread-1] DEBUG com.kronos.Kronos - Recieved Data: fQmnGweMUClf5qSaXfbEmNUbAeJrCKDzMDUiJNYcqLmHGZXQ7aOGCtdKnaZFFDgz+B2NwoNW9VVnuYYzmj60gA== On Side: CONNECTION RECIEVED DATA Extra Info: input msg

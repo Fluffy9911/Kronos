@@ -5,6 +5,7 @@ package com.kronos.net.data.packet;
 
 import javax.crypto.SecretKey;
 
+import com.kronos.io.Config;
 import com.kronos.net.connection.Connection;
 import com.kronos.net.encryption.EncryptionUtils;
 
@@ -18,7 +19,7 @@ public class HandShake extends UnsecurePacket {
 	public HandShake(Connection cs) {
 		super();
 		this.c = cs;
-
+		this.cfg = new Config();
 	}
 
 	@Override
@@ -37,6 +38,7 @@ public class HandShake extends UnsecurePacket {
 	@Override
 	public void recieveClientSide() {
 		String key = cfg.readString("key");
+		System.out.println(key);
 		this.key = EncryptionUtils.decodeSecretKey(key);
 		this.c.setKey(this.key);
 	}

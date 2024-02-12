@@ -3,6 +3,8 @@
  */
 package com.kronos.net.data.packet;
 
+import javax.crypto.SecretKey;
+
 import com.google.gson.Gson;
 import com.kronos.io.Config;
 import com.kronos.net.data.Packet;
@@ -28,6 +30,17 @@ public class UnsecurePacket extends Packet {
 		System.out.println(dat);
 		cfg = g.fromJson(dat, Config.class);
 		System.out.println(cfg.toString());
+	}
+
+	@Override
+	public void receive(byte[] input, SecretKey key) throws Exception {
+		String d = new String(input);
+		this.dealWithInputData(d);
+	}
+
+	@Override
+	public byte[] send(String input, SecretKey key) throws Exception {
+		return input.getBytes();
 	}
 
 	@Override
