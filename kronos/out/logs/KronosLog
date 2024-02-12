@@ -1,3 +1,6 @@
-20:49:03.477 [main] DEBUG com.kronos.Kronos - Connected! 
-20:49:03.484 [main] DEBUG com.kronos.Kronos - Client: 192.168.219.9
-20:49:03.485 [main] DEBUG com.kronos.Kronos - Connected to Client
+21:37:41.095 [main] INFO  com.kronos.Kronos - Dubugger created
+21:37:41.106 [main] DEBUG com.kronos.Kronos - Server Opened
+21:37:41.106 [main] DEBUG com.kronos.Kronos - Starting Server Connect
+21:37:41.441 [main] DEBUG com.kronos.Kronos - Connected! 
+21:37:41.445 [main] DEBUG com.kronos.Kronos - Client: 192.168.219.9
+21:37:41.445 [main] DEBUG com.kronos.Kronos - Connected to Client

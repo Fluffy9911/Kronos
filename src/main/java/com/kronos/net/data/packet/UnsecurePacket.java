@@ -37,6 +37,7 @@ public class UnsecurePacket extends Packet {
 		Gson g = new Gson();
 		System.out.println(dat);
 		cfg = g.fromJson(dat, Config.class);
+		System.out.println(cfg.toString());
 	}
 
 	@Override
@@ -59,7 +60,9 @@ public class UnsecurePacket extends Packet {
 	public String getToSend() {
 
 		if (cfg != null) {
-			return cfg.writeOut();
+			Gson g = new Gson();
+			return g.toJson(cfg);
+
 		}
 		return "null";
 	}

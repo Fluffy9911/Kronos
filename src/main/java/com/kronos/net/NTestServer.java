@@ -6,7 +6,7 @@ package com.kronos.net;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 
-import com.kronos.Kronos;
+import com.kronos.io.Config;
 import com.kronos.net.connection.Connector;
 import com.kronos.net.data.packet.UnsecurePacket;
 
@@ -29,8 +29,10 @@ public class NTestServer {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
-		cn.c.sendPacket("unsecure", new UnsecurePacket(Kronos.k_config));
+		Config c = new Config();
+		c.appendInt("test_int", 0);
+		c.appendLong("time", System.currentTimeMillis());
+		cn.c.sendPacket("unsecure", new UnsecurePacket(c));
 
 	}
 

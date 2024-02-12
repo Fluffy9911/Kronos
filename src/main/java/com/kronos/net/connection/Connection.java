@@ -86,7 +86,7 @@ public class Connection {
 				} else {
 					cp = "null";
 				}
-				if (!cp.equals("null")) {
+				if (!cp.equals("null") && cp != s) {
 					Packet p = registered.get(cp);
 					try {
 						p.receive(s, s.getBytes(), null, null);
