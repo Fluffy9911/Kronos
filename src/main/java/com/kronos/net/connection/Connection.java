@@ -4,7 +4,7 @@
 package com.kronos.net.connection;
 
 import java.io.IOException;
-import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -79,13 +79,15 @@ public class Connection {
 			}
 
 		};
-		bs.begin(Executors.newCachedThreadPool(), System.in);
+		si.begin(Executors.newCachedThreadPool(), System.in);
 	}
 
 	public void send(String s) throws IOException {
-		OutputStream os = connection.getOutputStream();
-		os.write(s.getBytes());
+		PrintWriter out = new PrintWriter(connection.getOutputStream(), false);
+
+		out.println(s);
 		System.out.println("Sent: " + s);
+		out.flush();
 		return;
 	}
 
@@ -156,7 +158,6 @@ public class Connection {
 
 	public void listenOnInput(String next) throws IOException {
 
-		System.out.println(next);
 		if (next.equals("BUF")) {
 			for (Iterator iterator = databuffer.iterator(); iterator.hasNext();) {
 				String string = (String) iterator.next();

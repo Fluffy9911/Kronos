@@ -15,14 +15,18 @@ public abstract class BufferedStreamReader {
 	public abstract void onRecieve(String s);
 
 	public void begin(Executor e, InputStream is) {
-		e.execute(() -> {
-			Scanner s = new Scanner(is);
-			while (s.hasNext()) {
-				onRecieve(s.nextLine());
-			}
-			s.close();
-		});
 
+		e.execute(() -> {
+			try (Scanner s = new Scanner(is)) {
+				while (s.hasNext()) {
+					String ss = s.nextLine();
+					onRecieve(ss);
+					System.out.println("Received: " + ss);
+				}
+			} catch (Exception ex) {
+				ex.printStackTrace(); // Add proper error handling/logging
+			}
+		});
 	}
 
 }
