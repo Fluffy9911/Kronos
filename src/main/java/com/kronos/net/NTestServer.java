@@ -8,7 +8,7 @@ import java.net.InetSocketAddress;
 
 import com.kronos.io.Config;
 import com.kronos.net.connection.Connector;
-import com.kronos.net.data.packet.UnsecurePacket;
+import com.kronos.net.data.packet.ConfigPacket;
 
 /**
  * 
@@ -33,7 +33,7 @@ public class NTestServer {
 		c.appendInt("test_int", 0);
 		c.appendLong("time", System.currentTimeMillis());
 		cn.c.sendPacket("handshake");
-		cn.c.sendPacket("config", new UnsecurePacket(c));
+		cn.c.sendPacket("config", new ConfigPacket(c));
 
 	}
 

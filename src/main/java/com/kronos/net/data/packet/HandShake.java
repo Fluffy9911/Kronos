@@ -8,6 +8,7 @@ import java.security.spec.InvalidKeySpecException;
 
 import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
 
 import org.apache.commons.lang3.RandomStringUtils;
 
@@ -27,7 +28,7 @@ public class HandShake extends UnsecurePacket {
 		super();
 		this.c = cs;
 		pass = rString();
-		alg = "AES/CBC/PKCS5Padding";
+		alg = "AES";
 		spec = Packet.generateIv();
 	}
 
@@ -49,13 +50,11 @@ public class HandShake extends UnsecurePacket {
 		pass = cfg.readString("password");
 		byte[] by = cfg.readString("spec").getBytes();
 		spec = new IvParameterSpec(by);
-		try {
-			SecretKey key = getKeyFromPassword(pass, rString());
-			c.setKey(key);
-		} catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+
+		SecretKey key = new SecretKeySpec(cfg.readString("key").getBytes(), alg);
+
+		c.setKey(key);
+
 		c.setAlgorithm(alg);
 		c.setSpec(spec);
 		System.out.println("handshake complete!");
@@ -68,6 +67,12 @@ public class HandShake extends UnsecurePacket {
 		cfg.appendString("password", pass);
 
 		cfg.appendString("spec", new String(spec.getIV()));
+		try {
+			cfg.appendString("key", new String(getKeyFromPassword(pass, rString()).getEncoded()));
+		} catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return super.getToSend();
 	}
 

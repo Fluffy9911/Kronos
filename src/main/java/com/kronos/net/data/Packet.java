@@ -33,7 +33,7 @@ public abstract class Packet {
 	public static SecretKey getKeyFromPassword(String password, String salt)
 			throws NoSuchAlgorithmException, InvalidKeySpecException {
 
-		SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
+		SecretKeyFactory factory = SecretKeyFactory.getInstance(password);
 		KeySpec spec = new PBEKeySpec(password.toCharArray(), salt.getBytes(), 65536, 256);
 		SecretKey secret = new SecretKeySpec(factory.generateSecret(spec).getEncoded(), "AES");
 		return secret;

@@ -1,4 +1,3 @@
-22:07:43.003 [main] DEBUG com.kronos.Kronos - Starting Client Connect desktop-iore1f2.local
-22:07:43.014 [main] DEBUG com.kronos.Kronos - Connected to server
-22:07:43.015 [main] DEBUG com.kronos.Kronos - Client connected
-22:07:43.026 [pool-3-thread-1] DEBUG com.kronos.Kronos - Recieved Data: handshake On Side: CONNECTION RECIEVED DATA Extra Info: input msg
+22:19:10.663 [main] DEBUG com.kronos.Kronos - Connected! 
+22:19:10.670 [main] DEBUG com.kronos.Kronos - Client: 192.168.219.9
+22:19:10.670 [main] DEBUG com.kronos.Kronos - Connected to Client
