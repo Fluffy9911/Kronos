@@ -6,6 +6,9 @@ package com.kronos.net.data;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.KeySpec;
 import java.util.Base64;
 
 import javax.crypto.BadPaddingException;
@@ -13,7 +16,10 @@ import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
+import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.PBEKeySpec;
+import javax.crypto.spec.SecretKeySpec;
 
 /**
  * 
@@ -23,6 +29,21 @@ public abstract class Packet {
 	long sent, recieved;
 	byte pid;
 	public static byte MAX_PID = 0;
+
+	public static SecretKey getKeyFromPassword(String password, String salt)
+			throws NoSuchAlgorithmException, InvalidKeySpecException {
+
+		SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
+		KeySpec spec = new PBEKeySpec(password.toCharArray(), salt.getBytes(), 65536, 256);
+		SecretKey secret = new SecretKeySpec(factory.generateSecret(spec).getEncoded(), "AES");
+		return secret;
+	}
+
+	public static IvParameterSpec generateIv() {
+		byte[] iv = new byte[16];
+		new SecureRandom().nextBytes(iv);
+		return new IvParameterSpec(iv);
+	}
 
 	public Packet() {
 		super();
@@ -64,6 +85,10 @@ public abstract class Packet {
 	}
 
 	public abstract void dealWithInputData(String dat);
+
+	public abstract String getToSend();
+
+	public abstract Object getCurrent();
 
 	@SuppressWarnings("unused")
 	private String decrypt(String algorithm, String cipherText, SecretKey key, IvParameterSpec iv)

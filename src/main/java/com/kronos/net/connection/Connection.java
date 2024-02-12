@@ -9,14 +9,25 @@ import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.concurrent.Executors;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 
 import org.apache.logging.log4j.Logger;
 
 import com.kronos.Kronos;
 import com.kronos.core.util.BufferedStreamReader;
+import com.kronos.net.data.Packet;
+import com.kronos.net.data.packet.UnsecurePacket;
 
 /**
  * 
@@ -27,7 +38,19 @@ public class Connection {
 	LinkedList<String> databuffer, cbuf;
 	InetSocketAddress ss;
 	BufferedStreamReader bs, si;
+
+	HashMap<String, Packet> registered;
+
 	boolean isServer = true, isConnected = false, isWaiting = true, handshake = false;
+	private ArrayList<String> datalog;
+
+	{
+
+		datalog = new ArrayList<>();
+		registered = new HashMap<>();
+		registered.put("unsecure", new UnsecurePacket());
+	}
+	String cp;
 
 	public void setDatabuffer(LinkedList<String> databuffer) {
 
@@ -57,6 +80,24 @@ public class Connection {
 
 			@Override
 			public void onRecieve(String s) {
+				if (registered.containsKey(s)) {
+					cp = s;
+
+				} else {
+					cp = "null";
+				}
+				if (!cp.equals("null")) {
+					Packet p = registered.get(cp);
+					try {
+						p.receive(s, s.getBytes(), null, null);
+						System.out.println("packet recieved");
+					} catch (InvalidKeyException | NoSuchPaddingException | NoSuchAlgorithmException
+							| InvalidAlgorithmParameterException | BadPaddingException | IllegalBlockSizeException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+				appendData("input msg", s, "CONNECTION RECIEVED DATA");
 				databuffer.add(s);
 			}
 
@@ -69,6 +110,7 @@ public class Connection {
 
 			@Override
 			public void onRecieve(String s) {
+				appendData("input terminal", s, "TERMINAL RECIEVED DATA");
 				try {
 					listenOnInput(s);
 				} catch (IOException e) {
@@ -89,6 +131,66 @@ public class Connection {
 		System.out.println("Sent: " + s);
 		out.flush();
 		return;
+	}
+
+	public void sendPacket(String p) {
+
+		try {
+			send(p);
+			Packet pa = registered.get(p);
+			send(new String(pa.send(p, pa.getToSend(), null, null)));
+		} catch (InvalidKeyException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NoSuchPaddingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NoSuchAlgorithmException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvalidAlgorithmParameterException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (BadPaddingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalBlockSizeException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	public void sendPacket(String p, Packet pa) {
+
+		try {
+			send(p);
+
+			send(new String(pa.send(p, pa.getToSend(), null, null)));
+		} catch (InvalidKeyException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NoSuchPaddingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NoSuchAlgorithmException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvalidAlgorithmParameterException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (BadPaddingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalBlockSizeException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public Connection(ServerSocket server) {
@@ -175,5 +277,19 @@ public class Connection {
 
 	public void connectionError(String s) {
 		Kronos.debug.getLogger().debug("A connection error has occured: {}", s);
+	}
+
+	public void log(String s) {
+		Kronos.debug.getLogger().debug(s);
+	}
+
+	public void appendDataSilent(String msg, String dat, String side) {
+		datalog.add("Recieved Data: " + dat + " On Side: " + side + " Extra Info: " + msg);
+	}
+
+	public void appendData(String msg, String dat, String side) {
+		String s = "Recieved Data: " + dat + " On Side: " + side + " Extra Info: " + msg;
+		datalog.add(s);
+		log(s);
 	}
 }
