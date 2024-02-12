@@ -23,8 +23,9 @@ public class HandShake extends UnsecurePacket {
 	String alg, pass;
 	IvParameterSpec spec;
 
-	public HandShake() {
+	public HandShake(Connection cs) {
 		super();
+		this.c = cs;
 		pass = rString();
 		alg = "AES/CBC/PKCS5Padding";
 		spec = Packet.generateIv();
@@ -45,7 +46,7 @@ public class HandShake extends UnsecurePacket {
 
 		super.dealWithInputData(dat);
 		alg = cfg.readString("algorithm");
-		pass = cfg.readString("pass");
+		pass = cfg.readString("password");
 		byte[] by = cfg.readString("spec").getBytes();
 		spec = new IvParameterSpec(by);
 		try {

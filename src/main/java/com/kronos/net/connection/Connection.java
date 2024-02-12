@@ -55,7 +55,7 @@ public class Connection {
 		datalog = new ArrayList<>();
 		registered = new HashMap<>();
 		registered.put("unsecure", new UnsecurePacket());
-		registered.put("handshake", new HandShake());
+		registered.put("handshake", new HandShake(this));
 		registered.put("config", new UnsecurePacket());
 	}
 	String cp = "null";

@@ -1,3 +1,4 @@
-22:05:54.899 [main] INFO  com.kronos.Kronos - Dubugger created
-22:05:54.935 [main] DEBUG com.kronos.Kronos - Server Opened
-22:05:54.936 [main] DEBUG com.kronos.Kronos - Starting Server Connect
+22:07:43.003 [main] DEBUG com.kronos.Kronos - Starting Client Connect desktop-iore1f2.local
+22:07:43.014 [main] DEBUG com.kronos.Kronos - Connected to server
+22:07:43.015 [main] DEBUG com.kronos.Kronos - Client connected
+22:07:43.026 [pool-3-thread-1] DEBUG com.kronos.Kronos - Recieved Data: handshake On Side: CONNECTION RECIEVED DATA Extra Info: input msg
