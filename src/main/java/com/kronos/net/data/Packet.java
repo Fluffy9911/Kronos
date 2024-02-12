@@ -3,23 +3,18 @@
  */
 package com.kronos.net.data;
 
-import java.security.InvalidAlgorithmParameterException;
-import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
-import java.util.Base64;
 
-import javax.crypto.BadPaddingException;
-import javax.crypto.Cipher;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
+
+import com.kronos.net.encryption.EncryptionUtils;
 
 /**
  * 
@@ -55,11 +50,9 @@ public abstract class Packet {
 
 	}
 
-	public byte[] send(String algorithm, String input, SecretKey key, IvParameterSpec iv)
-			throws InvalidKeyException, NoSuchPaddingException, NoSuchAlgorithmException,
-			InvalidAlgorithmParameterException, BadPaddingException, IllegalBlockSizeException {
+	public byte[] send(String input, SecretKey key) throws Exception {
 		this.sent = System.currentTimeMillis();
-		return encrypt(algorithm, input, key, iv);
+		return encrypt(input, key);
 	}
 
 	/**
@@ -69,17 +62,10 @@ public abstract class Packet {
 	 * @param cipherText
 	 * @param key
 	 * @param iv
-	 * @throws InvalidKeyException
-	 * @throws NoSuchPaddingException
-	 * @throws NoSuchAlgorithmException
-	 * @throws InvalidAlgorithmParameterException
-	 * @throws BadPaddingException
-	 * @throws IllegalBlockSizeException
+	 * @throws Exception
 	 */
-	public void receive(String algorithm, byte[] cipherText, SecretKey key, IvParameterSpec iv)
-			throws InvalidKeyException, NoSuchPaddingException, NoSuchAlgorithmException,
-			InvalidAlgorithmParameterException, BadPaddingException, IllegalBlockSizeException {
-		String dat = decrypt(algorithm, new String(cipherText), key, iv);
+	public void receive(byte[] input, SecretKey key) throws Exception {
+		String dat = decrypt(new String(input), key);
 		dealWithInputData(dat);
 
 	}
@@ -91,24 +77,26 @@ public abstract class Packet {
 	public abstract Object getCurrent();
 
 	@SuppressWarnings("unused")
-	private String decrypt(String algorithm, String cipherText, SecretKey key, IvParameterSpec iv)
-			throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException,
-			InvalidKeyException, BadPaddingException, IllegalBlockSizeException {
-
-		Cipher cipher = Cipher.getInstance(algorithm);
-		cipher.init(Cipher.DECRYPT_MODE, key, iv);
-		byte[] plainText = cipher.doFinal(Base64.getDecoder().decode(cipherText));
-		return new String(plainText);
+	private String decrypt(String input, SecretKey key) throws Exception {
+		return EncryptionUtils.decryptString(input, key);
 	}
 
 	@SuppressWarnings("unused")
-	private byte[] encrypt(String algorithm, String input, SecretKey key, IvParameterSpec iv)
-			throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException,
-			InvalidKeyException, BadPaddingException, IllegalBlockSizeException {
+	private byte[] encrypt(String input, SecretKey key) throws Exception {
 
-		Cipher cipher = Cipher.getInstance(algorithm);
-		cipher.init(Cipher.ENCRYPT_MODE, key, iv);
-		byte[] cipherText = cipher.doFinal(input.getBytes());
-		return Base64.getEncoder().encode(cipherText);
+		return EncryptionUtils.encryptString(input, key).getBytes();
 	}
+
+	public abstract void initServerSide();
+
+	public abstract void initClientSide();
+
+	public abstract void sentClientSide();
+
+	public abstract void recieveClientSide();
+
+	public abstract void sentServerSide();
+
+	public abstract void recieveServerSide();
+
 }

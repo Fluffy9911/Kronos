@@ -21,7 +21,7 @@ public abstract class BufferedStreamReader {
 				while (s.hasNext()) {
 					String ss = s.nextLine();
 					onRecieve(ss);
-					System.out.println("Received: " + ss);
+
 				}
 			} catch (Exception ex) {
 				ex.printStackTrace(); // Add proper error handling/logging

@@ -16,13 +16,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.Map;
 import java.util.concurrent.Executors;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
-import javax.crypto.spec.IvParameterSpec;
 
 import org.apache.logging.log4j.Logger;
 
@@ -30,6 +30,7 @@ import com.kronos.Kronos;
 import com.kronos.core.util.BufferedStreamReader;
 import com.kronos.net.data.Packet;
 import com.kronos.net.data.packet.HandShake;
+import com.kronos.net.data.packet.Side;
 import com.kronos.net.data.packet.UnsecurePacket;
 
 /**
@@ -41,22 +42,18 @@ public class Connection {
 	LinkedList<String> databuffer, cbuf;
 	InetSocketAddress ss;
 	BufferedStreamReader bs, si;
-
+	Side side;
 	HashMap<String, Packet> registered;
 
-	private String algorithm = "null";
 	private SecretKey key = null;
-	private IvParameterSpec spec = null;
+
 	boolean isServer = true, isConnected = false, isWaiting = true, handshake = false;
 	private ArrayList<String> datalog;
 
 	{
 
 		datalog = new ArrayList<>();
-		registered = new HashMap<>();
-		registered.put("unsecure", new UnsecurePacket());
-		registered.put("handshake", new HandShake(this));
-		registered.put("config", new UnsecurePacket());
+
 	}
 	String cp = "null";
 
@@ -69,6 +66,13 @@ public class Connection {
 
 		this.cbuf = cbuf;
 
+	}
+
+	public void registerPackets() {
+		registered = new HashMap<>();
+		registered.put("unsecure", new UnsecurePacket());
+		registered.put("handshake", new HandShake(this));
+		registered.put("config", new UnsecurePacket());
 	}
 
 	public LinkedList<String> getCbuf() {
@@ -91,10 +95,19 @@ public class Connection {
 				if (!cp.equals("null") && cp != s) {
 					Packet p = registered.get(cp);
 					try {
-						p.receive(algorithm, s.getBytes(), key, spec);
-						System.out.println("packet recieved");
+						p.receive(s.getBytes(), key);
+						System.out.println("packet recieved: " + cp);
+						if (side == Side.SERVER) {
+							p.recieveServerSide();
+						}
+						if (side == Side.CLIENT) {
+							p.recieveClientSide();
+						}
 					} catch (InvalidKeyException | NoSuchPaddingException | NoSuchAlgorithmException
 							| InvalidAlgorithmParameterException | BadPaddingException | IllegalBlockSizeException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (Exception e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
@@ -137,7 +150,7 @@ public class Connection {
 		PrintWriter out = new PrintWriter(connection.getOutputStream(), false);
 
 		out.println(s);
-		System.out.println("Sent: " + s);
+
 		out.flush();
 		return;
 	}
@@ -147,7 +160,13 @@ public class Connection {
 		try {
 			send(p);
 			Packet pa = registered.get(p);
-			send(new String(pa.send(algorithm, pa.getToSend(), key, spec)));
+			send(new String(pa.send(pa.getToSend(), key)));
+			if (side == Side.SERVER) {
+				pa.sentServerSide();
+			}
+			if (side == Side.CLIENT) {
+				pa.sentClientSide();
+			}
 		} catch (InvalidKeyException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -167,6 +186,9 @@ public class Connection {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -177,7 +199,13 @@ public class Connection {
 		try {
 			send(p);
 
-			send(new String(pa.send(algorithm, pa.getToSend(), key, spec)));
+			send(new String(pa.send(pa.getToSend(), key)));
+			if (side == Side.SERVER) {
+				pa.sentServerSide();
+			}
+			if (side == Side.CLIENT) {
+				pa.sentClientSide();
+			}
 		} catch (InvalidKeyException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -197,6 +225,9 @@ public class Connection {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -209,6 +240,7 @@ public class Connection {
 
 		databuffer = new LinkedList<>();
 		cbuf = new LinkedList<>();
+		this.registerPackets();
 	}
 
 	public Connection(InetSocketAddress s) {
@@ -216,6 +248,7 @@ public class Connection {
 		cbuf = new LinkedList<>();
 		ss = s;
 		this.isServer = false;
+		this.registerPackets();
 	}
 
 	public LinkedList<String> getDatabuffer() {
@@ -230,6 +263,7 @@ public class Connection {
 			l.debug("Connected! ");
 			this.isWaiting = false;
 			this.isConnected = true;
+			this.side = Side.SERVER;
 			l.debug("Client: {}", connection.getInetAddress().getHostAddress());
 		} catch (IOException e) {
 			l.error("IO: an IO error occured. {}", e);
@@ -247,7 +281,7 @@ public class Connection {
 			this.isWaiting = false;
 			this.isConnected = true;
 			l.debug("Connected to server");
-
+			this.side = Side.CLIENT;
 		} catch (UnknownHostException e) {
 			l.error("UnknownHost: the destination IP could not be resolved. {}", e);
 		} catch (IOException e) {
@@ -302,14 +336,6 @@ public class Connection {
 		log(s);
 	}
 
-	public String getAlgorithm() {
-		return algorithm;
-	}
-
-	public void setAlgorithm(String algorithm) {
-		this.algorithm = algorithm;
-	}
-
 	public SecretKey getKey() {
 		return key;
 	}
@@ -318,12 +344,20 @@ public class Connection {
 		this.key = key;
 	}
 
-	public IvParameterSpec getSpec() {
-		return spec;
+	public void innitClient() {
+		for (Map.Entry<String, Packet> entry : registered.entrySet()) {
+			String key = entry.getKey();
+			Packet val = entry.getValue();
+			val.initClientSide();
+		}
 	}
 
-	public void setSpec(IvParameterSpec spec) {
-		this.spec = spec;
+	public void innitServer() {
+		for (Map.Entry<String, Packet> entry : registered.entrySet()) {
+			String key = entry.getKey();
+			Packet val = entry.getValue();
+			val.initServerSide();
+		}
 	}
 
 }
