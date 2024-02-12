@@ -25,6 +25,7 @@ public class HandShake extends UnsecurePacket {
 	@Override
 	public void initServerSide() {
 		try {
+			this.cfg = new Config();
 			String k = EncryptionUtils.generateAndEncodeSecretKey();
 			this.key = EncryptionUtils.decodeSecretKey(k);
 			this.cfg.appendString("key", k);
@@ -41,6 +42,7 @@ public class HandShake extends UnsecurePacket {
 		System.out.println(key);
 		this.key = EncryptionUtils.decodeSecretKey(key);
 		this.c.setKey(this.key);
+		System.out.println("Key recieved and set");
 	}
 
 }

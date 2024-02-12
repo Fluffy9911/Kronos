@@ -41,7 +41,7 @@ public class EncryptionUtils {
 
 	private static SecretKey generateSecretKey() throws Exception {
 		KeyGenerator keyGenerator = KeyGenerator.getInstance("AES");
-		keyGenerator.init(1024); // You can choose key size based on your security needs
+		keyGenerator.init(256); // You can choose key size based on your security needs
 		return keyGenerator.generateKey();
 	}
 

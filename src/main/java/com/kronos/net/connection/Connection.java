@@ -29,6 +29,7 @@ import org.apache.logging.log4j.Logger;
 import com.kronos.Kronos;
 import com.kronos.core.util.BufferedStreamReader;
 import com.kronos.net.data.Packet;
+import com.kronos.net.data.packet.ConfigPacket;
 import com.kronos.net.data.packet.HandShake;
 import com.kronos.net.data.packet.Side;
 import com.kronos.net.data.packet.UnsecurePacket;
@@ -72,7 +73,7 @@ public class Connection {
 		registered = new HashMap<>();
 		registered.put("unsecure", new UnsecurePacket());
 		registered.put("handshake", new HandShake(this));
-		registered.put("config", new UnsecurePacket());
+		registered.put("config", new ConfigPacket());
 	}
 
 	public LinkedList<String> getCbuf() {
@@ -95,14 +96,16 @@ public class Connection {
 				if (!cp.equals("null") && cp != s) {
 					Packet p = registered.get(cp);
 					try {
-						p.receive(s.getBytes(), key);
 						System.out.println("packet recieved: " + cp);
+						p.receive(s.getBytes(), key);
+
 						if (side == Side.SERVER) {
 							p.recieveServerSide();
 						}
 						if (side == Side.CLIENT) {
 							p.recieveClientSide();
 						}
+						cp = "null";
 					} catch (InvalidKeyException | NoSuchPaddingException | NoSuchAlgorithmException
 							| InvalidAlgorithmParameterException | BadPaddingException | IllegalBlockSizeException e) {
 						// TODO Auto-generated catch block
