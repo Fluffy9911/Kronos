@@ -21,12 +21,15 @@ import java.util.concurrent.Executors;
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
+import javax.crypto.SecretKey;
+import javax.crypto.spec.IvParameterSpec;
 
 import org.apache.logging.log4j.Logger;
 
 import com.kronos.Kronos;
 import com.kronos.core.util.BufferedStreamReader;
 import com.kronos.net.data.Packet;
+import com.kronos.net.data.packet.HandShake;
 import com.kronos.net.data.packet.UnsecurePacket;
 
 /**
@@ -41,6 +44,9 @@ public class Connection {
 
 	HashMap<String, Packet> registered;
 
+	private String algorithm = "null";
+	private SecretKey key = null;
+	private IvParameterSpec spec = null;
 	boolean isServer = true, isConnected = false, isWaiting = true, handshake = false;
 	private ArrayList<String> datalog;
 
@@ -49,8 +55,10 @@ public class Connection {
 		datalog = new ArrayList<>();
 		registered = new HashMap<>();
 		registered.put("unsecure", new UnsecurePacket());
+		registered.put("handshake", new HandShake());
+		registered.put("config", new UnsecurePacket());
 	}
-	String cp;
+	String cp = "null";
 
 	public void setDatabuffer(LinkedList<String> databuffer) {
 
@@ -80,16 +88,10 @@ public class Connection {
 
 			@Override
 			public void onRecieve(String s) {
-				if (registered.containsKey(s)) {
-					cp = s;
-
-				} else {
-					cp = "null";
-				}
 				if (!cp.equals("null") && cp != s) {
 					Packet p = registered.get(cp);
 					try {
-						p.receive(s, s.getBytes(), null, null);
+						p.receive(algorithm, s.getBytes(), key, spec);
 						System.out.println("packet recieved");
 					} catch (InvalidKeyException | NoSuchPaddingException | NoSuchAlgorithmException
 							| InvalidAlgorithmParameterException | BadPaddingException | IllegalBlockSizeException e) {
@@ -97,6 +99,13 @@ public class Connection {
 						e.printStackTrace();
 					}
 				}
+				if (registered.containsKey(s)) {
+					cp = s;
+
+				} else {
+					cp = "null";
+				}
+
 				appendData("input msg", s, "CONNECTION RECIEVED DATA");
 				databuffer.add(s);
 			}
@@ -138,7 +147,7 @@ public class Connection {
 		try {
 			send(p);
 			Packet pa = registered.get(p);
-			send(new String(pa.send(p, pa.getToSend(), null, null)));
+			send(new String(pa.send(algorithm, pa.getToSend(), key, spec)));
 		} catch (InvalidKeyException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -168,7 +177,7 @@ public class Connection {
 		try {
 			send(p);
 
-			send(new String(pa.send(p, pa.getToSend(), null, null)));
+			send(new String(pa.send(algorithm, pa.getToSend(), key, spec)));
 		} catch (InvalidKeyException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -292,4 +301,29 @@ public class Connection {
 		datalog.add(s);
 		log(s);
 	}
+
+	public String getAlgorithm() {
+		return algorithm;
+	}
+
+	public void setAlgorithm(String algorithm) {
+		this.algorithm = algorithm;
+	}
+
+	public SecretKey getKey() {
+		return key;
+	}
+
+	public void setKey(SecretKey key) {
+		this.key = key;
+	}
+
+	public IvParameterSpec getSpec() {
+		return spec;
+	}
+
+	public void setSpec(IvParameterSpec spec) {
+		this.spec = spec;
+	}
+
 }

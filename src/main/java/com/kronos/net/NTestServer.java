@@ -32,7 +32,8 @@ public class NTestServer {
 		Config c = new Config();
 		c.appendInt("test_int", 0);
 		c.appendLong("time", System.currentTimeMillis());
-		cn.c.sendPacket("unsecure", new UnsecurePacket(c));
+		cn.c.sendPacket("handshake");
+		cn.c.sendPacket("config", new UnsecurePacket(c));
 
 	}
 
