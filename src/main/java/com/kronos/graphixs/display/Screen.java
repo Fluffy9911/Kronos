@@ -33,6 +33,7 @@ import org.lwjgl.system.MemoryUtil;
 
 import com.kronos.Kronos;
 import com.kronos.graphixs.color.Color;
+import com.kronos.graphixs.g.Graphixs;
 import com.kronos.graphixs.g2d.ScreenUtils;
 import com.kronos.graphixs.resources.Resource;
 import com.kronos.io.InputHandler;
@@ -43,7 +44,7 @@ public class Screen implements Resource {
 	ScreenConfig sc;
 	long id = -99;
 
-	protected long init(ScreenConfig config) {
+	public long init(ScreenConfig config) {
 		g.setConfig(config);
 		this.sc = config;
 		Map<Integer, Integer> hints = config.getHints();

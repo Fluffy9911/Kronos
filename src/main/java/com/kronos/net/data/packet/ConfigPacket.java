@@ -15,6 +15,7 @@ public class ConfigPacket extends Packet {
 
 	public ConfigPacket() {
 		super();
+		cfg = new Config();
 	}
 
 	public ConfigPacket(Config cfg) {

@@ -29,6 +29,8 @@ public abstract class Packet {
 
 	protected Logger plog = Kronos.debug.getLogger();
 
+	Side lastside;
+
 	public static SecretKey getKeyFromPassword(String password, String salt)
 			throws NoSuchAlgorithmException, InvalidKeySpecException {
 

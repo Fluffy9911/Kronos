@@ -24,7 +24,7 @@ import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL40;
 
 import com.kronos.Kronos;
-import com.kronos.graphixs.display.Graphixs;
+import com.kronos.graphixs.g.Graphixs;
 import com.kronos.graphixs.resources.Resource;
 import com.kronos.graphixs.shaders.bufferobjects.BufferObject;
 import com.kronos.graphixs.shaders.render.ShaderUniform;

@@ -10,8 +10,8 @@ import com.kronos.core.CoreConfig;
 import com.kronos.core.event.EngineListener;
 import com.kronos.debug.Debugger;
 import com.kronos.graphixs.Loop;
-import com.kronos.graphixs.display.Graphixs;
 import com.kronos.graphixs.display.ScreenConfig;
+import com.kronos.graphixs.g.Graphixs;
 import com.kronos.io.Config;
 import com.kronos.io.FileLoader;
 import com.kronos.io.ResourceIdentifier;
@@ -20,10 +20,7 @@ import com.kronos.io.assets.InternalAssetLoader;
 public class Kronos {
 
 	private static List<EngineListener> listeners;
-
 	private static HashMap<String, Config> registeredConfig;
-
-	public static String version = "KRONOS1a1.0";
 
 	// config
 	public static Config k_config = new Config();
@@ -100,6 +97,7 @@ public class Kronos {
 		} else {
 			buildConfig(k_config);
 		}
+		debug.getLogger().debug("Base Kronos done setup");
 	}
 
 	/**

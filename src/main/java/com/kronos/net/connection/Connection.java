@@ -46,7 +46,10 @@ public class Connection {
 	private ArrayList<String> datalog;
 	private String cp = "null";
 
+	private LinkedList<Packet> packetBuffer;
+
 	{
+		packetBuffer = new LinkedList<>();
 		datalog = new ArrayList<>();
 	}
 
@@ -129,8 +132,7 @@ public class Connection {
 		try {
 			send(p);
 			Packet pa = registered.get(p);
-			send(new String(pa.send(pa.getToSend(), key)));
-			handleSentPacket(pa);
+			sendPacket(p, pa);
 		} catch (Exception e) {
 			handleException(e);
 		}
@@ -138,9 +140,11 @@ public class Connection {
 
 	public void sendPacket(String p, Packet pa) {
 		try {
-			send(p);
-			send(new String(pa.send(pa.getToSend(), key)));
-			handleSentPacket(pa);
+			if (pa.shouldSend(getSide())) {
+				send(p);
+				send(new String(pa.send(pa.getToSend(), key)));
+				handleSentPacket(pa);
+			}
 		} catch (Exception e) {
 			handleException(e);
 		}
@@ -232,22 +236,24 @@ public class Connection {
 	private void handleReceivedData(String s) {
 		if (!cp.equals("null") && !cp.equals(s)) {
 			Packet p = registered.get(cp);
-			try {
+			if (p.shouldRecieve(getSide())) {
+				try {
 
-				p.receive(s.getBytes(), key);
+					p.receive(s.getBytes(), key);
 
-				if (this.getSide() == Side.SERVER) {
-					p.recieveServerSide();
+					if (this.getSide() == Side.SERVER) {
+						p.recieveServerSide();
+					}
+					if (this.getSide() == Side.CLIENT) {
+						p.recieveClientSide();
+					}
+					cp = "null";
+				} catch (InvalidKeyException | NoSuchPaddingException | NoSuchAlgorithmException
+						| InvalidAlgorithmParameterException | BadPaddingException | IllegalBlockSizeException e) {
+					handleException(e);
+				} catch (Exception e) {
+					handleException(e);
 				}
-				if (this.getSide() == Side.CLIENT) {
-					p.recieveClientSide();
-				}
-				cp = "null";
-			} catch (InvalidKeyException | NoSuchPaddingException | NoSuchAlgorithmException
-					| InvalidAlgorithmParameterException | BadPaddingException | IllegalBlockSizeException e) {
-				handleException(e);
-			} catch (Exception e) {
-				handleException(e);
 			}
 		}
 		if (registered.containsKey(s)) {
@@ -256,7 +262,7 @@ public class Connection {
 			cp = "null";
 		}
 
-		appendData("input msg", s, "CONNECTION RECEIVED DATA");
+		appendData("input", s, "CONNECTION RECEIVED DATA");
 		databuffer.add(s);
 	}
 
@@ -293,4 +299,12 @@ public class Connection {
 	public Side getSide() {
 		return data.getSide();
 	}
+
+	public void sendPacketWhenReady(String s) {
+		Packet p = registered.get(s);
+
+		this.packetBuffer.add(p);
+
+	}
+
 }

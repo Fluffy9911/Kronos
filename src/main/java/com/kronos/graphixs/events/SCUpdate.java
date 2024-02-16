@@ -1,7 +1,7 @@
 package com.kronos.graphixs.events;
 
 import com.kronos.core.util.SListener;
-import com.kronos.graphixs.display.Graphixs;
+import com.kronos.graphixs.g.Graphixs;
 import com.kronos.graphixs.g2d.Graphixs2D;
 
 public class SCUpdate implements GraphicEvent {

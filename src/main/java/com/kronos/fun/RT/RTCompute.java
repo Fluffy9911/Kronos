@@ -12,8 +12,8 @@ import org.lwjgl.opengl.GL43C;
 
 import com.kronos.Kronos;
 import com.kronos.graphixs.color.Colors;
-import com.kronos.graphixs.display.Graphixs;
 import com.kronos.graphixs.display.Texture;
+import com.kronos.graphixs.g.Graphixs;
 import com.kronos.graphixs.shaders.compute.ComputeShader;
 import com.kronos.graphixs.shaders.utils.Struct;
 

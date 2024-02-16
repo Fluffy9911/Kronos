@@ -5,7 +5,7 @@ package com.kronos.net.data.packet;
 
 import javax.crypto.SecretKey;
 
-import com.kronos.Kronos;
+import com.kronos.KronosInfo;
 import com.kronos.io.Config;
 import com.kronos.net.connection.Connection;
 import com.kronos.net.encryption.EncryptionUtils;
@@ -30,7 +30,7 @@ public class HandShake extends UnsecurePacket {
 			String k = EncryptionUtils.generateAndEncodeSecretKey();
 			this.key = EncryptionUtils.decodeSecretKey(k);
 			this.cfg.appendString("key", k);
-			this.cfg.appendString("version", Kronos.version);
+			this.cfg.appendString("version", KronosInfo.version);
 			this.c.setKey(key);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -42,9 +42,9 @@ public class HandShake extends UnsecurePacket {
 	public void recieveClientSide() {
 		String key = cfg.readString("key");
 		String ver = cfg.readString("version");
-		if (!Kronos.version.equals(ver)) {
+		if (!KronosInfo.version.equals(ver)) {
 			plog.warn("Incompatible version on Side: {} Current: {}, Sent: {}", this.c.getSide().toString(),
-					Kronos.version, ver);
+					KronosInfo.version, ver);
 		}
 		this.key = EncryptionUtils.decodeSecretKey(key);
 		this.c.setKey(this.key);

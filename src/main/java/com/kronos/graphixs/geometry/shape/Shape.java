@@ -1,6 +1,10 @@
 package com.kronos.graphixs.geometry.shape;
 
 import java.awt.image.BufferedImage;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.joml.Vector3f;
 
 import com.kronos.Kronos;
 import com.kronos.graphixs.color.Color;
@@ -9,6 +13,7 @@ import com.kronos.graphixs.display.Texture;
 import com.kronos.graphixs.g2d.pixelcanvas.Canvas2D;
 
 public class Shape extends Canvas2D {
+	public HashMap<Color, Color> mapped;
 
 	public Shape(BufferedImage img) {
 		super(img.getWidth(), img.getHeight());
@@ -18,18 +23,12 @@ public class Shape extends Canvas2D {
 		for (int i = 0; i < width; i++) {
 			for (int j = 0; j < height; j++) {
 
-				if (img.getRGB(i, j) == Colors.Black.rgb()) {
-
-					setPixel(i, j, Colors.Black.rgb());
-				} else {
-
-					setPixel(i, j, za.rgb());
-				}
+				img.getRGB(i, j);
 
 			}
 
 		}
-
+		mapped = new HashMap<>();
 	}
 
 	public Shape(Shape ss) {
@@ -37,11 +36,23 @@ public class Shape extends Canvas2D {
 		this.setCanvas(ss.getCanvas());
 	}
 
+	public void addMapping(Color c, Color c2) {
+		mapped.put(c, c2);
+	}
+
 	public Texture buildTextureForRender(int rgb) {
 		Shape cv = this;
 		cv.setCanvas(this.copyFrame());
-		cv.setAll(Colors.Black.rgb(), rgb);
+		for (Map.Entry<Color, Color> entry : mapped.entrySet()) {
+			Color key = entry.getKey();
+			Color val = entry.getValue();
+			cv.setAll(key.rgb(), val.rgb());
+		}
 		return cv.toTexture();
+	}
+
+	public Vector3f difference(Color c, Color cmp) {
+		return new Vector3f(c.getA() - cmp.getA(), c.getG() - cmp.getG(), c.getB() - cmp.getB());
 	}
 
 }

@@ -2,8 +2,8 @@ package com.kronos.core;
 
 import org.apache.logging.log4j.Logger;
 
-import com.kronos.graphixs.display.Graphixs;
 import com.kronos.graphixs.display.ScreenConfig;
+import com.kronos.graphixs.g.Graphixs;
 import com.kronos.graphixs.g2d.Graphixs2D;
 import com.kronos.io.FileLoader;
 import com.kronos.io.assets.InternalAssetLoader;

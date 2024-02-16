@@ -1,4 +1,4 @@
-package com.kronos.graphixs.display;
+package com.kronos.graphixs.g;
 
 import static org.lwjgl.glfw.GLFW.glfwInit;
 
@@ -29,6 +29,11 @@ import com.kronos.graphixs.FixedLoopSystem;
 import com.kronos.graphixs.FrameBuffer;
 import com.kronos.graphixs.Loop;
 import com.kronos.graphixs.color.Color;
+import com.kronos.graphixs.display.HighlightProgram;
+import com.kronos.graphixs.display.Screen;
+import com.kronos.graphixs.display.ScreenConfig;
+import com.kronos.graphixs.display.Texture;
+import com.kronos.graphixs.display.TextureProgram;
 import com.kronos.graphixs.events.GraphicEvent;
 import com.kronos.graphixs.g2d.Graphixs2D;
 import com.kronos.graphixs.g2d.ScreenProvider;
