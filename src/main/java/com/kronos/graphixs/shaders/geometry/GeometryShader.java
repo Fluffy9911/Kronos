@@ -11,11 +11,11 @@ import com.kronos.graphixs.shaders.BaseShader;
  * 
  */
 public abstract class GeometryShader extends BaseShader {
-	String source;
+	public String geometrySource;
 	protected int shaderID = -1;
 
 	public GeometryShader(String source) {
-		this.source = source;
+		this.geometrySource = source;
 	}
 
 	@Override
@@ -42,7 +42,7 @@ public abstract class GeometryShader extends BaseShader {
 
 	@Override
 	public void compileShader() {
-		shaderID = this.compileAndCreateShader(GL40.GL_GEOMETRY_SHADER, source, "Geometry Shader");
+		shaderID = this.compileAndCreateShader(GL40.GL_GEOMETRY_SHADER, geometrySource, "Geometry Shader");
 		programId = this.linkAndAttach(shaderID);
 	}
 

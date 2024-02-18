@@ -307,4 +307,95 @@ public class Connection {
 
 	}
 
+	/**
+	 * @return the databuffer
+	 */
+	public LinkedList<String> getDatabuffer() {
+		return databuffer;
+	}
+
+	/**
+	 * @return the ss
+	 */
+	public InetSocketAddress getSs() {
+		return ss;
+	}
+
+	/**
+	 * @return the bs
+	 */
+	public BufferedStreamReader getBs() {
+		return bs;
+	}
+
+	/**
+	 * @return the si
+	 */
+	public BufferedStreamReader getSi() {
+		return si;
+	}
+
+	/**
+	 * @return the registered
+	 */
+	public HashMap<String, Packet> getRegistered() {
+		return registered;
+	}
+
+	/**
+	 * @return the data
+	 */
+	public ConnectionData getData() {
+		return data;
+	}
+
+	/**
+	 * @return the isServer
+	 */
+	public boolean isServer() {
+		return isServer;
+	}
+
+	/**
+	 * @return the isConnected
+	 */
+	public boolean isConnected() {
+		return isConnected;
+	}
+
+	/**
+	 * @return the isWaiting
+	 */
+	public boolean isWaiting() {
+		return isWaiting;
+	}
+
+	/**
+	 * @return the handshake
+	 */
+	public boolean isHandshake() {
+		return handshake;
+	}
+
+	/**
+	 * @return the datalog
+	 */
+	public ArrayList<String> getDatalog() {
+		return datalog;
+	}
+
+	/**
+	 * @return the cp
+	 */
+	public String getCp() {
+		return cp;
+	}
+
+	/**
+	 * @return the packetBuffer
+	 */
+	public LinkedList<Packet> getPacketBuffer() {
+		return packetBuffer;
+	}
+
 }
