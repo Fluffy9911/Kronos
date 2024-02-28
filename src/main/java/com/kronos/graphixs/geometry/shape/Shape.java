@@ -9,8 +9,8 @@ import org.joml.Vector3f;
 import com.kronos.Kronos;
 import com.kronos.graphixs.color.Color;
 import com.kronos.graphixs.color.Colors;
-import com.kronos.graphixs.display.Texture;
 import com.kronos.graphixs.g2d.pixelcanvas.Canvas2D;
+import com.kronos.graphixs.texture.Texture;
 
 public class Shape extends Canvas2D {
 	public HashMap<Color, Color> mapped;

@@ -16,7 +16,6 @@ import com.kronos.Testing;
 import com.kronos.graphixs.Light;
 import com.kronos.graphixs.color.Color;
 import com.kronos.graphixs.color.Colors;
-import com.kronos.graphixs.display.Texture;
 import com.kronos.graphixs.display.camera.PerspectiveCamera;
 import com.kronos.graphixs.geometry.Mesh;
 import com.kronos.graphixs.geometry.meshing.BasicMeshBuilder;
@@ -26,6 +25,7 @@ import com.kronos.graphixs.rendering.RenderTarget.TargetConfig;
 import com.kronos.graphixs.rendering.buffers.MeshBuffer;
 import com.kronos.graphixs.shaders.builtin.Shader3D;
 import com.kronos.graphixs.shaders.render.ShaderProgram;
+import com.kronos.graphixs.texture.Texture;
 import com.kronos.io.InputHandler;
 import com.kronos.io.Keys;
 

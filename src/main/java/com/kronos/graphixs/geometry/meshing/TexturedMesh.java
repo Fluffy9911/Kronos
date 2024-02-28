@@ -3,10 +3,10 @@ package com.kronos.graphixs.geometry.meshing;
 import org.lwjgl.opengl.GL40;
 
 import com.kronos.Kronos;
-import com.kronos.graphixs.display.Texture;
 import com.kronos.graphixs.g2d.ScreenCord;
 import com.kronos.graphixs.geometry.Mesh;
 import com.kronos.graphixs.shaders.render.RenderShader;
+import com.kronos.graphixs.texture.Texture;
 
 public class TexturedMesh {
 	Mesh mesh;

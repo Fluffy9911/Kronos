@@ -1,11 +1,11 @@
 package com.kronos.graphixs.g2d.ui.components.clickables;
 
-import com.kronos.graphixs.display.Texture;
 import com.kronos.graphixs.g2d.ui.BaseComponent;
 import com.kronos.graphixs.g2d.ui.BasePosition;
 import com.kronos.graphixs.g2d.ui.listeners.MouseEventListener;
 import com.kronos.graphixs.g2d.ui.listeners.adapter.InteractionType;
 import com.kronos.graphixs.g2d.ui.listeners.adapter.MouseEvents;
+import com.kronos.graphixs.texture.Texture;
 import com.kronos.io.Config;
 
 public abstract class BasicClickable extends BaseComponent implements MouseEvents, ClickListener {

@@ -6,7 +6,7 @@ import java.util.Map;
 
 import org.apache.logging.log4j.Logger;
 
-import com.kronos.graphixs.display.Texture;
+import com.kronos.graphixs.texture.Texture;
 
 public class InternalAssetLoader {
 	Logger l;

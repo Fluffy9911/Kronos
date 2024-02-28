@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.kronos.graphixs.display.Texture;
 import com.kronos.graphixs.g2d.Graphixs2D;
 import com.kronos.graphixs.g2d.TextureBatch;
 import com.kronos.graphixs.g2d.fonts.FontRenderer;
@@ -12,6 +11,7 @@ import com.kronos.graphixs.g2d.ui.components.Drawable;
 import com.kronos.graphixs.g2d.ui.components.Persistant;
 import com.kronos.graphixs.g2d.ui.transform.DragNDrop;
 import com.kronos.graphixs.g2d.ui.transform.KeepInBox;
+import com.kronos.graphixs.texture.Texture;
 import com.kronos.io.Config;
 import com.kronos.io.config.ConfigFile;
 

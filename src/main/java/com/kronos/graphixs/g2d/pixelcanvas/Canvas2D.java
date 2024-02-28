@@ -1,7 +1,7 @@
 package com.kronos.graphixs.g2d.pixelcanvas;
 
 import com.kronos.graphixs.color.Color;
-import com.kronos.graphixs.display.Texture;
+import com.kronos.graphixs.texture.Texture;
 
 public class Canvas2D {
 	int[][] canvas;

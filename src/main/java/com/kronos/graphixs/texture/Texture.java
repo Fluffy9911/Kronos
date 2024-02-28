@@ -1,8 +1,9 @@
-package com.kronos.graphixs.display;
+package com.kronos.graphixs.texture;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.util.Map;
 
 import javax.imageio.ImageIO;
 
@@ -16,40 +17,47 @@ import com.kronos.graphixs.color.Color;
 public class Texture {
 	public int textureId = 0;
 	int width = 0, height = 0;
+	TextureInfo info = BASE;
 
 	public Texture(String filePath) {
 		this(loadImage(filePath));
+		info = BASE;
 	}
 
 	public Texture(int tid) {
 		textureId = tid;
+		info = BASE;
 	}
 
 	public Texture(int[][] pixels) {
 		width = pixels.length;
 		height = pixels[0].length;
+		info = BASE;
 		textureId = loadTexture(pixels);
+
 	}
 
 	public Texture(int textureId, int width, int height) {
 		super();
+		info = BASE;
 		this.textureId = textureId;
 		this.width = width;
 		this.height = height;
 	}
 
 	public Texture(BufferedImage image) {
+		info = BASE;
 		textureId = loadTexture(image);
 	}
 
 	public void bind() {
-		GL40.glActiveTexture(GL40.GL_TEXTURE0);
-		GL11.glBindTexture(GL11.GL_TEXTURE_2D, textureId);
+		GL40.glActiveTexture(info.level());
+		GL11.glBindTexture(info.dimension(), textureId);
 
 	}
 
 	public void unbind() {
-		GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
+		GL11.glBindTexture(info.dimension(), 0);
 	}
 
 	private static BufferedImage loadImage(String filePath) {
@@ -88,14 +96,16 @@ public class Texture {
 		buffer.flip();
 
 		textureId = GL11.glGenTextures();
-		GL11.glBindTexture(GL11.GL_TEXTURE_2D, textureId);
+		GL11.glBindTexture(info.dimension(), textureId);
 
-		// Setup texture parameters
-		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
-		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
+		for (Map.Entry<Integer, Integer> entry : info.params().entrySet()) {
+			Integer key = entry.getKey();
+			Integer val = entry.getValue();
+			GL11.glTexParameteri(info.dimension(), key, val);
+		}
 
 		// Upload the texture data
-		GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL40.GL_RGBA8, width, height, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE,
+		GL11.glTexImage2D(info.dimension(), 0, info.formatInternal(), width, height, 0, info.format(), info.type(),
 				buffer);
 
 		return textureId;
@@ -121,16 +131,17 @@ public class Texture {
 		buffer.flip();
 
 		textureId = GL11.glGenTextures();
-		GL11.glBindTexture(GL11.GL_TEXTURE_2D, textureId);
+		GL11.glBindTexture(info.dimension(), textureId);
 
-		// Setup texture parameters
-		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
-		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
+		for (Map.Entry<Integer, Integer> entry : info.params().entrySet()) {
+			Integer key = entry.getKey();
+			Integer val = entry.getValue();
+			GL11.glTexParameteri(info.dimension(), key, val);
+		}
 
 		// Upload the texture data
-		GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL40.GL_RGBA8, width, height, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE,
+		GL11.glTexImage2D(info.dimension(), 0, info.formatInternal(), width, height, 0, info.format(), info.type(),
 				buffer);
-
 		return textureId;
 	}
 
@@ -195,4 +206,42 @@ public class Texture {
 		GL43C.glBindImageTexture(0, textureId, 0, false, 0, GL43C.GL_READ_ONLY, GL40.GL_RGBA32F);
 	}
 
+	public static final TextureInfo BASE = new TextureInfo() {
+
+		@Override
+		public int type() {
+			// TODO Auto-generated method stub
+			return GL11.GL_UNSIGNED_BYTE;
+		}
+
+		@Override
+		public int level() {
+			// TODO Auto-generated method stub
+			return GL40.GL_TEXTURE0;
+		}
+
+		@Override
+		public int format() {
+			// TODO Auto-generated method stub
+			return GL11.GL_RGBA;
+		}
+
+		@Override
+		public int dimension() {
+			// TODO Auto-generated method stub
+			return GL11.GL_TEXTURE_2D;
+		}
+
+		@Override
+		public Map<Integer, Integer> params() {
+			// TODO Auto-generated method stub
+			return Map.of(GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
+		}
+
+		@Override
+		public int formatInternal() {
+			// TODO Auto-generated method stub
+			return GL40.GL_RGBA8;
+		}
+	};
 }

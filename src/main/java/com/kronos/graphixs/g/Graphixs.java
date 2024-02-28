@@ -32,8 +32,6 @@ import com.kronos.graphixs.color.Color;
 import com.kronos.graphixs.display.HighlightProgram;
 import com.kronos.graphixs.display.Screen;
 import com.kronos.graphixs.display.ScreenConfig;
-import com.kronos.graphixs.display.Texture;
-import com.kronos.graphixs.display.TextureProgram;
 import com.kronos.graphixs.events.GraphicEvent;
 import com.kronos.graphixs.g2d.Graphixs2D;
 import com.kronos.graphixs.g2d.ScreenProvider;
@@ -48,6 +46,8 @@ import com.kronos.graphixs.shaders.builtin.Shader3D;
 import com.kronos.graphixs.shaders.render.RenderShader;
 import com.kronos.graphixs.shaders.render.ShaderProgram;
 import com.kronos.graphixs.shaders.render.ShaderUniform;
+import com.kronos.graphixs.texture.Texture;
+import com.kronos.graphixs.texture.TextureProgram;
 
 import de.javagl.obj.Obj;
 import de.javagl.obj.ObjReader;

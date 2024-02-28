@@ -1,4 +1,4 @@
-package com.kronos.graphixs.display.textures;
+package com.kronos.graphixs.texture;
 
 import java.nio.ByteBuffer;
 
@@ -6,7 +6,6 @@ import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 
 import com.kronos.graphixs.color.Color;
-import com.kronos.graphixs.display.Texture;
 
 public class TextureBuilder {
 

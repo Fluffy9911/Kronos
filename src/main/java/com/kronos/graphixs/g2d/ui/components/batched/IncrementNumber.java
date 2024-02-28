@@ -5,14 +5,14 @@ import java.awt.Color;
 import org.joml.Vector2i;
 
 import com.kronos.graphixs.color.Colors;
-import com.kronos.graphixs.display.Texture;
-import com.kronos.graphixs.display.textures.TextureBuilder;
 import com.kronos.graphixs.g2d.Graphixs2D;
 import com.kronos.graphixs.g2d.TextureBatch;
 import com.kronos.graphixs.g2d.fonts.FontRenderer;
 import com.kronos.graphixs.g2d.ui.BaseComponent;
 import com.kronos.graphixs.g2d.ui.BasePosition;
 import com.kronos.graphixs.g2d.ui.components.clickables.BasicClickable;
+import com.kronos.graphixs.texture.Texture;
+import com.kronos.graphixs.texture.TextureBuilder;
 import com.kronos.io.config.ConfigFile;
 
 public class IncrementNumber extends BaseComponent {

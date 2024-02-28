@@ -1,11 +1,11 @@
 package com.kronos.graphixs.g2d.ui;
 
 import com.kronos.graphixs.color.Colors;
-import com.kronos.graphixs.display.Texture;
-import com.kronos.graphixs.display.textures.TextureBuilder;
 import com.kronos.graphixs.g2d.ScreenCord;
 import com.kronos.graphixs.g2d.ScreenProvider;
 import com.kronos.graphixs.g2d.TextureBatch;
+import com.kronos.graphixs.texture.Texture;
+import com.kronos.graphixs.texture.TextureBuilder;
 import com.kronos.io.InputHandler;
 
 public class BasePosition implements ComponentPosition {
