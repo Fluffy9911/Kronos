@@ -74,7 +74,7 @@ public class RTCompute extends ComputeShader {
 		bo.putVector("pdu", pixelDeltaU);
 		bo.putVector("pdv", pixelDeltaV);
 		Random r = new Random();
-		this.addUniform("seed", r.nextInt());
+		// this.addUniform("seed", r.nextInt());
 	}
 
 	public void render() {

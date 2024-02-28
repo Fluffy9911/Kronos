@@ -12,13 +12,13 @@ import com.kronos.graphixs.shaders.BaseShader;
  * 
  */
 public abstract class ComputeShader extends BaseShader {
-	String source;
+	public String computeSource;
 	protected int shaderID = -1;
 	Vector3i size = new Vector3i(1, 1, 1);
 
 	public ComputeShader(String source, Vector3i size) {
 		super();
-		this.source = source;
+		this.computeSource = source;
 		this.size = size;
 	}
 
@@ -36,7 +36,7 @@ public abstract class ComputeShader extends BaseShader {
 
 	@Override
 	public void compileShader() {
-		shaderID = compileAndCreateShader(GL43C.GL_COMPUTE_SHADER, source, "COMPUTE");
+		shaderID = compileAndCreateShader(GL43C.GL_COMPUTE_SHADER, computeSource, "COMPUTE");
 
 		programId = linkAndAttach(shaderID);
 		this.shaderLogger.debug(this.getShaderCompilationStatus());
