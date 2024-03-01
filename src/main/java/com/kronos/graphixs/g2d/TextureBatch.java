@@ -4,8 +4,8 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.kronos.graphixs.display.Texture;
 import com.kronos.graphixs.geometry.meshing.TexturedMesh;
+import com.kronos.graphixs.texture.Texture;
 
 public class TextureBatch {
 	List<TexturedMesh> mesh;

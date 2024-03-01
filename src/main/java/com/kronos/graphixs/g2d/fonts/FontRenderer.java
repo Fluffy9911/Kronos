@@ -15,8 +15,8 @@ import java.util.Map;
 import org.apache.logging.log4j.Logger;
 
 import com.kronos.Kronos;
-import com.kronos.graphixs.display.Texture;
 import com.kronos.graphixs.g2d.TextureBatch;
+import com.kronos.graphixs.texture.Texture;
 import com.kronos.io.Config;
 
 /**
@@ -89,7 +89,14 @@ public class FontRenderer {
 
 		// Split the text into lines to fit within the given width
 		String[] lines = getWrappedTextLines(text, constraint.width, fontMetrics);
-
+		// scale down by .25 until we fit or until we are a size of 0
+		while (getOverflowX(text, font, constraint.width) != 0 && getOverflowY(text, font, constraint.height) != 0) {
+			if (font.getSize() <= 0) {
+				font = font.deriveFont(1);
+				break;
+			}
+			font = font.deriveFont(font.getSize() - .25f);
+		}
 		// Calculate total height required for all lines
 		int totalHeight = lines.length * fontMetrics.getHeight();
 		int startY = 0;
@@ -249,11 +256,23 @@ public class FontRenderer {
 		createDrawTexture(f, c, text);
 	}
 
-	public Rectangle2D getSize(String text, Font f) {
+	public static Rectangle2D getSize(String text, Font f) {
 		BufferedImage img = new BufferedImage(16, 16, BufferedImage.TRANSLUCENT);
 		Graphics g = img.createGraphics();
 		g.setFont(f);
 		return g.getFontMetrics().getStringBounds(text, g);
+	}
+
+	public static int getOverflowX(String text, Font f, int max) {
+		Rectangle2D rd = getSize(text, f);
+		return (int) Math.max(0, max - rd.getWidth());
+
+	}
+
+	public static int getOverflowY(String text, Font f, int max) {
+		Rectangle2D rd = getSize(text, f);
+		return (int) Math.max(0, max - rd.getHeight());
+
 	}
 
 }

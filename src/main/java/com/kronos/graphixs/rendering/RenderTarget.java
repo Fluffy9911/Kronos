@@ -6,12 +6,12 @@ package com.kronos.graphixs.rendering;
 import com.kronos.Kronos;
 import com.kronos.graphixs.FrameBuffer;
 import com.kronos.graphixs.color.Color;
-import com.kronos.graphixs.display.Texture;
 import com.kronos.graphixs.display.camera.Camera;
 import com.kronos.graphixs.geometry.Mesh;
 import com.kronos.graphixs.rendering.buffers.MeshBuffer;
 import com.kronos.graphixs.shaders.builtin.Shader3D;
 import com.kronos.graphixs.shaders.render.ShaderUniform;
+import com.kronos.graphixs.texture.Texture;
 
 /**
  * 

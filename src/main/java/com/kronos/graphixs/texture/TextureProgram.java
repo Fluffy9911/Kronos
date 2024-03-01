@@ -1,4 +1,4 @@
-package com.kronos.graphixs.display;
+package com.kronos.graphixs.texture;
 
 import com.kronos.graphixs.shaders.render.ShaderProgram;
 

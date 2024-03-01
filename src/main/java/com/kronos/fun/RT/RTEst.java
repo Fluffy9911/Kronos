@@ -11,8 +11,8 @@ import com.kronos.Kronos;
 import com.kronos.graphixs.color.Color;
 import com.kronos.graphixs.color.Colors;
 import com.kronos.graphixs.display.ScreenConfig;
-import com.kronos.graphixs.display.Texture;
 import com.kronos.graphixs.g2d.TextureBatch;
+import com.kronos.graphixs.texture.Texture;
 
 /**
  * 

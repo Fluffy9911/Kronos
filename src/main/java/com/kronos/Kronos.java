@@ -107,6 +107,7 @@ public class Kronos {
 	 * @param sc
 	 */
 	public static void start(ScreenConfig sc) {
+		long time = System.currentTimeMillis();
 		defaultKronosInit();
 		for (Iterator iterator = listeners.iterator(); iterator.hasNext();) {
 			EngineListener el = (EngineListener) iterator.next();
@@ -114,6 +115,11 @@ public class Kronos {
 		}
 		graphixs.dev = false;
 		graphixs.startGlSequence(debug.getLogger());
+		createGLScreen(sc);
+		debug.getLogger().debug("Loading time: {}MS", (System.currentTimeMillis() - time));
+	}
+
+	public static void createGLScreen(ScreenConfig sc) {
 		graphixs.createScreen(sc);
 		config = new CoreConfig(graphixs, graphixs.g2d, loader, new InternalAssetLoader(config_loc), debug.getLogger());
 		config.setCurrent(graphixs.getConfig());
@@ -125,15 +131,15 @@ public class Kronos {
 	 * @param sc
 	 */
 	public static void startInDev(ScreenConfig sc) {
+		long time = System.currentTimeMillis();
 		defaultKronosInit();
 		for (Iterator iterator = listeners.iterator(); iterator.hasNext();) {
 			EngineListener el = (EngineListener) iterator.next();
 			el.engineStart();
 		}
 		graphixs.startGlSequenceDev(debug.getLogger());
-		graphixs.createScreen(sc);
-		config = new CoreConfig(graphixs, graphixs.g2d, loader, new InternalAssetLoader(config_loc), debug.getLogger());
-		config.setCurrent(graphixs.getConfig());
+		createGLScreen(sc);
+		debug.getLogger().debug("Loading time in DEV: {}MS", (System.currentTimeMillis() - time));
 	}
 
 	/**
@@ -185,4 +191,12 @@ public class Kronos {
 		return registeredConfig.get(key);
 	}
 
+	public static void beginHeadlessGL() {
+		defaultKronosInit();
+		for (Iterator iterator = listeners.iterator(); iterator.hasNext();) {
+			EngineListener el = (EngineListener) iterator.next();
+			el.engineStart();
+		}
+		graphixs.startGlSequence(debug.getLogger());
+	}
 }

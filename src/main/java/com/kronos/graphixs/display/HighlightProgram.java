@@ -1,5 +1,7 @@
 package com.kronos.graphixs.display;
 
+import com.kronos.graphixs.texture.TextureProgram;
+
 public class HighlightProgram extends TextureProgram {
 
 	public HighlightProgram(String vs, String fs) {

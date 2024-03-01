@@ -1,4 +1,4 @@
-package com.kronos.graphixs.display;
+package com.kronos.graphixs.texture;
 
 import java.nio.ByteBuffer;
 import java.util.ArrayList;

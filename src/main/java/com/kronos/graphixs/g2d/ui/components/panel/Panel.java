@@ -1,12 +1,12 @@
 package com.kronos.graphixs.g2d.ui.components.panel;
 
 import com.kronos.Kronos;
-import com.kronos.graphixs.display.Texture;
 import com.kronos.graphixs.g2d.Graphixs2D;
 import com.kronos.graphixs.g2d.TextureBatch;
 import com.kronos.graphixs.g2d.fonts.FontRenderer;
 import com.kronos.graphixs.g2d.ui.BaseComponent;
 import com.kronos.graphixs.g2d.ui.BasePosition;
+import com.kronos.graphixs.texture.Texture;
 
 public class Panel extends BaseComponent {
 	Texture panel, top;
