@@ -32,4 +32,18 @@ public class ShapeRenderer {
 		tb.drawTexture(x, y, width, height, draw);
 	}
 
+	/**
+	 * @return the shapes
+	 */
+	public static HashMap<String, Shape> getShapes() {
+		return shapes;
+	}
+
+	/**
+	 * @param shapes the shapes to set
+	 */
+	public static void setShapes(HashMap<String, Shape> shapes) {
+		ShapeRenderer.shapes = shapes;
+	}
+
 }

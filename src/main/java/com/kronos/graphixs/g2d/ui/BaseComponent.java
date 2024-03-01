@@ -25,7 +25,7 @@ public class BaseComponent implements Comp, Drawable, Persistant {
 	protected boolean hidden, updateListeners = false;
 	protected States state;
 	protected ComponentHandler ch;
-	private KeepInBox kib = new KeepInBox();
+	protected KeepInBox kib = new KeepInBox();
 	private BaseComponent parent;
 	String id;
 	DragNDrop dnd;
@@ -152,6 +152,8 @@ public class BaseComponent implements Comp, Drawable, Persistant {
 	}
 
 	public void move(float f, float g, float h, float i) {
+		this.getPosition().pos().translate(f, g);
+		this.getPosition().pos().translateSize(h, i);
 		for (Map.Entry<String, BaseComponent> entry : children.entrySet()) {
 			String key = entry.getKey();
 			BaseComponent val = entry.getValue();

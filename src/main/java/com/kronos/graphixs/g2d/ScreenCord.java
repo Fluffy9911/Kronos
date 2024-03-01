@@ -5,6 +5,8 @@ import java.awt.Rectangle;
 import org.joml.Matrix4f;
 import org.joml.Vector4f;
 
+import com.kronos.graphixs.g2d.ui.transform.PositionX;
+import com.kronos.graphixs.g2d.ui.transform.PositionY;
 import com.kronos.io.Config;
 
 public class ScreenCord {
@@ -104,6 +106,64 @@ public class ScreenCord {
 
 	public void setH(float h) {
 		this.h = h;
+	}
+
+	public void set(ScreenCord sc) {
+		this.x = sc.x;
+		this.y = sc.y;
+		this.w = sc.w;
+		this.h = sc.h;
+	}
+
+	public void setToCenterOf(ScreenCord other) {
+		// Calculate the center coordinates of the other ScreenCord
+		float otherCenterX = other.getX() + other.getW() / 2;
+		float otherCenterY = other.getY() + other.getH() / 2;
+
+		// Calculate the center coordinates of this ScreenCord
+		float centerX = this.x + this.w / 2;
+		float centerY = this.y + this.h / 2;
+
+		// Calculate the difference between the centers
+		float dx = otherCenterX - centerX;
+		float dy = otherCenterY - centerY;
+
+		// Translate this ScreenCord by the calculated differences
+		this.translate(dx, dy);
+	}
+
+	public void setToCenterOf(ScreenCord other, PositionX positionX, PositionY positionY) {
+
+		// Adjust based on X position enum
+		switch (positionX) {
+		case LEFT:
+			this.setX(other.getX());
+			break;
+		case RIGHT:
+			this.setX((other.getW() - this.getW()));
+			break;
+		case CENTER:
+		default:
+			// No adjustment needed for center alignment
+			break;
+		}
+
+		// Adjust based on Y position enum
+		switch (positionY) {
+		case UP:
+			this.setY(other.getY());
+			break;
+		case DOWN:
+			this.setY((other.getH() - this.getH()));
+			break;
+		case CENTER:
+		default:
+			// No adjustment needed for center alignment
+			break;
+		}
+
+		// Translate this ScreenCord by the calculated differences
+
 	}
 
 }

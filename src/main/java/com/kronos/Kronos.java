@@ -92,6 +92,7 @@ public class Kronos {
 		loader.create(kronos_out);
 		if (loader.tryLoad(config_loc + "\\" + kronos_id + "_config.json", kronos_out) != null) {
 			k_config = loader.tryRead(kronos_id + "_config.json", config_loc, kronos_out);
+
 			debug.getLogger().debug("Loaded Config");
 			buildConfig(k_config);
 		} else {
@@ -111,6 +112,7 @@ public class Kronos {
 			EngineListener el = (EngineListener) iterator.next();
 			el.engineStart();
 		}
+		graphixs.dev = false;
 		graphixs.startGlSequence(debug.getLogger());
 		graphixs.createScreen(sc);
 		config = new CoreConfig(graphixs, graphixs.g2d, loader, new InternalAssetLoader(config_loc), debug.getLogger());

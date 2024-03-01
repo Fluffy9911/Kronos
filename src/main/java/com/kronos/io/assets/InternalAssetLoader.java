@@ -73,4 +73,32 @@ public class InternalAssetLoader {
 		return new File(val);
 	}
 
+	/**
+	 * @return the loaded
+	 */
+	public HashMap<String, Texture> getLoaded() {
+		return loaded;
+	}
+
+	/**
+	 * @param loaded the loaded to set
+	 */
+	public void setLoaded(HashMap<String, Texture> loaded) {
+		this.loaded = loaded;
+	}
+
+	/**
+	 * @return the current
+	 */
+	public String getCurrent() {
+		return current;
+	}
+
+	/**
+	 * @param current the current to set
+	 */
+	public void setCurrent(String current) {
+		this.current = current;
+	}
+
 }

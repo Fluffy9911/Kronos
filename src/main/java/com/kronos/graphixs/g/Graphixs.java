@@ -54,7 +54,7 @@ import de.javagl.obj.ObjReader;
 import de.javagl.obj.ObjUtils;
 
 public class Graphixs {
-	boolean g_lock = true, dev = true;
+	public boolean g_lock = true, dev = true;
 	private ScreenConfig config;
 	private Screen screen;
 	private ResourceManager manager = new ResourceManager();
@@ -69,6 +69,7 @@ public class Graphixs {
 	private ListMap<String, GraphicEvent> events;
 	String fs, vs;
 	public HashMap<String, Texture> textures;
+	public HashMap<String, String> tfile;
 
 	public double DELTA_TIME = 0;
 
@@ -116,6 +117,7 @@ public class Graphixs {
 		g_lock = false;
 		events = new ListMap<String, GraphicEvent>();
 		textures = new HashMap<>();
+		tfile = new HashMap<String, String>();
 		Runtime.getRuntime().addShutdownHook(new Thread(() -> {
 			manager.close();
 		}));
@@ -475,9 +477,17 @@ public class Graphixs {
 
 	}
 
+	/**
+	 * Tries to create and load in a texture
+	 * 
+	 * @param name
+	 * @param path
+	 */
 	public void createTexture(String name, String path) {
-		l.debug("loaded texture: {}", name);
+
 		textures.put(name, new Texture(Kronos.loader.tryLoadImage(path)));
+		tfile.put(name, Kronos.loader.getRid().getBasePath() + "\\" + path);
+		l.debug("loaded texture: {}", name);
 	}
 
 	public Texture getTexture(String id) {
