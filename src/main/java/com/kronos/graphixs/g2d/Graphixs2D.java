@@ -3,11 +3,13 @@ package com.kronos.graphixs.g2d;
 import java.util.Iterator;
 import java.util.List;
 
+import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL40;
 
 import com.kronos.Kronos;
 import com.kronos.core.util.SListener;
 import com.kronos.graphixs.FrameBuffer;
+import com.kronos.graphixs.color.Color;
 import com.kronos.graphixs.display.ScreenConfig;
 import com.kronos.graphixs.geometry.meshing.TexturedMesh;
 import com.kronos.graphixs.shaders.render.ShaderProgram;
@@ -74,4 +76,22 @@ public class Graphixs2D implements SListener {
 		return provider;
 	}
 
+	/**
+	 * Draws a line using OpenGL's fixed function pipeline.
+	 *
+	 * @param x   Starting x-coordinate
+	 * @param y   Starting y-coordinate
+	 * @param ex  Ending x-coordinate
+	 * @param ey  Ending y-coordinate
+	 * @param col Color of the line
+	 */
+	public void drawLineFF(int x, int y, int ex, int ey, Color col) {
+		GL11.glBegin(GL11.GL_LINES);
+
+		GL11.glColor3f(col.getR(), col.getG(), col.getB());
+		GL11.glVertex2i(x, y);
+		GL11.glVertex2i(ex, ey);
+
+		GL11.glEnd();
+	}
 }

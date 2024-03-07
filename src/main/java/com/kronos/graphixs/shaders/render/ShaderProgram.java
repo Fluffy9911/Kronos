@@ -8,7 +8,6 @@ public class ShaderProgram extends RenderShader {
 
 	@Override
 	public void load() {
-		// TODO Auto-generated method stub
 
 	}
 

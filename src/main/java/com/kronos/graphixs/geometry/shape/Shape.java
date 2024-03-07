@@ -23,8 +23,7 @@ public class Shape extends Canvas2D {
 		for (int i = 0; i < width; i++) {
 			for (int j = 0; j < height; j++) {
 
-				img.getRGB(i, j);
-
+				this.setPixel(i, j, img.getRGB(i, j));
 			}
 
 		}
@@ -41,14 +40,16 @@ public class Shape extends Canvas2D {
 	}
 
 	public Texture buildTextureForRender(int rgb) {
-		Shape cv = this;
+		Shape cv = new Shape(this);
 		cv.setCanvas(this.copyFrame());
 		for (Map.Entry<Color, Color> entry : mapped.entrySet()) {
 			Color key = entry.getKey();
 			Color val = entry.getValue();
 			cv.setAll(key.rgb(), val.rgb());
 		}
+		mapped.clear();
 		return cv.toTexture();
+
 	}
 
 	public Vector3f difference(Color c, Color cmp) {

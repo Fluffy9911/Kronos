@@ -38,6 +38,10 @@ public class ConfigFile {
 	}
 
 	public void write() {
+		File dir = new File(id.getBasePath() + "/" + path);
+		if (!dir.exists()) {
+			dir.mkdirs();
+		}
 		File f = new File(id.getBasePath() + "/" + path + "/" + name + ".json");
 		f.delete();
 		fl.createAndWrite(id, path + "/" + name + ".json", config.writeOut());

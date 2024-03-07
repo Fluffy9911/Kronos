@@ -141,8 +141,11 @@ public class ComponentHandler {
 			if (val.canUpdateChildren()) {
 				val.updateChildren();
 			}
+
 			val.render(batcher, fr, g);
+
 		}
+
 		batcher.render();
 		batcher.end();
 	}
