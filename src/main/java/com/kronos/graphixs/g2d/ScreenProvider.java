@@ -3,12 +3,16 @@ package com.kronos.graphixs.g2d;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
+import com.kronos.Kronos;
 import com.kronos.graphixs.display.ScreenConfig;
 
 /**
  * Converts cordinates to opengl cords and does all the math
  */
 public class ScreenProvider {
+	public static ScreenProvider getDefault() {
+		return Kronos.graphixs.g2d.getProvider();
+	}
 
 	Cam2D cam;
 

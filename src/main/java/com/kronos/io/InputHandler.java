@@ -1,5 +1,10 @@
 package com.kronos.io;
 
+import java.awt.event.KeyEvent;
+import java.nio.CharBuffer;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWCursorPosCallback;
 import org.lwjgl.glfw.GLFWCursorPosCallbackI;
@@ -12,7 +17,7 @@ public class InputHandler {
 
 	// Create a GLFWKeyCallback to handle key events
 	private static GLFWKeyCallback keyCallback;
-
+	static HashMap<String, CharBuffer> caps = new HashMap<>();
 	static int released = 0;
 	static double lastx = 0, lasty = 0;
 	static boolean mouseDownRight = false, mouseDownLeft = false;
@@ -21,12 +26,21 @@ public class InputHandler {
 	// Initialize the key callback
 	public static void init(long window) {
 		keyCallback = GLFWKeyCallback.create((windowHandle, keyCode, scancode, action, mods) -> {
+			for (Map.Entry<String, CharBuffer> entry : caps.entrySet()) {
+				String key = entry.getKey();
+				CharBuffer val = entry.getValue();
+				if (action == GLFW.GLFW_RELEASE) {
+
+					val.append(convertKeyCodeToChar(keyCode, false));
+				}
+			}
 			if (action == GLFW.GLFW_PRESS) {
 				keys[keyCode] = true;
 			} else if (action == GLFW.GLFW_RELEASE) {
 				keys[keyCode] = false;
 				released = keyCode;
 			}
+
 		});
 
 		// Set the key callback for the specified window
@@ -119,4 +133,26 @@ public class InputHandler {
 		return leftReleased;
 	}
 
+	public void startKeyCapture(CharBuffer buffer) {
+
+	}
+
+	public static char convertKeyCodeToChar(int keyCode, boolean shiftPressed) {
+		char[] chars = new char[2];
+		KeyEvent keyEvent = new KeyEvent(null, KeyEvent.KEY_TYPED, System.currentTimeMillis(), 0, keyCode,
+				(char) keyCode);
+
+		if (shiftPressed) {
+			// If shift is pressed, convert to uppercase
+			chars[0] = Character.toUpperCase(keyEvent.getKeyChar());
+		} else {
+			chars[0] = keyEvent.getKeyChar();
+		}
+
+		// Handle special characters
+
+		// Create a CharBuffer with the converted character
+		CharBuffer charBuffer = CharBuffer.wrap(chars);
+		return charBuffer.get();
+	}
 }
