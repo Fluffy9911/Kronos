@@ -1,5 +1,6 @@
 package com.kronos.graphixs.g2d.ui;
 
+import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -32,15 +33,17 @@ public class ComponentHandler {
 
 	HashMap<String, ConfigFile> configs;
 	ArrayList<Persistant> persistant = new ArrayList<Persistant>();
-	HashMap<String, BaseComponent> comps;
+	String default_pane = "default", current_pane = default_pane;
 	Graphixs2D g;
 	TextureBatch batcher;
 	FontRenderer fr;
 	ScreenProvider sp;
+	HashMap<String, HashMap<String, BaseComponent>> comps;
+	HashMap<String, BaseComponent> active = new HashMap<String, BaseComponent>();
 
 	public ComponentHandler(Graphixs2D g) {
 		configs = new HashMap<String, ConfigFile>();
-		comps = new HashMap<String, BaseComponent>();
+		comps = new HashMap<String, HashMap<String, BaseComponent>>();
 
 		this.g = g;
 		batcher = g.createBatch();
@@ -95,6 +98,7 @@ public class ComponentHandler {
 	 * @see java.util.HashMap#get(java.lang.Object)
 	 */
 	public BaseComponent get(Object key) {
+		HashMap<String, BaseComponent> comps = this.comps.get(default_pane); // <String, BaseComponent>
 		return comps.get(key);
 	}
 
@@ -105,6 +109,10 @@ public class ComponentHandler {
 	 * @see java.util.HashMap#put(java.lang.Object, java.lang.Object)
 	 */
 	public BaseComponent put(String key, BaseComponent value) {
+		HashMap<String, BaseComponent> comps = this.comps.get(default_pane);
+		if (comps == null) {
+			this.comps.put(default_pane, comps = new HashMap<String, BaseComponent>());
+		}
 		return comps.put(key, value);
 	}
 
@@ -116,36 +124,47 @@ public class ComponentHandler {
 		bc.show();
 	}
 
+	/**
+	 * creates all the components regardless of there ID
+	 */
 	public void createComps() {
-		for (Map.Entry<String, BaseComponent> entry : comps.entrySet()) {
-			String key = entry.getKey();
-			BaseComponent val = entry.getValue();
-			val.onCreation(this);
+		for (Map.Entry<String, HashMap<String, BaseComponent>> ent : comps.entrySet()) {
+			HashMap<String, BaseComponent> c = ent.getValue();
+			for (Map.Entry<String, BaseComponent> entry : c.entrySet()) {
+				String key = entry.getKey();
+				BaseComponent val = entry.getValue();
+				val.onCreation(this);
+			}
 		}
 	}
 
 	public void deleteAll() {
-		for (Map.Entry<String, BaseComponent> entry : comps.entrySet()) {
-			String key = entry.getKey();
-			BaseComponent val = entry.getValue();
-			val.onDeletion();
+		for (Map.Entry<String, HashMap<String, BaseComponent>> ent : comps.entrySet()) {
+			HashMap<String, BaseComponent> c = ent.getValue();
+			for (Map.Entry<String, BaseComponent> entry : c.entrySet()) {
+				String key = entry.getKey();
+				BaseComponent val = entry.getValue();
+				val.onDeletion();
+			}
 		}
 	}
 
 	public void update() {
+		for (Map.Entry<String, HashMap<String, BaseComponent>> ent : comps.entrySet()) {
+			HashMap<String, BaseComponent> c = ent.getValue();
+			for (Map.Entry<String, BaseComponent> entry : c.entrySet()) {
 
-		for (Map.Entry<String, BaseComponent> entry : comps.entrySet()) {
-			String key = entry.getKey();
-			BaseComponent val = entry.getValue();
-			val.update();
-			if (val.canUpdateChildren()) {
-				val.updateChildren();
+				String key = entry.getKey();
+				BaseComponent val = entry.getValue();
+				val.update();
+				if (val.canUpdateChildren()) {
+					val.updateChildren();
+				}
+
+				val.render(batcher, fr, g);
+
 			}
-
-			val.render(batcher, fr, g);
-
 		}
-
 		batcher.render();
 		batcher.end();
 	}
@@ -166,4 +185,100 @@ public class ComponentHandler {
 		return sp;
 	}
 
+	public void setActive(String id) {
+		this.active = this.comps.get(id);
+		this.current_pane = id;
+	}
+
+	public void update(String id) {
+		HashMap<String, BaseComponent> c = this.comps.get(id);
+		for (Map.Entry<String, BaseComponent> entry : c.entrySet()) {
+
+			String key = entry.getKey();
+			BaseComponent val = entry.getValue();
+			val.update();
+			if (val.canUpdateChildren()) {
+				val.updateChildren();
+			}
+
+			val.render(batcher, fr, g);
+
+		}
+	}
+
+	public void create(String id) {
+		HashMap<String, BaseComponent> c = this.comps.get(id);
+		for (Map.Entry<String, BaseComponent> entry : c.entrySet()) {
+
+			String key = entry.getKey();
+			BaseComponent val = entry.getValue();
+			val.onCreation(this);
+
+		}
+	}
+
+	public void updateShown() {
+		for (Map.Entry<String, BaseComponent> entry : active.entrySet()) {
+			String key = entry.getKey();
+			BaseComponent val = entry.getValue();
+			val.update();
+			if (val.canUpdateChildren()) {
+				val.updateChildren();
+			}
+
+			val.render(batcher, fr, g);
+		}
+	}
+
+	public void saveDataForInactiveComponents() {
+		for (Map.Entry<String, HashMap<String, BaseComponent>> entry : comps.entrySet()) {
+			HashMap<String, BaseComponent> components = entry.getValue();
+			for (Map.Entry<String, BaseComponent> componentEntry : components.entrySet()) {
+				String key = componentEntry.getKey();
+				BaseComponent component = componentEntry.getValue();
+
+				// Check if the component is not in the active pane
+				if (!active.containsValue(component)) {
+					// Save the data for the component
+					component.write(getOrCreatePersistance(current_pane + "_" + key));
+				}
+			}
+		}
+	}
+
+	public void saveData() {
+		for (Map.Entry<String, HashMap<String, BaseComponent>> entry : comps.entrySet()) {
+			HashMap<String, BaseComponent> components = entry.getValue();
+			for (Map.Entry<String, BaseComponent> componentEntry : components.entrySet()) {
+				BaseComponent component = componentEntry.getValue();
+				if (isOffscreen(component)) {
+					component.write(getOrCreatePersistance(current_pane + "_" + componentEntry.getKey()));
+				}
+			}
+		}
+	}
+
+	private boolean isOffscreen(BaseComponent component) {
+		Rectangle screen = new Rectangle(0, 0, g.getProvider().width(), g.getProvider().height());
+		Rectangle bounds = component.bp.pos.getBounds();
+		return !screen.intersects(bounds); // Placeholder return, implement your offscreen check logic
+	}
+
+	public void renderComponents(boolean updateNotSeen) {
+		for (Map.Entry<String, HashMap<String, BaseComponent>> entry : comps.entrySet()) {
+			HashMap<String, BaseComponent> components = entry.getValue();
+			for (Map.Entry<String, BaseComponent> componentEntry : components.entrySet()) {
+				BaseComponent component = componentEntry.getValue();
+				if (isOffscreen(component) && updateNotSeen) {
+					component.update();
+					if (component.canUpdateChildren()) {
+						component.updateChildren();
+					}
+
+				} else {
+					// do nothing
+				}
+			}
+		}
+	}
 }

@@ -115,4 +115,12 @@ public class ScreenCord {
 		return getPercentWH(xper, yper).add(x, y);
 	}
 
+	/**
+	 * @return
+	 */
+	public Rectangle getBounds() {
+		// TODO Auto-generated method stub
+		return new Rectangle((int) x, (int) y, (int) w, (int) h);
+	}
+
 }

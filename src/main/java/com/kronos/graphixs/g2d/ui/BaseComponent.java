@@ -22,7 +22,7 @@ public class BaseComponent implements Comp, Drawable, Persistant {
 	protected BasePosition bp;
 	protected HashMap<String, BaseComponent> children;
 	boolean cdren, moveable, update;
-	protected boolean hidden, updateListeners = false;
+	protected boolean hidden, updateListeners = false, hovering = false, listenHover = false;
 	protected States state;
 	protected ComponentHandler ch;
 	protected KeepInBox kib = new KeepInBox();
@@ -45,7 +45,13 @@ public class BaseComponent implements Comp, Drawable, Persistant {
 
 	}
 
+	public void setListenHover(boolean listenHover) {
+		this.listenHover = listenHover;
+	}
+
 	public void createListeners() {
+		if (listenHover)
+			listeners.add(new HoverListener());
 
 	}
 
@@ -59,7 +65,8 @@ public class BaseComponent implements Comp, Drawable, Persistant {
 	public void update() {
 		updateChildren();
 		if (!hidden) {
-			render(ch.getBatcher(), ch.getFr(), ch.getG());
+			if (ch != null)
+				render(ch.getBatcher(), ch.getFr(), ch.getG());
 		}
 		if (update) {
 			recalculatePosition();
@@ -206,6 +213,7 @@ public class BaseComponent implements Comp, Drawable, Persistant {
 		this.ch = ch;
 		this.register(this, ch);
 		config = this.ch.getOrCreatePersistance(id);
+		System.out.println("created:" + id);
 		forEachChild((c, k) -> {
 			c.onCreation(ch);
 		});
@@ -266,12 +274,23 @@ public class BaseComponent implements Comp, Drawable, Persistant {
 	}
 
 	public void drawHere(TextureBatch batch, Texture t) {
-		batch.drawTexture((int) this.bp.pos().getX(), (int) this.bp.pos().getY(), (int) this.bp.pos().getW(),
-				(int) this.bp.pos().getH(), t);
+		if (t != null)
+			batch.drawTexture((int) this.bp.pos().getX(), (int) this.bp.pos().getY(), (int) this.bp.pos().getW(),
+					(int) this.bp.pos().getH(), t);
 	}
 
 	public void setUpdateListeners(boolean updateListeners) {
 		this.updateListeners = updateListeners;
 	}
 
+	public void enterHover(int x, int y) {
+	}
+
+	public void leaveHover(int x, int y) {
+
+	}
+
+	public void hover(int x, int y) {
+
+	}
 }

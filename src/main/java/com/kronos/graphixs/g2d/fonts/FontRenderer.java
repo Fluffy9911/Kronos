@@ -90,13 +90,13 @@ public class FontRenderer {
 		// Split the text into lines to fit within the given width
 		String[] lines = getWrappedTextLines(text, constraint.width, fontMetrics);
 		// scale down by .25 until we fit or until we are a size of 0
-		while (getOverflowX(text, font, constraint.width) != 0 && getOverflowY(text, font, constraint.height) != 0) {
-			if (font.getSize() <= 0) {
-				font = font.deriveFont(1);
-				break;
-			}
-			font = font.deriveFont(font.getSize() - .25f);
-		}
+//		while (getOverflowX(text, font, constraint.width) != 0 && getOverflowY(text, font, constraint.height) != 0) {
+//			if (font.getSize() <= 0) {
+//				font = font.deriveFont(1);
+//				break;
+//			}
+//			font = font.deriveFont(font.getSize() - .25f);
+//		}
 		// Calculate total height required for all lines
 		int totalHeight = lines.length * fontMetrics.getHeight();
 		int startY = 0;

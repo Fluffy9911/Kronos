@@ -1,9 +1,15 @@
 package com.kronos.graphixs.g2d;
 
+import java.util.Map;
+
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
+<<<<<<< Updated upstream
 import com.kronos.Kronos;
+=======
+import com.kronos.graphixs.color.Color;
+>>>>>>> Stashed changes
 import com.kronos.graphixs.display.ScreenConfig;
 
 /**
@@ -83,6 +89,86 @@ public class ScreenProvider {
 
 	public float getCenter() {
 		return (halfHeight() + halfWidth());
+	}
+
+	/**
+	 * @return
+	 * @see com.kronos.graphixs.display.ScreenConfig#width()
+	 */
+	public int width() {
+		return config.width();
+	}
+
+	/**
+	 * @return
+	 * @see com.kronos.graphixs.display.ScreenConfig#height()
+	 */
+	public int height() {
+		return config.height();
+	}
+
+	/**
+	 * @return
+	 * @see com.kronos.graphixs.display.ScreenConfig#title()
+	 */
+	public String title() {
+		return config.title();
+	}
+
+	/**
+	 * @return
+	 * @see com.kronos.graphixs.display.ScreenConfig#getClearColor()
+	 */
+	public Color getClearColor() {
+		return config.getClearColor();
+	}
+
+	/**
+	 * @return
+	 * @see com.kronos.graphixs.display.ScreenConfig#updateTime()
+	 */
+	public int updateTime() {
+		return config.updateTime();
+	}
+
+	/**
+	 * @return
+	 * @see com.kronos.graphixs.display.ScreenConfig#getHints()
+	 */
+	public Map<Integer, Integer> getHints() {
+		return config.getHints();
+	}
+
+	/**
+	 * @return
+	 * @see com.kronos.graphixs.display.ScreenConfig#defaultHints()
+	 */
+	public Map<Integer, Integer> defaultHints() {
+		return config.defaultHints();
+	}
+
+	/**
+	 * 
+	 * @see com.kronos.graphixs.display.ScreenConfig#loadValues()
+	 */
+	public void loadValues() {
+		config.loadValues();
+	}
+
+	/**
+	 * 
+	 * @see com.kronos.graphixs.display.ScreenConfig#disposeValues()
+	 */
+	public void disposeValues() {
+		config.disposeValues();
+	}
+
+	/**
+	 * @return
+	 * @see com.kronos.graphixs.display.ScreenConfig#getData()
+	 */
+	public String getData() {
+		return config.getData();
 	}
 
 }
