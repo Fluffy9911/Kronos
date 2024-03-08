@@ -38,7 +38,19 @@ import com.kronos.graphixs.g2d.ScreenUtils;
 import com.kronos.graphixs.resources.Resource;
 import com.kronos.io.InputHandler;
 
+/**
+ * a base class that handles screen stuff
+ */
 public class Screen implements Resource {
+	/**
+	 * the width of the current screen 0 if none
+	 */
+	public static int width = 0;
+	/**
+	 * the height of the current screen 0 if none
+	 */
+	public static int height = 0;
+
 	Graphixs g = Kronos.graphixs;
 	Logger l = Kronos.debug.getLogger();
 	ScreenConfig sc;
@@ -79,9 +91,12 @@ public class Screen implements Resource {
 			}
 		});
 		InputHandler.init(id);
-		glfwSetWindowSizeCallback(id, (w, wi, h) -> {
-			resize(wi, h);
-		});
+		if (sc.resizeable())
+			glfwSetWindowSizeCallback(id, (w, wi, h) -> {
+				resize(wi, h);
+				width = wi;
+				height = h;
+			});
 	}
 
 	private void resize(int wi, int h) {

@@ -33,21 +33,21 @@ import com.kronos.io.Keys;
  * 
  */
 public class Scene3D {
-	List<Light> lights;
-	List<Mesh> meshes;
-	Shader3D draw;
-	PerspectiveCamera pc;
-	Vector2i li;
-	String[] displays;
-	String[] op;
-	int val = 0;
-	String display = "Hit N";
-	String opr = "Hit M";
-	int mmax = 20;
-	int lmax = 5;
-	int v = 0;
-	RenderTarget tt;
-	int uq = 1;
+	public List<Light> lights;
+	public List<Mesh> meshes;
+	public Shader3D draw;
+	public PerspectiveCamera pc;
+	public Vector2i li;
+	public String[] displays;
+	public String[] op;
+	public int val = 0;
+	public String display = "Hit N";
+	public String opr = "Hit M";
+	public int mmax = 20;
+	public int lmax = 5;
+	public int v = 0;
+	public RenderTarget tt;
+	public int uq = 1;
 
 	public Scene3D(ShaderProgram draw, PerspectiveCamera pc) {
 		super();

@@ -62,7 +62,7 @@ public class Graphixs {
 	private Logger l = Kronos.debug.getLogger();
 	public Mesh post_process_quad;
 	public HashMap<String, FrameBuffer> buffers = new HashMap<>();
-	private HashMap<String, BaseShader> shaders = new HashMap<String, BaseShader>();
+	public HashMap<String, BaseShader> shaders = new HashMap<String, BaseShader>();
 	private long window_id = -1;
 
 	public Graphixs2D g2d;

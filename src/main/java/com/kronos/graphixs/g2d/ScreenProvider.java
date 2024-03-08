@@ -5,11 +5,8 @@ import java.util.Map;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
-<<<<<<< Updated upstream
 import com.kronos.Kronos;
-=======
 import com.kronos.graphixs.color.Color;
->>>>>>> Stashed changes
 import com.kronos.graphixs.display.ScreenConfig;
 
 /**

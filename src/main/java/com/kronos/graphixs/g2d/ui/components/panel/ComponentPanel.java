@@ -3,6 +3,9 @@
  */
 package com.kronos.graphixs.g2d.ui.components.panel;
 
+import com.kronos.graphixs.g2d.Graphixs2D;
+import com.kronos.graphixs.g2d.TextureBatch;
+import com.kronos.graphixs.g2d.fonts.FontRenderer;
 import com.kronos.graphixs.g2d.ui.BaseComponent;
 import com.kronos.graphixs.g2d.ui.BasePosition;
 
@@ -22,6 +25,17 @@ public class ComponentPanel extends BaseComponent {
 	public ComponentPanel(BasePosition bp, boolean moveable, boolean hidden, String id) {
 		super(bp, true, moveable, hidden, id);
 		// TODO Auto-generated constructor stub
+	}
+
+	@Override
+	public void render(TextureBatch batch, FontRenderer fr, Graphixs2D g) {
+
+		super.render(batch, fr, g);
+
+		forEachChild((c, ch) -> {
+			c.render(batch, fr, g);
+		});
+
 	}
 
 }
