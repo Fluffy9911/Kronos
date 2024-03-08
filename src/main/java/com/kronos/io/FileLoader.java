@@ -62,10 +62,11 @@ public class FileLoader {
 		}
 
 		try {
-			Path p = Paths.get(f.toURI());
-			byte[] bytes = Files.readAllBytes(p);
-			return new String(bytes, StandardCharsets.UTF_8);
-
+			if (f != null) {
+				Path p = Paths.get(f.toURI());
+				byte[] bytes = Files.readAllBytes(p);
+				return new String(bytes, StandardCharsets.UTF_8);
+			}
 		} catch (IOException e) {
 			Kronos.debug.getLogger().fatal("ERROR {} ", e.getMessage());
 			e.printStackTrace();

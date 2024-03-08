@@ -45,7 +45,7 @@ public class Kronos {
 		@Override
 		public String getBasePath() {
 			// TODO Auto-generated method stub
-			return "src/main/resources";
+			return "src\\main\\resources";
 		}
 	};
 
@@ -65,7 +65,7 @@ public class Kronos {
 		@Override
 		public String getBasePath() {
 			// TODO Auto-generated method stub
-			return kronos_id + "/out";
+			return kronos_id + "\\out";
 		}
 	};
 

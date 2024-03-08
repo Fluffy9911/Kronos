@@ -115,11 +115,14 @@ public abstract class RenderShader extends BaseShader {
 	 * @return
 	 */
 	public int compileAndCreateShader() {
-		int vertexShaderID = GL20.glCreateShader(GL20.GL_VERTEX_SHADER);
-		GL20.glShaderSource(vertexShaderID, vertexSource);
-		GL20.glCompileShader(vertexShaderID);
-		ShaderUtils.checkShaderCompilationStatus(this, vertexShaderID, "Vertex RenderShader");
-		return vertexShaderID;
+		if (vertexSource != null) {
+			int vertexShaderID = GL20.glCreateShader(GL20.GL_VERTEX_SHADER);
+			GL20.glShaderSource(vertexShaderID, vertexSource);
+			GL20.glCompileShader(vertexShaderID);
+			ShaderUtils.checkShaderCompilationStatus(this, vertexShaderID, "Vertex RenderShader");
+			return vertexShaderID;
+		}
+		return -1;
 	}
 
 	/**

@@ -107,6 +107,11 @@ public class Graphixs {
 		return config;
 	}
 
+	public Texture put(String key, Texture value) {
+		l.debug("Put texture: {}", key);
+		return textures.put(key, value);
+	}
+
 	public void startGlSequence(Logger l) {
 		l.debug("Starting OPENGL");
 		if (!glfwInit()) {

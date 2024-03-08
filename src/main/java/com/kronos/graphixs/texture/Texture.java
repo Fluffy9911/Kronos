@@ -45,6 +45,15 @@ public class Texture {
 		this.height = height;
 	}
 
+	public Texture(int width, int height, ByteBuffer buf) {
+		super();
+		info = BASE;
+
+		this.width = width;
+		this.height = height;
+		loadTexture(buf, width, height);
+	}
+
 	public Texture(BufferedImage image) {
 		info = BASE;
 		textureId = loadTexture(image);
@@ -107,6 +116,26 @@ public class Texture {
 		// Upload the texture data
 		GL11.glTexImage2D(info.dimension(), 0, info.formatInternal(), width, height, 0, info.format(), info.type(),
 				buffer);
+
+		return textureId;
+	}
+
+	public int loadTexture(ByteBuffer image, int w, int h) {
+		width = w;
+		height = h;
+
+		textureId = GL11.glGenTextures();
+		GL11.glBindTexture(info.dimension(), textureId);
+
+		for (Map.Entry<Integer, Integer> entry : info.params().entrySet()) {
+			Integer key = entry.getKey();
+			Integer val = entry.getValue();
+			GL11.glTexParameteri(info.dimension(), key, val);
+		}
+
+		// Upload the texture data
+		GL11.glTexImage2D(info.dimension(), 0, info.formatInternal(), width, height, 0, info.format(), info.type(),
+				image);
 
 		return textureId;
 	}

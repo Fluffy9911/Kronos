@@ -3,6 +3,8 @@
  */
 package com.kronos.testing;
 
+import java.io.File;
+import java.net.MalformedURLException;
 import java.util.List;
 import java.util.Map;
 
@@ -14,6 +16,7 @@ import com.kronos.graphixs.color.Color;
 import com.kronos.graphixs.color.Colors;
 import com.kronos.graphixs.display.ScreenConfig;
 import com.kronos.graphixs.g2d.ui.ComponentHandler;
+import com.kronos.io.assets.TextureBuffer;
 
 /**
  * 
@@ -39,6 +42,18 @@ public class UITesting extends Game {
 
 		ch.createComps();
 		ch.load();
+		TextureBuffer b = new TextureBuffer();
+		try {
+			b.addIData("test1", new File("C:\\Users\\James.M\\OneDrive\\Desktop\\rt\\rr.png").toURL());
+			b.addIData("test2", new File("C:\\Users\\James.M\\OneDrive\\Desktop\\rt\\rrr.png").toURL());
+			b.addIData("test3", new File("C:\\Users\\James.M\\OneDrive\\Desktop\\rt\\r.png").toURL());
+			b.addIData("test4", new File("C:\\Users\\James.M\\OneDrive\\Desktop\\rt\\t.png").toURL());
+			b.addIData("test5", new File("C:\\Users\\James.M\\OneDrive\\Desktop\\rt\\tt.png").toURL());
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		b.loadToImages();
 	}
 
 	@Override
