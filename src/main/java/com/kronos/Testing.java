@@ -1,6 +1,5 @@
 package com.kronos;
 
-import java.io.File;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,14 +28,13 @@ import com.kronos.graphixs.scene.Scene3D;
 import com.kronos.graphixs.shaders.render.ShaderProgram;
 import com.kronos.io.Config;
 import com.kronos.io.InputHandler;
-import com.kronos.io.assets.TextureBuffer;
 
 public class Testing {
 	public static int i = 200;
 
 	public static void main(String[] args) throws MalformedURLException {
 
-		Kronos.start(new ScreenConfig() {
+		Kronos.startInDev(new ScreenConfig() {
 
 			@Override
 			public int width() {
@@ -97,17 +95,7 @@ public class Testing {
 		ShapeRenderer sr = g.shapeRenderer;
 		// sr.loadIn("test_shape",
 		// Kronos.loader.tryLoadImage("texture/test_shape.png"));
-		TextureBuffer b = new TextureBuffer();
-		b.addIData("test1", new File("C:\\Users\\James.M\\OneDrive\\Desktop\\rt\\rr.png").toURL());
-		b.addIData("test2", new File("C:\\Users\\James.M\\OneDrive\\Desktop\\rt\\rrr.png").toURL());
-		b.addIData("test3", new File("C:\\Users\\James.M\\OneDrive\\Desktop\\rt\\r.png").toURL());
-		b.addIData("test4", new File("C:\\Users\\James.M\\OneDrive\\Desktop\\rt\\t.png").toURL());
-		b.addIData("test5", new File("C:\\Users\\James.M\\OneDrive\\Desktop\\rt\\tt.png").toURL());
-		b.loadToImages();
-		int val = 0;
-		while (val >= -1) {
-			val++;
-		}
+
 		Cube cube = new Cube(0, 0, 0, 10, Colors.Salmon);
 //		BasicMeshBuilder builder = new BasicMeshBuilder();
 //		addRand(builder, 10);

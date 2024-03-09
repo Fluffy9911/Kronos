@@ -29,6 +29,7 @@ public class BaseComponent implements Comp, Drawable, Persistant {
 	private BaseComponent parent;
 	String id;
 	DragNDrop dnd;
+	protected int frame = 0;
 
 	public BaseComponent(BasePosition bp, boolean cdren, boolean moveable, boolean hidden, String id) {
 		super();
@@ -80,7 +81,9 @@ public class BaseComponent implements Comp, Drawable, Persistant {
 		if (moveable) {
 			dnd.reposition(this.bp.getProvider(), bp, null);
 		}
-
+		if (frame > 0) {
+			frame--;
+		}
 	}
 
 	@Override
@@ -293,4 +296,17 @@ public class BaseComponent implements Comp, Drawable, Persistant {
 	public void hover(int x, int y) {
 
 	}
+
+	/**
+	 * @return
+	 */
+	public boolean canRegisterClicks() {
+		// TODO Auto-generated method stub
+		return frame == 0;
+	}
+
+	public void resetClicks(int i) {
+		frame = i;
+	}
+
 }

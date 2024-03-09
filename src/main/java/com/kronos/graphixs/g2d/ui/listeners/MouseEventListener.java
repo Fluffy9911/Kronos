@@ -22,15 +22,19 @@ public class MouseEventListener implements UIListener {
 	public void listen(BaseComponent bc, States states) {
 		int mx = (int) InputHandler.getLastMouseX();
 		int my = (int) InputHandler.getLastMouseY();
-
-		if (bc.getPosition().pos().contains(mx, my) && InputHandler.isLeftReleased()) {
-			event.clicked(InteractionType.LEFT_CLICK);
-		}
-		if (bc.getPosition().pos().contains(mx, my) && InputHandler.isRightReleased()) {
-			event.clicked(InteractionType.RIGHT_CLICK);
-		}
-		if (bc.getPosition().pos().contains(mx, my) && InputHandler.isKeyReleased(GLFW.GLFW_KEY_SPACE)) {
-			event.clicked(InteractionType.KEYBOARD);
+		if (bc.canRegisterClicks()) {
+			if (bc.getPosition().pos().contains(mx, my) && InputHandler.isLeftReleased()) {
+				event.clicked(InteractionType.LEFT_CLICK);
+				bc.resetClicks(5);
+			}
+			if (bc.getPosition().pos().contains(mx, my) && InputHandler.isRightReleased()) {
+				event.clicked(InteractionType.RIGHT_CLICK);
+				bc.resetClicks(5);
+			}
+			if (bc.getPosition().pos().contains(mx, my) && InputHandler.isKeyReleased(GLFW.GLFW_KEY_SPACE)) {
+				event.clicked(InteractionType.KEYBOARD);
+				bc.resetClicks(5);
+			}
 		}
 		if (bc.getPosition().pos().contains(mx, my)) {
 			hovering = true;
