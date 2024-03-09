@@ -1,5 +1,6 @@
 package com.kronos;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -16,11 +17,14 @@ import com.kronos.io.Config;
 import com.kronos.io.FileLoader;
 import com.kronos.io.ResourceIdentifier;
 import com.kronos.io.assets.InternalAssetLoader;
+import com.kronos.plugin.PluginLoader;
 
 public class Kronos {
 
 	private static List<EngineListener> listeners;
 	private static HashMap<String, Config> registeredConfig;
+
+	private static PluginLoader plugin_loader;
 
 	// config
 	public static Config k_config = new Config();
@@ -30,6 +34,8 @@ public class Kronos {
 	public static boolean logdebug = false;
 	public static boolean extensivedebug = false;
 	public static int max_threads = 2;
+
+	public static boolean plugins = false;
 
 	// resources
 	public static String config_loc = "configs/main";
@@ -99,6 +105,15 @@ public class Kronos {
 			buildConfig(k_config);
 		}
 		debug.getLogger().debug("Base Kronos done setup");
+		debug.getLogger().debug("Startup Config: {}", startupInfo());
+		if (plugins) {
+			debug.getLogger().debug("Beginning Plugin loading");
+			try {
+				plugin_loader.loadPlugins();
+			} catch (Exception e) {
+				debug.getLogger().error("Failed loading plugins: {}", e);
+			}
+		}
 	}
 
 	/**
@@ -199,4 +214,39 @@ public class Kronos {
 		}
 		graphixs.startGlSequence(debug.getLogger());
 	}
+
+	public static void enablePlugins(File folder) {
+		plugins = true;
+		plugin_loader = new PluginLoader(folder);
+	}
+
+	private static String startupInfo() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("{UsingDebug=" + debg).append(", LoggingDebug=" + logdebug)
+				.append(", ExtensiveDebug=" + extensivedebug).append(", MaxThreads=" + max_threads)
+				.append(", UsingPlugins=" + plugins);
+		if (plugin_loader != null) {
+			sb.append(", PluginLocation=" + plugin_loader.getFolder().getAbsolutePath());
+		}
+		sb.append("}");
+		return sb.toString();
+	}
+
+	private static void loadPlugins() {
+		if (plugin_loader != null) {
+
+		}
+
+	}
+
+	/**
+	 * 
+	 */
+	public static void shutdown() {
+		Kronos.debug.getLogger().debug("Shutting down");
+		Kronos.graphixs.closeResources();
+		System.exit(0);
+
+	}
+
 }

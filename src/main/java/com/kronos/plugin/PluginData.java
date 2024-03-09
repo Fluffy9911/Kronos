@@ -3,6 +3,10 @@
  */
 package com.kronos.plugin;
 
+import org.apache.logging.log4j.Logger;
+
+import com.kronos.Kronos;
+
 /**
  * 
  */
@@ -42,6 +46,10 @@ public class PluginData {
 	 */
 	public void setPlugin(Plugin plugin) {
 		this.plugin = plugin;
+	}
+
+	public Logger getKronosLogger() {
+		return Kronos.debug.getLogger();
 	}
 
 }

@@ -14,7 +14,6 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.jar.JarFile;
@@ -22,13 +21,13 @@ import java.util.jar.JarFile;
 import org.apache.logging.log4j.Logger;
 import org.reflections.Reflections;
 import org.reflections.scanners.MethodAnnotationsScanner;
-import org.reflections.scanners.SubTypesScanner;
 import org.reflections.util.ClasspathHelper;
 import org.reflections.util.ConfigurationBuilder;
 
 import com.kronos.Kronos;
 import com.kronos.core.event.EngineListener;
 import com.kronos.io.Config;
+import com.kronos.plugin.info.AuthorInfo;
 
 /**
  * 
@@ -40,23 +39,11 @@ public class PluginLoader {
 	ArrayList<PluginData> pd = new ArrayList<PluginData>();
 	ArrayList<Method> mm = new ArrayList<>();
 	public static URLClassLoader cu;
+	ArrayList<AuthorInfo> authors = new ArrayList<>();
 
 	public PluginLoader(File pfolder) {
 		this.pfolder = pfolder;
-		List<ClassLoader> classLoadersList = new LinkedList<ClassLoader>();
-		classLoadersList.add(ClasspathHelper.contextClassLoader());
-		classLoadersList.add(ClasspathHelper.staticClassLoader());
-		reflections = new Reflections(new ConfigurationBuilder().setUrls(ClasspathHelper.forClassLoader())
-				.addClassLoaders(this.getClass().getClassLoader())
-				.setUrls(ClasspathHelper.forClassLoader(classLoadersList.toArray(new ClassLoader[0])))
-				.setScanners(new MethodAnnotationsScanner(), new SubTypesScanner(false)));
-		Set<Class<?>> c = reflections.getSubTypesOf(Object.class);
 
-		for (Class<?> cl : c) {
-
-			l.debug("Reflected Class: {}", cl.getName());
-
-		}
 	}
 
 	public ArrayList<PluginData> loadPlugins() throws Exception {
@@ -76,6 +63,8 @@ public class PluginLoader {
 			l.debug("Found Plugin: {}", pp.toString());
 			jf.add(pp.toFile());
 		});
+		l.debug("Found Plugins; {}", jf.toString());
+
 		return jf;
 	}
 
@@ -149,7 +138,7 @@ public class PluginLoader {
 	private List<PluginData> executeAll(List<Method> mms)
 			throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		ArrayList<PluginData> pd = new ArrayList<>();
-		System.out.println(System.getProperty("java.class.path"));
+
 		for (Iterator iterator = mms.iterator(); iterator.hasNext();) {
 			Method m = (Method) iterator.next();
 			if (m.getParameterCount() == 0) {
@@ -186,8 +175,11 @@ public class PluginLoader {
 
 			});
 			Kronos.graphixs.add(p.plugin.getPluginResource());
+			authors.add(p.plugin.getAuthorInfo());
+			l.debug("Plugin: {}", p.plugin.getAuthorInfo().toString());
 		}
 
+		checkDependencies();
 		return pd;
 	}
 
@@ -204,4 +196,58 @@ public class PluginLoader {
 
 		return classNames;
 	}
+
+	/**
+	 * @return
+	 */
+	public File getFolder() {
+		// TODO Auto-generated method stub
+		return pfolder;
+	}
+
+	public boolean hasDependencies(AuthorInfo au) {
+		if (au == null || au.getDependencies() == null) {
+			// No dependencies or invalid AuthorInfo
+			return false;
+		}
+
+		String[] deps = au.getDependencies();
+
+		for (String dependency : deps) {
+			boolean dependencyFound = false;
+
+			for (AuthorInfo author : authors) {
+				if (dependency.equals(author.getUid())) {
+					// Dependency found
+					dependencyFound = true;
+					break;
+				}
+			}
+
+			if (!dependencyFound) {
+				// Dependency not found
+				return false;
+			}
+		}
+
+		// All dependencies found
+		return true;
+	}
+
+	public void checkDependencies() {
+		for (AuthorInfo au : authors) {
+			if (!hasDependencies(au)) {
+				l.warn("Plugin: {} has missing dependencies: {}", au.getUid(), au.getDependencies());
+				if (au.isSoftDeps()) {
+					l.warn("Plugin: {} has soft dependencies enabled continueing execution: {}", au.getUid(),
+							au.getDependencies());
+				} else {
+
+					Kronos.shutdown();
+
+				}
+			}
+		}
+	}
+
 }

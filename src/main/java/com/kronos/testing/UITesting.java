@@ -3,9 +3,7 @@
  */
 package com.kronos.testing;
 
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.net.MalformedURLException;
+import java.io.File;
 import java.util.List;
 import java.util.Map;
 
@@ -17,8 +15,6 @@ import com.kronos.graphixs.color.Color;
 import com.kronos.graphixs.color.Colors;
 import com.kronos.graphixs.display.ScreenConfig;
 import com.kronos.graphixs.g2d.ui.ComponentHandler;
-import com.kronos.io.Folder;
-import com.kronos.plugin.PluginLoader;
 
 /**
  * 
@@ -44,30 +40,7 @@ public class UITesting extends Game {
 
 		ch.createComps();
 		ch.load();
-		PluginLoader pl = new PluginLoader(Folder.createFolder("kronos/plugins"));
-		PluginLoader pll = new PluginLoader(Folder.createFolder("kronos/plugins/libs"));
-		try {
-			pll.loadPlugins();
-			pl.loadPlugins();
-		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+
 	}
 
 	@Override
@@ -137,6 +110,7 @@ public class UITesting extends Game {
 	}
 
 	public static void main(String[] args) {
+		AppLoader.addPluginNature(new File("kronos/plugins"));
 		AppLoader.begin(new UITesting());
 	}
 }

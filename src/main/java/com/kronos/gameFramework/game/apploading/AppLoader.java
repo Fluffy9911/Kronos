@@ -82,4 +82,7 @@ public class AppLoader {
 		log.debug("textures loaded");
 	}
 
+	public static void addPluginNature(File folder) {
+		Kronos.enablePlugins(folder);
+	}
 }
