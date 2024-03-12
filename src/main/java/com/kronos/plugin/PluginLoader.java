@@ -8,11 +8,14 @@ import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -37,9 +40,10 @@ public class PluginLoader {
 	Logger l = Kronos.debug.getLogger();
 	Reflections reflections;
 	ArrayList<PluginData> pd = new ArrayList<PluginData>();
-	ArrayList<Method> mm = new ArrayList<>();
+	HashSet<Method> mm = new HashSet<>();
 	public static URLClassLoader cu;
 	ArrayList<AuthorInfo> authors = new ArrayList<>();
+	HashMap<String, Class<?>> classMap = new HashMap<>();
 
 	public PluginLoader(File pfolder) {
 		this.pfolder = pfolder;
@@ -57,7 +61,7 @@ public class PluginLoader {
 		ArrayList<File> jf = new ArrayList<>();
 
 		Files.walk(pfolder.toPath()).filter((p) -> {
-			l.debug("File: {}", p.toFile().getAbsolutePath());
+
 			return !p.toFile().isDirectory() && p.toFile().getAbsolutePath().endsWith(".jar");
 		}).forEach((pp) -> {
 			l.debug("Found Plugin: {}", pp.toString());
@@ -69,31 +73,54 @@ public class PluginLoader {
 	}
 
 	private void loadToClassPath(ArrayList<File> files) throws Exception {
-
+		ArrayList<URL> los = new ArrayList<>();
 		for (Iterator iterator = files.iterator(); iterator.hasNext();) {
 			File jarFile = (File) iterator.next();
 
-			l.debug("Loading classes of: {}", jarFile.getName());
-			ArrayList<String> names = (ArrayList<String>) getAllClassNamesFromJar(jarFile.getAbsolutePath());
-
-			URLClassLoader ucl = new URLClassLoader(new URL[] { jarFile.toURI().toURL() },
-					this.getClass().getClassLoader());
-
-			for (Iterator iterator2 = names.iterator(); iterator2.hasNext();) {
-				String string = (String) iterator2.next();
-				Class<?> c = ucl.loadClass(string);
-
-				ArrayList<Method> ms = new ArrayList<Method>(Arrays.asList(c.getMethods()));
-				ms.removeIf((m) -> {
-					return !isMethodAnnotated(m, PluginEntry.class) && !(m.getReturnType().equals(PluginData.class)
-							&& m.isAccessible() && m.getParameterCount() == 0);
-				});
-				this.mm.addAll(ms);
-				l.debug("Loaded Class: {}", string);
-				// executeAll(gatherMethods(c));
-			}
+			los.add(jarFile.toURI().toURL());
+		}
+		URLClassLoader ucl = new URLClassLoader(los.toArray(new URL[los.size()]));
+		for (Iterator iterator = los.iterator(); iterator.hasNext();) {
+			URL url = (URL) iterator.next();
+			loadClassesAndMethods(new File(url.getFile()), ucl);
 		}
 
+	}
+
+	/**
+	 * @param jarFile
+	 * @throws Exception
+	 * @throws MalformedURLException
+	 * @throws ClassNotFoundException
+	 * @throws SecurityException
+	 */
+	public void loadClassesAndMethods(File jarFile, URLClassLoader ucl)
+			throws Exception, MalformedURLException, ClassNotFoundException, SecurityException {
+		l.debug("Loading classes of: {}", jarFile.getName());
+		ArrayList<String> names = (ArrayList<String>) getAllClassNamesFromJar(jarFile.getAbsolutePath());
+
+		for (Iterator iterator2 = names.iterator(); iterator2.hasNext();) {
+			String string = (String) iterator2.next();
+			Class<?> c = ucl.loadClass(string);
+			if (classMap.get(string) != null) {
+				c = classMap.get(string);
+			} else {
+				c = classMap.put(string, c);
+			}
+			if (c == null) {
+				c = ucl.loadClass(string);
+			}
+			ArrayList<Method> ms = new ArrayList<Method>(Arrays.asList(c.getMethods()));
+
+			ms.removeIf((m) -> {
+				return !isMethodAnnotated(m, PluginEntry.class) && !(m.getReturnType().equals(PluginData.class)
+						&& m.isAccessible() && m.getParameterCount() == 0) && !mm.contains(m);
+			});
+			this.mm.addAll(ms);
+
+			l.debug("Loaded Class: {}", string);
+			// executeAll(gatherMethods(c));
+		}
 	}
 
 	public static boolean isMethodAnnotated(Method method, Class<?> annotationName) {
@@ -135,14 +162,14 @@ public class PluginLoader {
 		return result;
 	}
 
-	private List<PluginData> executeAll(List<Method> mms)
+	private List<PluginData> executeAll(HashSet<Method> mms)
 			throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		ArrayList<PluginData> pd = new ArrayList<>();
 
 		for (Iterator iterator = mms.iterator(); iterator.hasNext();) {
 			Method m = (Method) iterator.next();
 			if (m.getParameterCount() == 0) {
-				pd.add((PluginData) m.invoke(null, null));
+				pd.add((PluginData) m.invoke(null));
 			} else {
 				l.debug("Unable to execute method: {}, in class: {}, due to it not being a static method that has no paramaters and returns a valid PluginData instance",
 						m.getName(), m.getClass().getSimpleName());

@@ -9,7 +9,7 @@ import java.util.Arrays;
  * 
  */
 public class AuthorInfo {
-	String name, uid;
+	String name, uid, author = "no_auth";
 	String version;
 
 	String[] dependencies;
@@ -30,8 +30,22 @@ public class AuthorInfo {
 		this.softDeps = softDeps;
 	}
 
+	public AuthorInfo(String name, String uid, String author, String version, String[] dependencies, boolean softDeps) {
+		this.name = name;
+		this.uid = uid;
+		this.author = author;
+		this.version = version;
+		this.dependencies = dependencies;
+		this.softDeps = softDeps;
+	}
+
 	public static AuthorInfo create(String name, String uid, String version, String... dependencies) {
 		return new AuthorInfo(name, uid, version, dependencies);
+	}
+
+	public static AuthorInfo create(String name, String uid, String version, String author, boolean softDeps,
+			String... dependencies) {
+		return new AuthorInfo(name, uid, author, version, dependencies, softDeps);
 	}
 
 	/**
@@ -116,6 +130,11 @@ public class AuthorInfo {
 		if (uid != null) {
 			builder.append("uid=");
 			builder.append(uid);
+			builder.append(", ");
+		}
+		if (author != null) {
+			builder.append("author=");
+			builder.append(author);
 			builder.append(", ");
 		}
 		if (version != null) {

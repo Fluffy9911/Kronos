@@ -3,9 +3,12 @@
  */
 package com.kronos.plugin;
 
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.kronos.Kronos;
+import com.kronos.io.ResourceIdentifier;
+import com.kronos.io.config.ConfigFile;
 
 /**
  * 
@@ -13,11 +16,11 @@ import com.kronos.Kronos;
 public class PluginData {
 
 	String name;
-	Plugin plugin;
+	static Plugin plugin;
 
 	public PluginData(String name, Plugin plugin) {
 		this.name = name;
-		this.plugin = plugin;
+		PluginData.plugin = plugin;
 	}
 
 	/**
@@ -45,11 +48,27 @@ public class PluginData {
 	 * @param plugin the plugin to set
 	 */
 	public void setPlugin(Plugin plugin) {
-		this.plugin = plugin;
+		PluginData.plugin = plugin;
 	}
 
-	public Logger getKronosLogger() {
-		return Kronos.debug.getLogger();
+	public static Logger getKronosLogger() {
+		return LogManager.getLogger();
+	}
+
+	public static ResourceIdentifier getIdentifierOut() {
+		return Kronos.kronos_out;
+	}
+
+	public static ResourceIdentifier getIdentifierRid() {
+		return Kronos.kronos_rid;
+	}
+
+	public static ConfigFile createConfig(String path, String name) {
+		if (name.endsWith(".json")) {
+			return new ConfigFile(path, name.replace(".json", ""), getIdentifierOut());
+		} else {
+			return new ConfigFile(path, name, getIdentifierOut());
+		}
 	}
 
 }
