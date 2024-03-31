@@ -36,7 +36,7 @@ public class UITesting extends Game {
 
 	@Override
 	public void init() {
-		ch = Kronos.graphixs.g2d.createHandler();
+		ch = Kronos.graphixs.g2d.createHandler(Kronos.graphixs.g2d);
 
 		ch.createComps();
 		ch.load();

@@ -3,7 +3,7 @@
  */
 package com.kronos.graphixs.g2d.ui.components.panel;
 
-import com.kronos.graphixs.g2d.Graphixs2D;
+import com.kronos.graphixs.g2d.Abstract2DGraphixs;
 import com.kronos.graphixs.g2d.TextureBatch;
 import com.kronos.graphixs.g2d.fonts.FontRenderer;
 import com.kronos.graphixs.g2d.ui.BaseComponent;
@@ -28,7 +28,7 @@ public class ComponentPanel extends BaseComponent {
 	}
 
 	@Override
-	public void render(TextureBatch batch, FontRenderer fr, Graphixs2D g) {
+	public void render(TextureBatch batch, FontRenderer fr, Abstract2DGraphixs g) {
 
 		super.render(batch, fr, g);
 

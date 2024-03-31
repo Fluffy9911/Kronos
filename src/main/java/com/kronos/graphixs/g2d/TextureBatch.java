@@ -9,7 +9,7 @@ import com.kronos.graphixs.texture.Texture;
 
 public class TextureBatch {
 	List<TexturedMesh> mesh;
-	Graphixs2D g;
+	Abstract2DGraphixs g;
 
 	public TextureBatch() {
 		super();
@@ -18,7 +18,7 @@ public class TextureBatch {
 
 	}
 
-	public void begin(Graphixs2D g) {
+	public void begin(Abstract2DGraphixs g) {
 		this.g = g;
 	}
 

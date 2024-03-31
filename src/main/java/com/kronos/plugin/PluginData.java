@@ -18,6 +18,8 @@ public class PluginData {
 	String name;
 	static Plugin plugin;
 
+	String[] pluginargs;
+
 	public PluginData(String name, Plugin plugin) {
 		this.name = name;
 		PluginData.plugin = plugin;
@@ -61,6 +63,10 @@ public class PluginData {
 
 	public static ResourceIdentifier getIdentifierRid() {
 		return Kronos.kronos_rid;
+	}
+
+	public String[] getPluginargs() {
+		return new String[] { "-noargs" };
 	}
 
 	public static ConfigFile createConfig(String path, String name) {

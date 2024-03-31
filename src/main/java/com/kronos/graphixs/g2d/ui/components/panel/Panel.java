@@ -1,7 +1,7 @@
 package com.kronos.graphixs.g2d.ui.components.panel;
 
 import com.kronos.Kronos;
-import com.kronos.graphixs.g2d.Graphixs2D;
+import com.kronos.graphixs.g2d.Abstract2DGraphixs;
 import com.kronos.graphixs.g2d.TextureBatch;
 import com.kronos.graphixs.g2d.fonts.FontRenderer;
 import com.kronos.graphixs.g2d.ui.BaseComponent;
@@ -19,7 +19,7 @@ public class Panel extends BaseComponent {
 	}
 
 	@Override
-	public void render(TextureBatch batch, FontRenderer fr, Graphixs2D g) {
+	public void render(TextureBatch batch, FontRenderer fr, Abstract2DGraphixs g) {
 		this.drawHere(batch, panel);
 		int fh = (int) fr.getSize(this.id(), fr.useDefaultFont()).getHeight();
 		fr.renderText(this.id(), (int) this.bp.pos().getX() + 2, (int) this.bp.pos().getY() + 2,

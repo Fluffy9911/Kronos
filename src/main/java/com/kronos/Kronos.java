@@ -20,7 +20,7 @@ import com.kronos.io.assets.InternalAssetLoader;
 import com.kronos.plugin.PluginLoader;
 
 public class Kronos {
-
+	public static String[] args;
 	private static List<EngineListener> listeners;
 	private static HashMap<String, Config> registeredConfig;
 
@@ -146,6 +146,19 @@ public class Kronos {
 	 * @param sc
 	 */
 	public static void startInDev(ScreenConfig sc) {
+		long time = System.currentTimeMillis();
+		defaultKronosInit();
+		for (Iterator iterator = listeners.iterator(); iterator.hasNext();) {
+			EngineListener el = (EngineListener) iterator.next();
+			el.engineStart();
+		}
+		graphixs.startGlSequenceDev(debug.getLogger());
+		createGLScreen(sc);
+		debug.getLogger().debug("Loading time in DEV: {}MS", (System.currentTimeMillis() - time));
+	}
+
+	public static void startInDev(ScreenConfig sc, String[] args) {
+		Kronos.args = args;
 		long time = System.currentTimeMillis();
 		defaultKronosInit();
 		for (Iterator iterator = listeners.iterator(); iterator.hasNext();) {

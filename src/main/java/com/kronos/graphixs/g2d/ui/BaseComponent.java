@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.kronos.graphixs.g2d.Graphixs2D;
+import com.kronos.graphixs.g2d.Abstract2DGraphixs;
 import com.kronos.graphixs.g2d.TextureBatch;
 import com.kronos.graphixs.g2d.fonts.FontRenderer;
 import com.kronos.graphixs.g2d.ui.components.Drawable;
@@ -223,7 +223,7 @@ public class BaseComponent implements Comp, Drawable, Persistant {
 	}
 
 	@Override
-	public void render(TextureBatch batch, FontRenderer fr, Graphixs2D g) {
+	public void render(TextureBatch batch, FontRenderer fr, Abstract2DGraphixs g) {
 
 		forEachChild((c, h) -> {
 			c.render(batch, fr, g);

@@ -4,15 +4,15 @@ import java.util.concurrent.TimeUnit;
 
 public abstract class FixedLoopSystem {
 
-	private int updatesPerSecond;
 	double deltaTime = 0;
 	int framenum = 0;
-	private long last = 0, current;
+	// private long last = 0, current;
 	private boolean running = false;
 	private boolean paused = false, flag = false;
 	private int fps = 0;
 	private int frameCount = 0;
 	double TARGET_FPS = 60;
+	Accessor accessor;
 
 	public FixedLoopSystem(int updatesPerSecond) {
 		TARGET_FPS = updatesPerSecond;
@@ -21,9 +21,9 @@ public abstract class FixedLoopSystem {
 	public void start() {
 		running = true;
 		flag = true;
-
+		accessor = new Accessor(this);
 		// This value would probably be stored elsewhere.
-		double GAME_HERTZ = TARGET_FPS / 2;
+		double GAME_HERTZ = TARGET_FPS;
 		// Calculate how many ns each frame should take for our target game hertz.
 		double TIME_BETWEEN_UPDATES = 1000000000 / GAME_HERTZ;
 		// At the very most we will update the game this many times before a new render.
@@ -43,7 +43,7 @@ public abstract class FixedLoopSystem {
 		while (running) {
 			if (flag) {
 				// This value would probably be stored elsewhere.
-				GAME_HERTZ = TARGET_FPS / 2;
+				GAME_HERTZ = TARGET_FPS;
 				// Calculate how many ns each frame should take for our target game hertz.
 				TIME_BETWEEN_UPDATES = 1000000000 / GAME_HERTZ;
 				// At the very most we will update the game this many times before a new render.
@@ -86,16 +86,9 @@ public abstract class FixedLoopSystem {
 						updateCount++;
 					}
 
-					// If for some reason an update takes forever, we don't want to do an insane
-					// number of catchups.
-					// If you were doing some sort of game that needed to keep EXACT time, you would
-					// get rid of this.
 					if (now - lastUpdateTime > TIME_BETWEEN_UPDATES) {
 						lastUpdateTime = now - TIME_BETWEEN_UPDATES;
 					}
-
-					// Render. To do so, we need to calculate interpolation for a smooth render.
-					float interpolation = Math.min(1.0f, (float) ((now - lastUpdateTime) / TIME_BETWEEN_UPDATES));
 
 					update();
 					frameCount++;
@@ -118,12 +111,6 @@ public abstract class FixedLoopSystem {
 							&& now - lastUpdateTime < TIME_BETWEEN_UPDATES && TARGET_FPS != 0) {
 						Thread.yield();
 
-						// This stops the app from consuming all your CPU. It makes this slightly less
-						// accurate, but is worth it.
-						// You can remove this line and it will still work (better), your CPU just
-						// climbs on certain OSes.
-						// FYI on some OS's this can cause pretty bad stuttering. Scroll down and have a
-						// look at different peoples' solutions to this.
 						try {
 							Thread.sleep(1);
 						} catch (Exception e) {
@@ -149,7 +136,7 @@ public abstract class FixedLoopSystem {
 	}
 
 	public Accessor getAccessor() {
-		return new Accessor(this);
+		return accessor;
 	}
 
 	private static class Accessor implements LoopAccessor {

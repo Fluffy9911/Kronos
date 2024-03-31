@@ -94,6 +94,12 @@ public abstract class RenderShader extends BaseShader {
 
 	@Override
 	public void compileShader() {
+		// System.out.println(vertexSource + ":" + fragmentSource);
+//		if (fragmentSource == null || vertexSource == null) {
+//			System.out.println("Source is null: " + vertexSource + " VERTEX:FRAGMENT " + fragmentSource);
+//			return;
+//		}
+
 		setAttribs();
 		int vertexShaderID = compileAndCreateShader();
 

@@ -47,7 +47,9 @@ public class PluginLoader {
 
 	public PluginLoader(File pfolder) {
 		this.pfolder = pfolder;
-
+		if (!this.pfolder.exists()) {
+			this.pfolder.mkdirs();
+		}
 	}
 
 	public ArrayList<PluginData> loadPlugins() throws Exception {
@@ -84,7 +86,7 @@ public class PluginLoader {
 			URL url = (URL) iterator.next();
 			loadClassesAndMethods(new File(url.getFile()), ucl);
 		}
-
+		l.debug("Loaded: {} Plugins", files.size());
 	}
 
 	/**
@@ -204,6 +206,7 @@ public class PluginLoader {
 			Kronos.graphixs.add(p.plugin.getPluginResource());
 			authors.add(p.plugin.getAuthorInfo());
 			l.debug("Plugin: {}", p.plugin.getAuthorInfo().toString());
+			readPArgs(p);
 		}
 
 		checkDependencies();
@@ -275,6 +278,18 @@ public class PluginLoader {
 				}
 			}
 		}
+	}
+
+	public void readPArgs(PluginData p) {
+		String[] args = p.getPluginargs();
+
+		for (int i = 0; i < args.length; i++) {
+			if (args[i].equals("-pagent")) {
+				PluginAgentLoader.attach(new File(args[i + 1]));
+			}
+
+		}
+
 	}
 
 }

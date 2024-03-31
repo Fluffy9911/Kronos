@@ -33,7 +33,7 @@ public class Testing {
 	public static int i = 200;
 
 	public static void main(String[] args) throws MalformedURLException {
-
+		Kronos.args = args;
 		Kronos.startInDev(new ScreenConfig() {
 
 			@Override
@@ -91,7 +91,7 @@ public class Testing {
 		Canvas2D c = new Canvas2D(400, 400);
 		c.clear(Colors.White.rgb());
 		c.noiseShort();
-		TextureBatch tb = g2d.createBatch();
+		TextureBatch tb = g2d.createBatch(g2d);
 		ShapeRenderer sr = g.shapeRenderer;
 		// sr.loadIn("test_shape",
 		// Kronos.loader.tryLoadImage("texture/test_shape.png"));

@@ -1,5 +1,6 @@
 package com.kronos.graphixs.geometry;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -13,7 +14,7 @@ import org.lwjgl.opengl.GL40;
 import com.kronos.graphixs.FrameBuffer;
 import com.kronos.graphixs.shaders.render.RenderShader;
 
-public class Mesh {
+public class Mesh implements Serializable {
 	private int vaoID;
 	private int vboID;
 	private int eboID;
@@ -162,7 +163,7 @@ public class Mesh {
 		return indexCount;
 	}
 
-	public static class AttributeInfo {
+	public static class AttributeInfo implements Serializable {
 		String name;
 		int size;
 		int type;
@@ -221,6 +222,20 @@ public class Mesh {
 			return loc;
 		}
 
+	}
+
+	/**
+	 * @return the v
+	 */
+	public float[] getV() {
+		return v;
+	}
+
+	/**
+	 * @return the i
+	 */
+	public int[] getI() {
+		return i;
 	}
 
 }

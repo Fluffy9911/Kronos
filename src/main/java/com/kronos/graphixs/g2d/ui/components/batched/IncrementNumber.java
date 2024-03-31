@@ -5,7 +5,7 @@ import java.awt.Color;
 import org.joml.Vector2i;
 
 import com.kronos.graphixs.color.Colors;
-import com.kronos.graphixs.g2d.Graphixs2D;
+import com.kronos.graphixs.g2d.Abstract2DGraphixs;
 import com.kronos.graphixs.g2d.TextureBatch;
 import com.kronos.graphixs.g2d.fonts.FontRenderer;
 import com.kronos.graphixs.g2d.ui.BaseComponent;
@@ -27,7 +27,7 @@ public class IncrementNumber extends BaseComponent {
 		bigger = new BasicClickable(bp.translate(c.x() - 10, -11, 10, 10), false, false, hidden,
 				id + "_increment_button") {
 			@Override
-			public void render(TextureBatch batch, FontRenderer fr, Graphixs2D g) {
+			public void render(TextureBatch batch, FontRenderer fr, Abstract2DGraphixs g) {
 				this.drawHere(batch, getBase());
 			}
 
@@ -64,7 +64,7 @@ public class IncrementNumber extends BaseComponent {
 				id + "_decrement_button") {
 
 			@Override
-			public void render(TextureBatch batch, FontRenderer fr, Graphixs2D g) {
+			public void render(TextureBatch batch, FontRenderer fr, Abstract2DGraphixs g) {
 				this.drawHere(batch, getBase());
 			}
 
@@ -108,7 +108,7 @@ public class IncrementNumber extends BaseComponent {
 	}
 
 	@Override
-	public void render(TextureBatch batch, FontRenderer fr, Graphixs2D g) {
+	public void render(TextureBatch batch, FontRenderer fr, Abstract2DGraphixs g) {
 		Vector2i c = center(bp.pos().getX(), bp.pos().getY(), bp.pos().getW(), bp.pos().getH());
 		fr.renderText("Value: " + num, c.x(), c.y(), fr.useDefaultFont(), Color.BLACK, batch);
 		bigger.getPosition().pos().setX(c.x() - 10);

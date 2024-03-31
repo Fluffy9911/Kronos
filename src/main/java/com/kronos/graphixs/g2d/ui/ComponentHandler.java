@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import com.kronos.graphixs.g2d.Graphixs2D;
+import com.kronos.graphixs.g2d.Abstract2DGraphixs;
 import com.kronos.graphixs.g2d.ScreenProvider;
 import com.kronos.graphixs.g2d.TextureBatch;
 import com.kronos.graphixs.g2d.fonts.FontRenderer;
@@ -34,19 +34,19 @@ public class ComponentHandler {
 	HashMap<String, ConfigFile> configs;
 	ArrayList<Persistant> persistant = new ArrayList<Persistant>();
 	String default_pane = "default", current_pane = default_pane;
-	Graphixs2D g;
+	Abstract2DGraphixs g;
 	TextureBatch batcher;
 	FontRenderer fr;
 	ScreenProvider sp;
 	HashMap<String, HashMap<String, BaseComponent>> comps;
 	HashMap<String, BaseComponent> active = new HashMap<String, BaseComponent>();
 
-	public ComponentHandler(Graphixs2D g) {
+	public ComponentHandler(Abstract2DGraphixs g) {
 		configs = new HashMap<String, ConfigFile>();
 		comps = new HashMap<String, HashMap<String, BaseComponent>>();
 
 		this.g = g;
-		batcher = g.createBatch();
+		batcher = g.createBatch(this.g);
 		fr = FontRenderer.createDefault();
 
 	}
@@ -169,7 +169,7 @@ public class ComponentHandler {
 		batcher.end();
 	}
 
-	public Graphixs2D getG() {
+	public Abstract2DGraphixs getG() {
 		return g;
 	}
 
