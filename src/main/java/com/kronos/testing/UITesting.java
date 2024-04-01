@@ -59,6 +59,7 @@ public class UITesting extends Game {
 	public void onEnd() {
 		// TODO Auto-generated method stub
 		ch.saveData();
+		System.out.println(Kronos.hello());
 	}
 
 	@Override
@@ -110,7 +111,9 @@ public class UITesting extends Game {
 	}
 
 	public static void main(String[] args) {
+		Kronos.args = args;
 		AppLoader.addPluginNature(new File("kronos/plugins"));
 		AppLoader.begin(new UITesting());
+
 	}
 }
