@@ -11,7 +11,8 @@ import com.kronos.io.streamedlists.StreamDynamicList2D;
  * 
  */
 public class StreamedCanvas extends Canvas2D {
-	StreamDynamicList2D<Integer> list = new StreamDynamicList2D<Integer>(new File("kronos\\ccnvs"));
+	StreamDynamicList2D<Integer> list = new StreamDynamicList2D<Integer>(new File("kronos\\ccnvs"), height, height,
+			height, height);
 
 	/**
 	 * @param width

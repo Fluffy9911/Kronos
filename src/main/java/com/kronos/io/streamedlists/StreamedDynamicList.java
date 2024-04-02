@@ -14,9 +14,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 import com.kronos.io.StreamedList;
 
@@ -33,30 +31,39 @@ public class StreamedDynamicList<T> implements StreamedList<T> {
 	public StreamedDynamicList(File loc) {
 		this.loc = loc;
 		try {
-			raf = new RandomAccessFile(loc, "rw");
+			raf = new RandomAccessFile(loc, "rws");
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 
-	private Map<Integer, T> cache = new LinkedHashMap<Integer, T>(cacheSize, 0.75f, true) {
+	private ArrayList<T> cache = new ArrayList<T>() {
 		/**
 		 * 
 		 */
 		private static final long serialVersionUID = 1L;
 
 		@Override
-		protected boolean removeEldestEntry(Map.Entry<Integer, T> eldest) {
-			return size() > cacheSize;
+		public boolean add(T e) {
+			boolean added = super.add(e);
+			if (size() > cacheSize) {
+				removeEldest();
+			}
+			return added;
+		}
+
+		private void removeEldest() {
+			remove(0); // Remove the eldest entry (the first one in the list)
 		}
 	};
 
 	@Override
 	public T readIndex(int n) {
-		if (cache.containsKey(n)) {
-			return cache.get(n);
-		}
+//		if (cache.contains(loc)) {
+//			System.out.println("found in cache");
+//			return cache.get(n);
+//		}
 		if ((n * chunksize) < 0) {
 			return null;
 		}
@@ -92,6 +99,7 @@ public class StreamedDynamicList<T> implements StreamedList<T> {
 			}
 			raf.seek(n * chunksize);
 			raf.write(toBytes(t, chunksize));
+			// cache.put(n, t);
 			if (index < n) {
 				index = n;
 			}
@@ -133,7 +141,7 @@ public class StreamedDynamicList<T> implements StreamedList<T> {
 			if (!newFile.exists()) {
 				newFile.createNewFile();
 			}
-			try (RandomAccessFile newRaf = new RandomAccessFile(newFile, "rw")) {
+			try (RandomAccessFile newRaf = new RandomAccessFile(newFile, "rwa")) {
 				byte[] buffer = new byte[chunksize];
 				int bytesRead;
 				raf.seek(0);
@@ -215,7 +223,7 @@ public class StreamedDynamicList<T> implements StreamedList<T> {
 
 	@Override
 	public List<T> getCached() {
-		return new ArrayList<>(cache.values());
+		return cache;
 	}
 
 	@Override
@@ -245,7 +253,7 @@ public class StreamedDynamicList<T> implements StreamedList<T> {
 				byte[] buffer = new byte[chunksize];
 				int bytesRead = raf.read(buffer);
 				T obj = readFromBytes(buffer);
-				cache.put(i, obj);
+				// cache.put(i, obj);
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -256,9 +264,9 @@ public class StreamedDynamicList<T> implements StreamedList<T> {
 	public void writeContentsFromCache() {
 		try {
 			raf.setLength(0); // Clear the file before writing
-			for (Map.Entry<Integer, T> entry : cache.entrySet()) {
-				appendIndex(entry.getKey(), entry.getValue());
-			}
+//			for (Map.Entry<Integer, T> entry : cache.entrySet()) {
+//				appendIndex(entry.getKey(), entry.getValue());
+//			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
