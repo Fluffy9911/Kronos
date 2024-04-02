@@ -15,8 +15,6 @@ import com.kronos.graphixs.color.Color;
 import com.kronos.graphixs.color.Colors;
 import com.kronos.graphixs.display.ScreenConfig;
 import com.kronos.graphixs.g2d.ui.ComponentHandler;
-import com.kronos.io.ListTesting;
-import com.kronos.io.streamedlists.StreamedDynamicList;
 
 /**
  * 
@@ -39,9 +37,7 @@ public class UITesting extends Game {
 	@Override
 	public void init() {
 		ch = Kronos.graphixs.g2d.createHandler(Kronos.graphixs.g2d);
-		StreamedDynamicList<String> sdl = new StreamedDynamicList<>(new File("kronos\\sdtestperf"));
-		sdl.setChunkSize(12);
-		ListTesting.<String>test(sdl, new String[] { "Hello" }, 900000, 10000);
+
 		ch.createComps();
 		ch.load();
 
@@ -63,6 +59,7 @@ public class UITesting extends Game {
 	public void onEnd() {
 		// TODO Auto-generated method stub
 		ch.saveData();
+		System.out.println(Kronos.hello());
 	}
 
 	@Override
@@ -114,7 +111,9 @@ public class UITesting extends Game {
 	}
 
 	public static void main(String[] args) {
-		// AppLoader.addPluginNature(new File("kronos/plugins"));
+		Kronos.args = args;
+		AppLoader.addPluginNature(new File("kronos/plugins"));
 		AppLoader.begin(new UITesting());
+
 	}
 }

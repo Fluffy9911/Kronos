@@ -44,6 +44,7 @@ public class PluginLoader {
 	public static URLClassLoader cu;
 	ArrayList<AuthorInfo> authors = new ArrayList<>();
 	HashMap<String, Class<?>> classMap = new HashMap<>();
+	public boolean showloaded = true;
 
 	public PluginLoader(File pfolder) {
 		this.pfolder = pfolder;
@@ -86,6 +87,7 @@ public class PluginLoader {
 			URL url = (URL) iterator.next();
 			loadClassesAndMethods(new File(url.getFile()), ucl);
 		}
+
 		l.debug("Loaded: {} Plugins", files.size());
 	}
 
@@ -103,25 +105,34 @@ public class PluginLoader {
 
 		for (Iterator iterator2 = names.iterator(); iterator2.hasNext();) {
 			String string = (String) iterator2.next();
-			Class<?> c = ucl.loadClass(string);
-			if (classMap.get(string) != null) {
-				c = classMap.get(string);
-			} else {
-				c = classMap.put(string, c);
-			}
-			if (c == null) {
-				c = ucl.loadClass(string);
-			}
-			ArrayList<Method> ms = new ArrayList<Method>(Arrays.asList(c.getMethods()));
 
-			ms.removeIf((m) -> {
-				return !isMethodAnnotated(m, PluginEntry.class) && !(m.getReturnType().equals(PluginData.class)
-						&& m.isAccessible() && m.getParameterCount() == 0) && !mm.contains(m);
-			});
-			this.mm.addAll(ms);
+			try {
+				Class<?> c = ucl.loadClass(string,true);
+				if (classMap.get(string) != null) {
+					c = classMap.get(string);
+				} else {
+					c = classMap.put(string, c);
+				}
+				if (c == null) {
+					c = ucl.loadClass(string);
+				}
+				ArrayList<Method> ms = new ArrayList<Method>(Arrays.asList(c.getMethods()));
 
-			l.debug("Loaded Class: {}", string);
-			// executeAll(gatherMethods(c));
+				ms.removeIf((m) -> {
+					return !isMethodAnnotated(m, PluginEntry.class) && !(m.getReturnType().equals(PluginData.class)
+							&& m.isAccessible() && m.getParameterCount() == 0) && !mm.contains(m);
+				});
+				this.mm.addAll(ms);
+				if (showloaded)
+					l.debug("Loaded Class: {}", string);
+				// executeAll(gatherMethods(c));
+			} catch (NoClassDefFoundError e) {
+				l.debug("Skipping Class {}, unable to load", string);
+				continue;
+			} catch (SecurityException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 

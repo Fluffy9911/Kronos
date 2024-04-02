@@ -89,6 +89,7 @@ public class Kronos {
 	 * Starts Kronos default startup making config and listeners
 	 */
 	private static void defaultKronosInit() {
+		System.out.println(hello());
 		listeners = new ArrayList<>();
 		registeredConfig = new HashMap<>();
 
@@ -260,6 +261,10 @@ public class Kronos {
 		Kronos.graphixs.closeResources();
 		System.exit(0);
 
+	}
+
+	public static String hello() {
+		return "HI";
 	}
 
 }

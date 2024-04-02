@@ -18,7 +18,7 @@ public class PluginData {
 	String name;
 	static Plugin plugin;
 
-	String[] pluginargs;
+	String[] pluginargs = new String[] { "-noargs" };
 
 	public PluginData(String name, Plugin plugin) {
 		this.name = name;
@@ -66,7 +66,14 @@ public class PluginData {
 	}
 
 	public String[] getPluginargs() {
-		return new String[] { "-noargs" };
+		return pluginargs;
+	}
+
+	/**
+	 * @param pluginargs the pluginargs to set
+	 */
+	public void setPluginargs(String[] pluginargs) {
+		this.pluginargs = pluginargs;
 	}
 
 	public static ConfigFile createConfig(String path, String name) {
