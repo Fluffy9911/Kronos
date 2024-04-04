@@ -3,7 +3,6 @@
  */
 package com.kronos.testing;
 
-import java.io.File;
 import java.util.List;
 import java.util.Map;
 
@@ -15,6 +14,7 @@ import com.kronos.graphixs.color.Color;
 import com.kronos.graphixs.color.Colors;
 import com.kronos.graphixs.display.ScreenConfig;
 import com.kronos.graphixs.g2d.ui.ComponentHandler;
+import com.kronos.io.file.EasyConfig;
 
 /**
  * 
@@ -57,7 +57,7 @@ public class UITesting extends Game {
 
 	@Override
 	public void onEnd() {
-		// TODO Auto-generated method stub
+
 		ch.saveData();
 		System.out.println(Kronos.hello());
 	}
@@ -112,7 +112,22 @@ public class UITesting extends Game {
 
 	public static void main(String[] args) {
 		Kronos.args = args;
-		AppLoader.addPluginNature(new File("kronos/plugins"));
+		EasyConfig c = new EasyConfig("kronos\\conftest.txt");
+
+		c.appendComment("This is a comment");
+
+		c.appendInt("testint", 5, 0, 10);
+
+		c.appendFloat("test_float", 1, 0.5f, 3.5f);
+
+		c.appendComment("Comments?");
+
+		c.appendIntArray("testiarr", new int[] { 4, 78, 8, 65, 3, 8 }, 0, 110);
+		c.appendSection("Test Section");
+		c.appendIntAdv("testiadv", "a test value for description stuff", 5, 0, 100);
+
+		c.generateConfigFile(c);
+
 		AppLoader.begin(new UITesting());
 
 	}

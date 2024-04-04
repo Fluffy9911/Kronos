@@ -46,11 +46,14 @@ public class PluginLoader {
 	HashMap<String, Class<?>> classMap = new HashMap<>();
 	public boolean showloaded = true;
 
+	HashMap<PluginData, List<Class<?>>> pluginClasses = new HashMap<>();
+
 	public PluginLoader(File pfolder) {
 		this.pfolder = pfolder;
 		if (!this.pfolder.exists()) {
 			this.pfolder.mkdirs();
 		}
+
 	}
 
 	public ArrayList<PluginData> loadPlugins() throws Exception {
@@ -107,7 +110,7 @@ public class PluginLoader {
 			String string = (String) iterator2.next();
 
 			try {
-				Class<?> c = ucl.loadClass(string,true);
+				Class<?> c = ucl.loadClass(string);
 				if (classMap.get(string) != null) {
 					c = classMap.get(string);
 				} else {
