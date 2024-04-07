@@ -14,7 +14,8 @@ import com.kronos.graphixs.color.Color;
 import com.kronos.graphixs.color.Colors;
 import com.kronos.graphixs.display.ScreenConfig;
 import com.kronos.graphixs.g2d.ui.ComponentHandler;
-import com.kronos.io.file.EasyConfig;
+import com.kronos.io.RandomDataGenerator;
+import com.kronos.io.config.configbuilder.AdvancedBlockedConfig;
 
 /**
  * 
@@ -112,21 +113,18 @@ public class UITesting extends Game {
 
 	public static void main(String[] args) {
 		Kronos.args = args;
-		EasyConfig c = new EasyConfig("kronos\\conftest.txt");
 
-		c.appendComment("This is a comment");
+		AdvancedBlockedConfig abc = new AdvancedBlockedConfig("kronos\\ctestabc.txt");
+		abc.addSection("Integers");
+		abc.addIntComment("Test Int", 50, 0, 1000, "A test int between 0-1000!!!");
 
-		c.appendInt("testint", 5, 0, 10);
+		abc.addSectionSpaced("Other Stuff", 4);
+		abc.addBooleanArraySpacedComment("Bool Array", RandomDataGenerator.generateRandomBooleanArray(50), 1,
+				"Booleans!!!");
 
-		c.appendFloat("test_float", 1, 0.5f, 3.5f);
-
-		c.appendComment("Comments?");
-
-		c.appendIntArray("testiarr", new int[] { 4, 78, 8, 65, 3, 8 }, 0, 110);
-		c.appendSection("Test Section");
-		c.appendIntAdv("testiadv", "a test value for description stuff", 5, 0, 100);
-
-		c.generateConfigFile(c);
+		abc.addString("Test String", RandomDataGenerator.generateRandomString(100));
+		// Outputting nodes to file
+		abc.out("$", "%");
 
 		AppLoader.begin(new UITesting());
 
