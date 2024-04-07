@@ -81,6 +81,10 @@ public class GameObject implements Cloneable {
 		return true;
 	}
 
+	public boolean isSolid() {
+		return false;
+	}
+
 	/**
 	 * @return the tags
 	 */
@@ -122,7 +126,7 @@ public class GameObject implements Cloneable {
 		}
 	}
 
-	public void update() {
-
+	public void update(Position2D p) {
+		// System.out.println(p2d.getX());
 	}
 }

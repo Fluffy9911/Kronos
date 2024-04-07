@@ -3,10 +3,11 @@
  */
 package com.kronos.graphixs.g2d;
 
-import java.util.Iterator;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.logging.log4j.Logger;
+import org.joml.Matrix4f;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL40;
 
@@ -39,18 +40,19 @@ public class Abstract2DGraphixs implements SListener {
 		this.shader = shader;
 	}
 
-	public void batchRender(List<TexturedMesh> meshes) {
+	public void batchRender(HashMap<TexturedMesh, Matrix4f> meshes) {
 		rendered_textures = 0;
 
 		// graphixs_pane.start();
 		// Kronos.graphixs.clearScreen(Colors.White);
 		// render
+		for (Map.Entry<TexturedMesh, Matrix4f> entry : meshes.entrySet()) {
+			TexturedMesh tm = entry.getKey();
+			Matrix4f val = entry.getValue();
 
-		for (Iterator iterator = meshes.iterator(); iterator.hasNext();) {
-			TexturedMesh tm = (TexturedMesh) iterator.next();
 			tm.getDraw().use();
 			tm.getDraw().addUniform("proj", provider.collectTransform());
-
+			tm.getDraw().addUniform("transform", val);
 			tm.render();
 			rendered_textures++;
 			tm.getTexture().unbind();
