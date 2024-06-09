@@ -118,7 +118,7 @@ public class Kronos {
 	}
 
 	/**
-	 * Starts opengl
+	 * Starts Kronos and Graphixs backend
 	 * 
 	 * @param sc
 	 */

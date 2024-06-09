@@ -26,13 +26,13 @@ abstract class SimplexApp {
 			@Override
 			public int width() {
 				// TODO Auto-generated method stub
-				return 400;
+				return 500;
 			}
 
 			@Override
 			public int updateTime() {
 				// TODO Auto-generated method stub
-				return 60;
+				return -1;
 			}
 
 			@Override
@@ -44,7 +44,7 @@ abstract class SimplexApp {
 			@Override
 			public int height() {
 				// TODO Auto-generated method stub
-				return 400;
+				return 500;
 			}
 
 			@Override
@@ -64,6 +64,7 @@ abstract class SimplexApp {
 	public static void startApp(SimplexApp app) {
 		Kronos.start(app.getConfig());
 		app.setup();
+		Simplex.init();
 		Kronos.startDrawing((la) -> {
 			app.draw(la);
 		});
