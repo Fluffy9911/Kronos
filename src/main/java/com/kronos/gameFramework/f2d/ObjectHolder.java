@@ -7,9 +7,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import org.joml.Vector2f;
-
 import com.kronos.graphixs.g2d.TextureBatch;
+import com.kronos.io.InputHandler;
 
 /**
  * 
@@ -53,7 +52,7 @@ public class ObjectHolder {
 	}
 
 	public void addObject(String id, Position2D pd) {
-		add.add(new ObjectRenderer(pd, objects.get(id)));
+		add.add(new ObjectRenderer(pd, objects.get(id), pd.trans));
 	}
 
 	public void addAll() {
@@ -65,53 +64,65 @@ public class ObjectHolder {
 	}
 
 	public void renderObjects(TextureBatch tb) {
-		resolveCollisions();
+
 		for (Iterator iterator = update.iterator(); iterator.hasNext();) {
 			ObjectRenderer or = (ObjectRenderer) iterator.next();
-			or.go.update();
+			or.go.update(or.position);
 			or.renderAt(tb);
-
+			if (or.go.getProvider().getSelectionTexture() != null
+					&& or.position.toRect().contains(InputHandler.getLastMouseX(), InputHandler.getLastMouseY())) {
+				or.renderAt(tb, or.go.getProvider().getSelectionTexture());
+			}
 		}
+		resolveCollisions();
 		addAll();
 		removeAll();
 	}
 
 	public void resolveCollisions() {
-		for (Iterator iterator = update.iterator(); iterator.hasNext();) {
-			ObjectRenderer or = (ObjectRenderer) iterator.next();
-//			if (!or.go.collision() && !or.go.hardCollision()) {
-//				continue;
-//			}
-			for (Iterator iterator2 = update.iterator(); iterator2.hasNext();) {
-				ObjectRenderer orr = (ObjectRenderer) iterator2.next();
-//				if (!orr.go.collision() && !orr.go.hardCollision()) {
-//					continue;
-//				}
-
-				if (or.getId() != orr.getId()) {
-					GameObject g = or.go;
-					GameObject g2 = orr.go;
-					System.out.println("here");
-					g.p2d.applyForce(g.pos);
-					g2.p2d.applyForce(g2.pos);
-					g.pos = new Vector2f();
-					g2.pos = new Vector2f();
-
-					if (g.hardCollision() && g.p2d.intersects(g2.getP2d())) {
-						g.onCollision(CollisionType.HARD, g2);
-						g2.onCollision(CollisionType.HARD, g);
-						System.out.println("HARD");
-						g.p2d.resolveCollision(g2.getP2d());
-
-					} else if (g.collision() && g.p2d.intersects(g2.getP2d())) {
-						g.onCollision(CollisionType.SOFT, g2);
-						g2.onCollision(CollisionType.SOFT, g);
-
-					}
-
-				}
-			}
+		for (Iterator iterator = add.iterator(); iterator.hasNext();) {
+			ObjectRenderer o = (ObjectRenderer) iterator.next();
+			checkMovement(o);
 		}
 	}
 
+	public void checkMovement(ObjectRenderer obj) {
+
+		for (Iterator iterator = update.iterator(); iterator.hasNext();) {
+			ObjectRenderer g = (ObjectRenderer) iterator.next();
+			if (g == obj) {
+				return;
+			} else {
+				Position2D tb = obj.position;
+				Position2D ob = g.position;
+
+				if (g.go.hardCollision() && obj.go.hardCollision()) {
+					g.go.onCollision(CollisionType.HARD, obj.go);
+					obj.go.onCollision(CollisionType.HARD, g.go);
+
+					if (tb.canMove(ob)) {
+						tb.moveToTarget();
+
+					} else {
+						if (g.go.isSolid()) {
+							tb.resolveCollisionSolid(ob);
+						} else {
+							tb.resolveCollisionsNonSolid(ob);
+						}
+					}
+
+				} else if (g.go.collision() && tb.intersects(ob)) {
+					g.go.onCollision(CollisionType.SOFT, obj.go);
+					obj.go.onCollision(CollisionType.SOFT, g.go);
+					tb.moveToTarget();
+				}
+
+				if (tb.canMove(ob)) {
+					tb.moveToTarget();
+				}
+
+			}
+
+		}
+	}
 }

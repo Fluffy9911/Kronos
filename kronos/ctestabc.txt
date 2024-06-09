@@ -1,0 +1,42 @@
+$Integers%
+$A test int between 0-1000!!!
+$Test Int=50;type=int;0~1000;
+
+
+
+
+
+$Other Stuff%
+
+
+$Booleans!!!
+$Bool Array=%[true,true,true,false,false,true,false,false,true,true,false,false,true,false,true,false,true,false,false,true,true,true,true,true,true,true,false,true,true,true,true,false,true,false,true,false,false,false,false,true,true,true,false,false,true,false,true,true,false,false];type=bool_arr;
+$Test String=YnF6otovFVdWTtgAXxcX93x4pLVXMa4PhWuLabK7KyzSjq7xbNVmOtUTdq1nPyMAYkXTXYLVC7mPLY1Ltca1Plqs0d2YLdjd8PvM;type=string;
+$[Integers];
+$A test int between 0-1000!!!
+$Test Int=50;type=int;0~1000;
+
+
+
+
+
+$[Other Stuff];
+
+
+$Booleans!!!
+$Bool Array=%[false,true,true,false,false,false,false,true,true,true,false,true,true,true,false,true,true,false,true,true,false,false,true,false,true,true,false,true,true,true,false,true,false,true,true,true,true,false,true,false,true,false,true,true,false,true,true,false,true,false];type=bool_arr;
+$Test String=fa1bTjxXAB1sTcEDMJmwmnNRG7egL01UEgJX8GBhYVo34M5uxZPE5gX2gJOdU12h7NUGcS6HKB2WMN6YK6fhyxtBjWx2s6qFwMBF;type=string;
+$Section*[Integers];
+$A test int between 0-1000!!!
+$Test Int=50;type=int;0~1000;
+
+
+
+
+
+$Section*[Other Stuff];
+
+
+$Booleans!!!
+$Bool Array=%[false,true,true,false,false,true,false,true,true,false,false,false,false,false,false,false,false,true,true,false,true,false,true,false,true,true,true,true,false,true,true,true,true,true,true,false,true,true,false,true,false,false,false,true,false,true,false,true,true,false];type=bool_arr;
+$Test String=edmrx8JwxQyEYAxQ7prUuqIRPZ54rxP1LlSOv8Le1f8ks9PzNRKwbYkQJQBszwkmNL8QXI2XWYimsOaU9gTk3vBASQbIIPBcGJMF;type=string;

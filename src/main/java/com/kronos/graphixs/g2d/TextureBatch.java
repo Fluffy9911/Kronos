@@ -1,21 +1,22 @@
 package com.kronos.graphixs.g2d;
 
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+
+import org.joml.Matrix4f;
 
 import com.kronos.Kronos;
 import com.kronos.graphixs.geometry.meshing.TexturedMesh;
 import com.kronos.graphixs.texture.Texture;
 
 public class TextureBatch {
-	List<TexturedMesh> mesh;
+	HashMap<TexturedMesh, Matrix4f> mesh;
 	Abstract2DGraphixs g;
 
 	public TextureBatch() {
 		super();
 
-		mesh = new ArrayList<>();
+		mesh = new HashMap<>();
 
 	}
 
@@ -36,19 +37,35 @@ public class TextureBatch {
 	}
 
 	public void drawTexture(int x, int y, int w, int h, BufferedImage img) {
-		mesh.add(new TexturedMesh(new Texture(img), new ScreenCord(x, y, w, h)));
+		mesh.put(new TexturedMesh(new Texture(img), new ScreenCord(x, y, w, h)), new Matrix4f());
 	}
 
 	public void drawTexture(int x, int y, int w, int h, Texture img) {
-		mesh.add(new TexturedMesh(img, new ScreenCord(x, y, w, h)));
+		mesh.put(new TexturedMesh(img, new ScreenCord(x, y, w, h)), new Matrix4f());
 	}
 
 	public void drawTexture(int x, int y, int w, int h, BufferedImage img, String sid) {
-		mesh.add(new TexturedMesh(new Texture(img), new ScreenCord(x, y, w, h), sid));
+		mesh.put(new TexturedMesh(new Texture(img), new ScreenCord(x, y, w, h), sid), new Matrix4f());
 	}
 
 	public void drawTexture(int x, int y, int w, int h, Texture img, String sid) {
-		mesh.add(new TexturedMesh(img, new ScreenCord(x, y, w, h), sid));
+		mesh.put(new TexturedMesh(img, new ScreenCord(x, y, w, h), sid), new Matrix4f());
+	}
+
+	public void drawTexture(int x, int y, int w, int h, BufferedImage img, Matrix4f m) {
+		mesh.put(new TexturedMesh(new Texture(img), new ScreenCord(x, y, w, h)), m);
+	}
+
+	public void drawTexture(int x, int y, int w, int h, Texture img, Matrix4f m) {
+		mesh.put(new TexturedMesh(img, new ScreenCord(x, y, w, h)), m);
+	}
+
+	public void drawTexture(int x, int y, int w, int h, BufferedImage img, String sid, Matrix4f m) {
+		mesh.put(new TexturedMesh(new Texture(img), new ScreenCord(x, y, w, h), sid), m);
+	}
+
+	public void drawTexture(int x, int y, int w, int h, Texture img, String sid, Matrix4f m) {
+		mesh.put(new TexturedMesh(img, new ScreenCord(x, y, w, h), sid), m);
 	}
 
 	/**

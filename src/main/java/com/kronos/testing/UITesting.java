@@ -3,7 +3,6 @@
  */
 package com.kronos.testing;
 
-import java.io.File;
 import java.util.List;
 import java.util.Map;
 
@@ -15,6 +14,8 @@ import com.kronos.graphixs.color.Color;
 import com.kronos.graphixs.color.Colors;
 import com.kronos.graphixs.display.ScreenConfig;
 import com.kronos.graphixs.g2d.ui.ComponentHandler;
+import com.kronos.io.RandomDataGenerator;
+import com.kronos.io.config.configbuilder.AdvancedBlockedConfig;
 
 /**
  * 
@@ -57,7 +58,7 @@ public class UITesting extends Game {
 
 	@Override
 	public void onEnd() {
-		// TODO Auto-generated method stub
+
 		ch.saveData();
 		System.out.println(Kronos.hello());
 	}
@@ -112,7 +113,19 @@ public class UITesting extends Game {
 
 	public static void main(String[] args) {
 		Kronos.args = args;
-		AppLoader.addPluginNature(new File("kronos/plugins"));
+
+		AdvancedBlockedConfig abc = new AdvancedBlockedConfig("kronos\\ctestabc.txt");
+		abc.addSection("Integers");
+		abc.addIntComment("Test Int", 50, 0, 1000, "A test int between 0-1000!!!");
+
+		abc.addSectionSpaced("Other Stuff", 4);
+		abc.addBooleanArraySpacedComment("Bool Array", RandomDataGenerator.generateRandomBooleanArray(50), 1,
+				"Booleans!!!");
+
+		abc.addString("Test String", RandomDataGenerator.generateRandomString(100));
+		// Outputting nodes to file
+		abc.out("$", "%");
+
 		AppLoader.begin(new UITesting());
 
 	}

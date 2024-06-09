@@ -46,11 +46,14 @@ public class PluginLoader {
 	HashMap<String, Class<?>> classMap = new HashMap<>();
 	public boolean showloaded = true;
 
+	HashMap<PluginData, List<Class<?>>> pluginClasses = new HashMap<>();
+
 	public PluginLoader(File pfolder) {
 		this.pfolder = pfolder;
 		if (!this.pfolder.exists()) {
 			this.pfolder.mkdirs();
 		}
+
 	}
 
 	public ArrayList<PluginData> loadPlugins() throws Exception {

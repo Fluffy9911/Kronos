@@ -3,12 +3,16 @@
  */
 package com.kronos.gameFramework.f2d;
 
+import org.joml.Matrix4f;
+import org.joml.Vector2f;
+
 import com.kronos.dynamo.simple.Bounds2D;
 
 /**
  * 
  */
 public class Position2D extends Bounds2D {
+	public Matrix4f trans;
 
 	/**
 	 * @param x
@@ -18,7 +22,7 @@ public class Position2D extends Bounds2D {
 	 */
 	public Position2D(int x, int y, int width, int height) {
 		super(x, y, width, height);
-		// TODO Auto-generated constructor stub
+		trans = new Matrix4f();
 	}
 
 	public int x() {
@@ -39,6 +43,16 @@ public class Position2D extends Bounds2D {
 	public int height() {
 		// TODO Auto-generated method stub
 		return (int) super.getHeight();
+	}
+
+	public void moveToTarget() {
+
+		this.translateBox2D(target.x, target.y);
+		this.target = new Vector2f();
+	}
+
+	public void applyFutureForce(float x, float y) {
+		this.target.add(x, y);
 	}
 
 }
