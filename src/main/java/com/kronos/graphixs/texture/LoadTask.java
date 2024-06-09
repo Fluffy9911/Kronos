@@ -35,6 +35,7 @@ public class LoadTask implements Runnable {
 	public void run() {
 
 		try {
+			System.out.println(u.getPath());
 			BufferedImage i = ImageIO.read(u);
 			tb.addImage(s, i);
 			l.debug("Loading Finished for image: {} at: {}", s, u.getFile());

@@ -92,8 +92,9 @@ public class AssetLoader {
 	}
 
 	public String readAll(String file) {
-		// System.out.println("RSC: " + (this.getClass().getResourceAsStream(file) !=
-		// null));
+		System.out.println(
+				"RSC: " + (this.getClass().getResourceAsStream(file) != null) + " File:" + new File(file).exists());
+
 		if (this.getClass().getResourceAsStream(file) != null) {
 			try (InputStream inputStream = this.getClass().getResourceAsStream(file)) {
 				// Buffer to store read data dynamically

@@ -107,7 +107,7 @@ public class PluginLoader {
 			String string = (String) iterator2.next();
 
 			try {
-				Class<?> c = ucl.loadClass(string,true);
+				Class<?> c = ucl.loadClass(string);
 				if (classMap.get(string) != null) {
 					c = classMap.get(string);
 				} else {

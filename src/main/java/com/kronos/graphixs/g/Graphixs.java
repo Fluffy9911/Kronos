@@ -169,6 +169,7 @@ public class Graphixs {
 		window_id = screen.init(config);
 		manager.add(screen);
 		screen.load();
+		buffers.put("graphixs2d_pane", new FrameBuffer(config.width(), config.height(), true));
 		if (dev) {
 			AssetLoader asl = new AssetLoader();
 			buffers.put("edge_detection", new FrameBuffer(config.width(), config.height(), true));

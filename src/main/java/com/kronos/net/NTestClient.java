@@ -17,7 +17,7 @@ public class NTestClient {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		Connector cn = new Connector(new InetSocketAddress("192.168.219.20", 255), 255);
+		Connector cn = new Connector(new InetSocketAddress("0", 255), 255);
 		cn.openClient();
 		try {
 			cn.c.listenTerminal();

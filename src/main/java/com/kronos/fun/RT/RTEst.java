@@ -3,6 +3,9 @@
  */
 package com.kronos.fun.RT;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Map;
 
 import org.joml.Vector3i;
@@ -23,7 +26,7 @@ public class RTEst {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		Kronos.start(new ScreenConfig() {
+		Kronos.startInDev(new ScreenConfig() {
 
 			@Override
 			public int width() {
@@ -64,7 +67,14 @@ public class RTEst {
 
 		int w = 400;
 		int h = 400;
-		String ss = Kronos.loader.tryLoad("shaders/rtcompute.glsl");
+		String ss = "null";
+		try {
+			ss = Files.readString(Path.of(
+					"C:\\Users\\James.M\\Documents\\Media\\Repos\\Kronos\\src\\main\\resources\\shaders\\rtcompute.glsl"));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		RTCompute comp = new RTCompute(ss, new Vector3i(w, h, 1), w, h);
 		comp.compileShader();
 		comp.render();

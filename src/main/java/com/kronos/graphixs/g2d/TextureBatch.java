@@ -4,6 +4,7 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.kronos.Kronos;
 import com.kronos.graphixs.geometry.meshing.TexturedMesh;
 import com.kronos.graphixs.texture.Texture;
 
@@ -48,5 +49,17 @@ public class TextureBatch {
 
 	public void drawTexture(int x, int y, int w, int h, Texture img, String sid) {
 		mesh.add(new TexturedMesh(img, new ScreenCord(x, y, w, h), sid));
+	}
+
+	/**
+	 * @param x
+	 * @param y
+	 * @param w
+	 * @param h
+	 * @param string
+	 */
+	public void drawTexture(int x, int y, int w, int h, String string) {
+		mesh.add(new TexturedMesh(Kronos.graphixs.getTexture(string), new ScreenCord(x, y, w, h)));
+
 	}
 }
