@@ -76,7 +76,7 @@ public class TextureBatch {
 	 * @param string
 	 */
 	public void drawTexture(int x, int y, int w, int h, String string) {
-		mesh.add(new TexturedMesh(Kronos.graphixs.getTexture(string), new ScreenCord(x, y, w, h)));
+		mesh.put(new TexturedMesh(Kronos.graphixs.getTexture(string), new ScreenCord(x, y, w, h)), new Matrix4f());
 
 	}
 }
