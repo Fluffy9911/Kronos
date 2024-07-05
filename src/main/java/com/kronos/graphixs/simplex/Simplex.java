@@ -149,6 +149,10 @@ public class Simplex {
 		GL11.glEnd();
 	}
 
+	public static void drawRect(int x, int y, int w, int h, Color c) {
+		drawSquare(x, y, x + w, y, x + w, y + h, x, y + h, c);
+	}
+
 	public static void drawText(int x, int y, String text, Color col) {
 		FontRenderer fr = FontRenderer.createDefault();
 		fr.renderText(text, x, y, fr.useDefaultFont(), new java.awt.Color(col.getR(), col.getG(), col.getB(), 1),
