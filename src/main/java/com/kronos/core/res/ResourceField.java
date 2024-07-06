@@ -15,6 +15,11 @@ import com.google.gson.GsonBuilder;
  * 
  */
 public class ResourceField<T> extends ResourceKey {
+
+	public static <T> T serializableField(String name, T defval) {
+		return new ResourceField<T>(kronos_base.child(name), defval).getAndFree();
+	}
+
 	T data;
 
 	/**
@@ -51,7 +56,7 @@ public class ResourceField<T> extends ResourceKey {
 			String data = Files.readString(this.asFile().toPath());
 			if (!(data == "")) {
 				Gson g = new Gson();
-				return g.fromJson(data, ResourceField.class);
+				return g.<ResourceField<T>>fromJson(data, ResourceField.class);
 			} else {
 
 			}
@@ -75,4 +80,11 @@ public class ResourceField<T> extends ResourceKey {
 			e.printStackTrace();
 		}
 	}
+
+	public T getAndFree() {
+		this.get().free();
+
+		return this.get().getValue();
+	}
+
 }

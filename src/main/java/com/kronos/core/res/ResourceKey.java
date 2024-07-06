@@ -10,10 +10,9 @@ import java.io.IOException;
  * 
  */
 public class ResourceKey {
-	public static String key_extension = ".rkey";
-	String name, path;
+	public static transient ResourceKey kronos_base = new ResourceKey("kronos_base", "kronos/res");
 
-	public static final ResourceKey kronos_base = new ResourceKey("KRONOS_BASE", "kronos/res");
+	String name, path;
 
 	public ResourceKey(String name, String path) {
 		super();
@@ -34,7 +33,7 @@ public class ResourceKey {
 	}
 
 	public File asFile() {
-		return new File(asPath() + key_extension);
+		return new File(asPath() + getKeyExtension());
 	}
 
 	public ResourceKey get() {
@@ -73,4 +72,8 @@ public class ResourceKey {
 		return new ResourceKey(name, path + "/" + sub);
 	}
 
+	public static String getKeyExtension() {
+		return ".rkey";
+
+	}
 }
