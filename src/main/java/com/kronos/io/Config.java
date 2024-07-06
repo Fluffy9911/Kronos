@@ -312,4 +312,14 @@ public class Config {
 		}
 	}
 
+	/**
+	 * @param data2
+	 * @return
+	 */
+	public static Config readStringIn(String data2) {
+		Gson g = new Gson();
+
+		return g.fromJson(data2, Config.class);
+	}
+
 }
