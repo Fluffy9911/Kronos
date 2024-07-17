@@ -1,9 +1,0 @@
-{
-  "data": [
-    "hi",
-    "hello",
-    "sup"
-  ],
-  "name": "test_static_rfield",
-  "path": "kronos/res"
-}

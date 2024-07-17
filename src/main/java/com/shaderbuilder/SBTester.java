@@ -3,6 +3,7 @@
  */
 package com.shaderbuilder;
 
+import com.kronos.io.InputHandler;
 import com.shaderbuilder.ShaderBuilder.SType;
 import com.shaderbuilder.ShaderBuilder.VType;
 
@@ -15,6 +16,7 @@ public class SBTester {
 	 * @param args
 	 */
 	public static void main(String[] args) {
+
 		ShaderBuilder sb = new ShaderBuilder(null, 430, SType.core);
 		sb.buildVersion().newLine();
 		sb.uniform(VType.vec2, "testIn");
@@ -33,6 +35,8 @@ public class SBTester {
 		sb.set("frag", "col");
 		sb.newLine();
 		sb.mainEnd();
+		InputHandler.handleKeyMappings();
+		InputHandler.createMapping("move_up", "W", "UP");
 		ShaderTester.testShader(sb.build());
 	}
 

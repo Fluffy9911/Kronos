@@ -1,8 +1,0 @@
-#This is a comment
-$testint=5;type=int;0~10;
-$test_float=1.0;type=float;0.5~3.5;
-#Comments?
-$testiarr= %[4,78,8,65,3,8];type=int_arr;0~110;
-## Section: Test Section
-#An Integer Type: testiadv, a test value for description stuff Minimum Value: 0 Maximum Value: 100;
-$testiadv=5;type=int;0~100;
