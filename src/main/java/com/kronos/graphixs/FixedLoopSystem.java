@@ -16,12 +16,13 @@ public abstract class FixedLoopSystem {
 
 	public FixedLoopSystem(int updatesPerSecond) {
 		TARGET_FPS = updatesPerSecond;
+		accessor = new Accessor(this);
 	}
 
 	public void start() {
 		running = true;
 		flag = true;
-		accessor = new Accessor(this);
+
 		// This value would probably be stored elsewhere.
 		double GAME_HERTZ = TARGET_FPS;
 		// Calculate how many ns each frame should take for our target game hertz.
@@ -107,17 +108,17 @@ public abstract class FixedLoopSystem {
 
 					// Yield until it has been at least the target time between renders. This saves
 					// the CPU from hogging.
-					while (now - lastRenderTime < TARGET_TIME_BETWEEN_RENDERS
-							&& now - lastUpdateTime < TIME_BETWEEN_UPDATES && TARGET_FPS != 0) {
-						Thread.yield();
-
-						try {
-							Thread.sleep(1);
-						} catch (Exception e) {
-						}
-
-						now = System.nanoTime();
-					}
+//					while (now - lastRenderTime < TARGET_TIME_BETWEEN_RENDERS
+//							&& now - lastUpdateTime < TIME_BETWEEN_UPDATES && TARGET_FPS != 0) {
+//						Thread.yield();
+//
+//						try {
+//							Thread.sleep(1);
+//						} catch (Exception e) {
+//						}
+//
+//						now = System.nanoTime();
+//					}
 				}
 			}
 		}

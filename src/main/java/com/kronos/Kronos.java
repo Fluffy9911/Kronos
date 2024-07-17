@@ -9,6 +9,7 @@ import java.util.Map;
 
 import com.kronos.core.CoreConfig;
 import com.kronos.core.event.EngineListener;
+import com.kronos.core.res.ResourceField;
 import com.kronos.debug.Debugger;
 import com.kronos.graphixs.Loop;
 import com.kronos.graphixs.display.ScreenConfig;
@@ -36,7 +37,7 @@ public class Kronos {
 	public static int max_threads = 2;
 
 	public static boolean plugins = false;
-
+	public static boolean show_shader_errors = ResourceField.serializableField("shaders_throw_errors", true);
 	// resources
 	public static String config_loc = "configs/main";
 	public static String kronos_id = "kronos";

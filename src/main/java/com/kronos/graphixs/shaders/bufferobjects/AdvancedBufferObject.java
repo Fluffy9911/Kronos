@@ -42,6 +42,8 @@ public class AdvancedBufferObject extends BufferObject {
 
 	@Override
 	public void append(FloatBuffer fb) {
+		// this caused many headaches lol
+		buffer.flip();
 		fb.put(buffer);
 	}
 

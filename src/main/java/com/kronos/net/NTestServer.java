@@ -16,7 +16,7 @@ import com.kronos.net.data.packet.ConfigPacket;
  */
 public class NTestServer {
 	public static void main(String[] args) {
-		Connector cn = new Connector(new InetSocketAddress("0", 255), 255);
+		Connector cn = new Connector(new InetSocketAddress("localhost", 255), 255);
 		cn.openServer();
 		try {
 			cn.c.listenTerminal();

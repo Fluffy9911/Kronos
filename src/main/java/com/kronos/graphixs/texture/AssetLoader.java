@@ -39,17 +39,17 @@ public class AssetLoader {
 //			nm.add(entry.getValue().getFile());
 //		}
 //		new FileVerification(nm).verify();
+		System.out.println(loadable.size() + " Assets to load!");
 		for (Map.Entry<String, URL> entry : loadable.entrySet()) {
 			BufferedImage img = new BufferedImage(16, 16, BufferedImage.OPAQUE);
 			try {
 				img = ImageIO.read(entry.getValue());
 				System.out.println("Loaded image: " + entry.getKey());
 				Kronos.graphixs.textures.put(entry.getKey(), new Texture(img));
+				loaded.put(entry.getKey(), img);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-
-			loaded.put(entry.getKey(), img);
 
 		}
 		isloaded = true;
@@ -150,11 +150,13 @@ public class AssetLoader {
 		for (Map.Entry<String, String> entry : preLoaded.entrySet()) {
 			String key = entry.getKey();
 			String val = entry.getValue();
+
 			if (this.getFileLocation(key, val) != null) {
 				System.out.println(this.getFileLocation(key, val).toString());
 				loadable.put(key, this.getFileLocation(key, val));
 			}
 		}
+		System.out.println(loadable.size());
 	}
 
 	public Map<String, BufferedImage> getLoaded() {

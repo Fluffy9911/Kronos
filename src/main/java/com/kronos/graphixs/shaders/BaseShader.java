@@ -43,7 +43,8 @@ public abstract class BaseShader implements Resource, ShaderUniform {
 	}
 
 	public void logShaderError(String error) {
-		shaderLogger.error("Shader Has Thrown an error: {}", error);
+		if (Kronos.show_shader_errors)
+			shaderLogger.error("Shader Has Thrown an error: {}", error);
 	}
 
 	public abstract void compileShader();
@@ -51,11 +52,14 @@ public abstract class BaseShader implements Resource, ShaderUniform {
 	public int compileAndCreateShader(int type, String source, String t) {
 		Graphixs g = Kronos.graphixs;
 		int shaderID = GL20.glCreateShader(type);
-		g.glErrors();
+		if (Kronos.show_shader_errors)
+			g.glErrors();
 		GL20.glShaderSource(shaderID, source);
-		g.glErrors();
+		if (Kronos.show_shader_errors)
+			g.glErrors();
 		GL20.glCompileShader(shaderID);
-		g.glErrors();
+		if (Kronos.show_shader_errors)
+			g.glErrors();
 		ShaderUtils.checkShaderCompilationStatus(shaderID, t);
 		return shaderID;
 	}
@@ -88,7 +92,8 @@ public abstract class BaseShader implements Resource, ShaderUniform {
 		if (location != -1) {
 			GL20.glUniform1i(location, value);
 		} else {
-			Kronos.debug.getLogger().error("Uniform " + id + " not found in shader.");
+			if (Kronos.show_shader_errors)
+				Kronos.debug.getLogger().error("Uniform " + id + " not found in shader.");
 		}
 	}
 
@@ -98,7 +103,8 @@ public abstract class BaseShader implements Resource, ShaderUniform {
 		if (location != -1) {
 			GL20.glUniform1f(location, value);
 		} else {
-			Kronos.debug.getLogger().error("Uniform " + id + " not found in shader.");
+			if (Kronos.show_shader_errors)
+				Kronos.debug.getLogger().error("Uniform " + id + " not found in shader.");
 		}
 	}
 
@@ -108,7 +114,8 @@ public abstract class BaseShader implements Resource, ShaderUniform {
 		if (location != -1) {
 			GL20.glUniform4f(location, vec4.x, vec4.y, vec4.z, vec4.w);
 		} else {
-			Kronos.debug.getLogger().error("Uniform " + id + " not found in shader.");
+			if (Kronos.show_shader_errors)
+				Kronos.debug.getLogger().error("Uniform " + id + " not found in shader.");
 		}
 	}
 
@@ -118,7 +125,8 @@ public abstract class BaseShader implements Resource, ShaderUniform {
 		if (location != -1) {
 			GL20.glUniform3f(location, vec4.x, vec4.y, vec4.z);
 		} else {
-			Kronos.debug.getLogger().error("Uniform " + id + " not found in shader.");
+			if (Kronos.show_shader_errors)
+				Kronos.debug.getLogger().error("Uniform " + id + " not found in shader.");
 		}
 	}
 
@@ -128,7 +136,8 @@ public abstract class BaseShader implements Resource, ShaderUniform {
 		if (location != -1) {
 			GL20.glUniform2f(location, vec4.x, vec4.y);
 		} else {
-			Kronos.debug.getLogger().error("Uniform " + id + " not found in shader.");
+			if (Kronos.show_shader_errors)
+				Kronos.debug.getLogger().error("Uniform " + id + " not found in shader.");
 		}
 	}
 
@@ -140,7 +149,8 @@ public abstract class BaseShader implements Resource, ShaderUniform {
 			mat4.get(matrixData);
 			GL20.glUniformMatrix4fv(location, false, matrixData);
 		} else {
-			Kronos.debug.getLogger().error("Uniform " + id + " not found in shader.");
+			if (Kronos.show_shader_errors)
+				Kronos.debug.getLogger().error("Uniform " + id + " not found in shader.");
 		}
 	}
 
@@ -160,7 +170,7 @@ public abstract class BaseShader implements Resource, ShaderUniform {
 		GL40.glBindBuffer(GL_SHADER_STORAGE_BUFFER, ssboID);
 
 		bo.append(bufferdata);
-
+		System.err.println(bufferdata.toString());
 		bufferdata.flip();
 		GL40.glBufferData(GL_SHADER_STORAGE_BUFFER, bufferdata, GL40.GL_STATIC_DRAW);
 		GL40.glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
@@ -186,7 +196,8 @@ public abstract class BaseShader implements Resource, ShaderUniform {
 	@Override
 	public void use() {
 		if (programId == -1) {
-			logShaderError("Shader expected a valid program, currently has -1, shader will not be used");
+			if (Kronos.show_shader_errors)
+				logShaderError("Shader expected a valid program, currently has -1, shader will not be used");
 			return;
 		}
 		GL40.glUseProgram(programId);

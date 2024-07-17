@@ -114,6 +114,17 @@ public class Mesh implements Serializable {
 		GL40.glUseProgram(0);
 	}
 
+	public void render() {
+		// Bind the VAO and draw the mesh
+
+		GL30.glBindVertexArray(vaoID);
+		GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, eboID);
+		GL11.glDrawElements(GL11.GL_TRIANGLES, indexCount, GL11.GL_UNSIGNED_INT, 0);
+		GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, 0);
+		GL30.glBindVertexArray(0);
+		GL40.glUseProgram(0);
+	}
+
 	public void renderNoInds(RenderShader shader) {
 		// Bind the VAO and draw the mesh
 		GL40.glUseProgram(shader.getShaderProgramID());

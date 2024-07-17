@@ -43,22 +43,18 @@ public class Abstract2DGraphixs implements SListener {
 	public void batchRender(HashMap<TexturedMesh, Matrix4f> meshes) {
 		rendered_textures = 0;
 
-		// graphixs_pane.start();
-		// Kronos.graphixs.clearScreen(Colors.White);
-		// render
 		for (Map.Entry<TexturedMesh, Matrix4f> entry : meshes.entrySet()) {
 			TexturedMesh tm = entry.getKey();
 			Matrix4f val = entry.getValue();
 
 			tm.getDraw().use();
 			tm.getDraw().addUniform("proj", provider.collectTransform());
-			tm.getDraw().addUniform("transform", val);
+			// tm.getDraw().addUniform("transform", val);
 			tm.render();
 			rendered_textures++;
 			tm.getTexture().unbind();
 		}
 
-		// graphixs_pane.end();
 		GL40.glUseProgram(0);
 
 	}

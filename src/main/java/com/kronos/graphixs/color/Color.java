@@ -146,4 +146,12 @@ public class Color {
 		return new Color(r.nextFloat(0, 1), r.nextFloat(0, 1), r.nextFloat(0, 1), r.nextFloat(0, 1));
 	}
 
+	/**
+	 * @return
+	 */
+	public java.awt.Color asJWTColor() {
+		// TODO Auto-generated method stub
+		return new java.awt.Color(r, g, b, a);
+	}
+
 }

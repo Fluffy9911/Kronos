@@ -26,7 +26,7 @@ public class TextureBatch {
 
 	public void render() {
 		if (g == null) {
-
+			return;
 		} else {
 			g.batchRender(mesh);
 		}
