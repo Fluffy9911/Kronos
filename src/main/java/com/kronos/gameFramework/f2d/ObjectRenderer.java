@@ -12,11 +12,11 @@ import com.kronos.graphixs.texture.Texture;
  * 
  */
 public class ObjectRenderer {
-	Position2D position;
-	GameObject go;
+	public Position2D position;
+	public GameObject go;
 	int id = 0;
 	static int ii = 0;
-	Matrix4f tf;
+	public Matrix4f tf, bb;
 
 	public ObjectRenderer(Position2D position, GameObject go) {
 		this.position = position;
@@ -34,6 +34,16 @@ public class ObjectRenderer {
 	}
 
 	public void renderAt(TextureBatch tb) {
+		if (go.getDefaultTransformation() != null) {
+			bb = tf;
+			tf = go.getDefaultTransformation();
+		}
+		if (tf == null) {
+			tf = bb;
+			if (tf == null)
+				tf = new Matrix4f();
+		}
+
 		RenderProvider rp = go.getProvider();
 		if (rp != null) {
 

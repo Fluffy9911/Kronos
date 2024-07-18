@@ -6,6 +6,7 @@ package com.kronos.gameFramework.f2d;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.joml.Matrix4f;
 import org.joml.Vector2f;
 
 import com.kronos.graphixs.color.Colors;
@@ -128,5 +129,9 @@ public class GameObject implements Cloneable {
 
 	public void update(Position2D p) {
 		// System.out.println(p2d.getX());
+	}
+
+	public Matrix4f getDefaultTransformation() {
+		return null;
 	}
 }

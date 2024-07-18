@@ -23,6 +23,15 @@ public class TexturedMesh {
 		draw = Kronos.graphixs.getShader("texture");
 	}
 
+	public TexturedMesh(Texture texture, ScreenCord cord, int depth) {
+		super();
+		this.texture = texture;
+		this.cord = cord;
+		texture.bind();
+		mesh = Builtin.textured_quad(cord.getX(), cord.getY(), cord.getW(), cord.getH());
+		draw = Kronos.graphixs.getShader("texture");
+	}
+
 	public TexturedMesh(Texture texture, ScreenCord cord, String draw) {
 		super();
 		this.texture = texture;

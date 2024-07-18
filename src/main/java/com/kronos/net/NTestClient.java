@@ -17,7 +17,11 @@ public class NTestClient {
 	 * @param args
 	 */
 	public static void main(String[] args) {
+<<<<<<< Updated upstream
 		Connector cn = new Connector(new InetSocketAddress("0", 255), 255);
+=======
+		Connector cn = new Connector(new InetSocketAddress("localhost", 255), 255);
+>>>>>>> Stashed changes
 		cn.openClient();
 		try {
 			cn.c.listenTerminal();

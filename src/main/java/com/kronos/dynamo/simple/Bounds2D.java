@@ -50,7 +50,7 @@ public class Bounds2D {
 	public float futureX(Vector2f v) {
 		float fx = x;
 
-		v.mul(friction);
+		// v.mul(friction);
 		MathLerp.lerpSmooth((v.x + fx), fx, factor);
 		return fx;
 	}
@@ -58,7 +58,7 @@ public class Bounds2D {
 	public float futureY(Vector2f v) {
 		float fy = y;
 
-		v.mul(friction);
+		// v.mul(friction);
 		MathLerp.lerpSmooth((v.y + fy), fy, factor);
 		return fy;
 	}
@@ -163,6 +163,13 @@ public class Bounds2D {
 		previousY = y;
 	}
 
+	/**
+	 * @return the target
+	 */
+	public Vector2f getTarget() {
+		return target;
+	}
+
 	public void resolveCollisionsNonSolid(Bounds2D b) {
 		Rectangle th = this.toRect();
 		Rectangle ot = b.toRect();
@@ -198,13 +205,13 @@ public class Bounds2D {
 
 	public Rectangle projectedRectangle(Vector2f target) {
 
-		Rectangle projected_rect = new Rectangle((int) futureX(target), (int) futureY(target), (int) width,
-				(int) height);
+		Rectangle projected_rect = new Rectangle((int) (target.x + x), (int) (target.y + y), (int) width, (int) height);
 
 		return projected_rect;
 	}
 
 	public boolean canMove(Bounds2D b) {
+
 		return !this.projectedRectangle(target).intersects(b.toRect());
 	}
 }

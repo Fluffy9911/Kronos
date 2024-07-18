@@ -275,4 +275,13 @@ public class FontRenderer {
 
 	}
 
+	/**
+	 * @param text
+	 * @return
+	 */
+	public Rectangle getSize(String text) {
+		// TODO Auto-generated method stub
+		return getSize(text, default_font).getBounds();
+	}
+
 }
