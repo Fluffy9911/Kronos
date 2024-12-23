@@ -146,6 +146,7 @@ public class Color {
 		return new Color(r.nextFloat(0, 1), r.nextFloat(0, 1), r.nextFloat(0, 1), r.nextFloat(0, 1));
 	}
 
+<<<<<<< Updated upstream
 	/**
 	 * @return
 	 */
@@ -154,4 +155,19 @@ public class Color {
 		return new java.awt.Color(r, g, b, a);
 	}
 
+=======
+	public Color brighter(float amnt) {
+		Vector4f vec = asVector4f();
+		vec.mul(amnt);
+		return new Color(vec.x, vec.y, vec.z, 1);
+	}
+
+	/**
+	 * @return
+	 */
+	public java.awt.Color asCol() {
+		// TODO Auto-generated method stub
+		return new java.awt.Color(r, g, b, a);
+	}
+>>>>>>> Stashed changes
 }

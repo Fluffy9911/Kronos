@@ -54,15 +54,23 @@ import de.javagl.obj.ObjReader;
 import de.javagl.obj.ObjUtils;
 
 public class Graphixs {
-	public boolean g_lock = true, dev = true;
+
+	/**
+	 * whether graphics system has been initialized
+	 */
+	public boolean g_lock = true;
+	public boolean dev = true;
+
 	private ScreenConfig config;
 	private Screen screen;
 	private ResourceManager manager = new ResourceManager();
 	private FixedLoopSystem fls;
 	private Logger l = Kronos.debug.getLogger();
 	public Mesh post_process_quad;
+
 	public HashMap<String, FrameBuffer> buffers = new HashMap<>();
 	public HashMap<String, BaseShader> shaders = new HashMap<String, BaseShader>();
+
 	private long window_id = -1;
 
 	public Graphixs2D g2d;

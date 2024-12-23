@@ -1,5 +1,6 @@
 package com.kronos.graphixs.texture;
 
+import java.awt.Rectangle;
 import java.nio.ByteBuffer;
 
 import org.lwjgl.BufferUtils;
@@ -48,6 +49,48 @@ public class TextureBuilder {
 		GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA8, width, height, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE,
 				buffer);
 		return new Texture(td, w, h);
+	}
+
+	public static Texture buildTextureBordered(Rectangle rec, int bw, Color base, Color b) {
+
+		int width = rec.width;
+		int height = rec.height;
+		if (width < 0) {
+			width = 1;
+		}
+		if (height < 0) {
+			height = 1;
+		}
+		ByteBuffer buffer = BufferUtils.createByteBuffer(width * height * 4); // 4 for RGBA
+
+		for (int y = 0; y < height; y++) {
+			for (int x = 0; x < width; x++) {
+				int pixel = base.rgb();
+				if (x == 0 || y == 0 || x == width || y == height) {
+					pixel = b.rgb();
+				}
+
+				if ((x - bw) <= 0 || (y - bw) <= 0 || (x + bw) >= width || (y + bw) >= height) {
+					pixel = b.rgb();
+				}
+
+				put(buffer, pixel);
+			}
+		}
+
+		buffer.flip();
+
+		int td = GL11.glGenTextures();
+		GL11.glBindTexture(GL11.GL_TEXTURE_2D, td);
+
+		// Setup texture parameters
+		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
+		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
+
+		// Upload the texture data
+		GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA8, width, height, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE,
+				buffer);
+		return new Texture(td, width, height);
 	}
 
 	/**

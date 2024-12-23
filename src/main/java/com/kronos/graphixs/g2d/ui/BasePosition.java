@@ -1,5 +1,7 @@
 package com.kronos.graphixs.g2d.ui;
 
+import java.awt.Rectangle;
+
 import com.kronos.graphixs.color.Colors;
 import com.kronos.graphixs.g2d.ScreenCord;
 import com.kronos.graphixs.g2d.ScreenProvider;
@@ -117,4 +119,7 @@ public class BasePosition implements ComponentPosition {
 		return bp;
 	}
 
+	public static BasePosition fromBounds(Rectangle rec, ScreenProvider sp) {
+		return new BasePosition(new ScreenCord(rec.x, rec.y, rec.width, rec.height), sp);
+	}
 }

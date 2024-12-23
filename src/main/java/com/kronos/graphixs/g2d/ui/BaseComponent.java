@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.kronos.graphixs.g2d.Abstract2DGraphixs;
+import com.kronos.graphixs.g2d.ScreenProvider;
 import com.kronos.graphixs.g2d.TextureBatch;
 import com.kronos.graphixs.g2d.fonts.FontRenderer;
 import com.kronos.graphixs.g2d.ui.components.Drawable;
@@ -309,4 +310,10 @@ public class BaseComponent implements Comp, Drawable, Persistant {
 		frame = i;
 	}
 
+	/**
+	 * @return
+	 */
+	public ScreenProvider getLocalProvider() {
+		return ((BasePosition) this.getPosition()).getProvider();
+	}
 }
