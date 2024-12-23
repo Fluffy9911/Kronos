@@ -11,7 +11,7 @@ import java.util.List;
  * rather than memory. caches x number of elements for faster access. Chunks are
  * the size of the block size at each element. we dont want to maybe store a GB+
  * in a single line. Another pro is that with massive lists we keep it in
- * storage without having to worry about t he jvm doing stuff to our lists.
+ * storage without having to worry about the jvm doing stuff to our lists.
  * 
  * NOT FOR FAST SMALL LISTS.
  * 

@@ -156,7 +156,7 @@ public class Perf {
 			}
 			if (at) {
 
-				r2d.addToBuffer(0, 0, 0, 100, 100);
+				r2d.addToBuffer(0, -1, 1, 1, -1);
 
 				r2d.prepare();
 				r2d.sus();

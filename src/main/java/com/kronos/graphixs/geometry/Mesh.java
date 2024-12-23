@@ -15,6 +15,10 @@ import com.kronos.graphixs.FrameBuffer;
 import com.kronos.graphixs.shaders.render.RenderShader;
 
 public class Mesh implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private int vaoID;
 	private int vboID;
 	private int eboID;
@@ -175,6 +179,10 @@ public class Mesh implements Serializable {
 	}
 
 	public static class AttributeInfo implements Serializable {
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
 		String name;
 		int size;
 		int type;

@@ -12,6 +12,8 @@ import static org.lwjgl.opengl.GL43C.glGetProgramResourceiv;
 
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.logging.log4j.Logger;
 import org.joml.Matrix4f;
@@ -168,11 +170,20 @@ public abstract class BaseShader implements Resource, ShaderUniform {
 		int ssboID = GL40.glGenBuffers();
 		FloatBuffer bufferdata = BufferUtils.createFloatBuffer(bo.getSize());
 		GL40.glBindBuffer(GL_SHADER_STORAGE_BUFFER, ssboID);
-
+		GL40.glBufferData(GL_SHADER_STORAGE_BUFFER, bo.getSize(), GL40.GL_DYNAMIC_COPY);
 		bo.append(bufferdata);
 		System.err.println(bufferdata.toString());
 		bufferdata.flip();
-		GL40.glBufferData(GL_SHADER_STORAGE_BUFFER, bufferdata, GL40.GL_STATIC_DRAW);
+		GL40.glBufferData(GL_SHADER_STORAGE_BUFFER, bufferdata, GL40.GL_DYNAMIC_COPY);
+
+		FloatBuffer floatBuffer = BufferUtils.createFloatBuffer(bo.getSize());
+		GL40.glGetBufferSubData(GL_SHADER_STORAGE_BUFFER, 0, floatBuffer);
+		List<Float> dataList = new ArrayList<>();
+		while (floatBuffer.hasRemaining()) {
+			dataList.add(floatBuffer.get());
+		}
+		System.out.println(dataList.toString());
+
 		GL40.glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
 		return new Vector2i(binding, ssboID);
 	}
