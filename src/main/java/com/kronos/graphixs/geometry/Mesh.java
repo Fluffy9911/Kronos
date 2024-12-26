@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
+import org.joml.Vector2i;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL30;
@@ -81,6 +82,37 @@ public class Mesh implements Serializable {
 		}
 
 		GL30.glBindVertexArray(0);
+	}
+
+	/**
+	 * @param vertices
+	 * @param indices
+	 */
+	public static Vector2i buildVAO(float[] vertices, int[] indices, int gldrawtype,
+			List<AttributeInfo> attributeList) {
+		int vaoID = GL30.glGenVertexArrays();
+		GL30.glBindVertexArray(vaoID);
+
+		// Create and bind the VBO (Vertex Buffer Object) for vertices
+		int vboID = GL15.glGenBuffers();
+		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vboID);
+		GL15.glBufferData(GL15.GL_ARRAY_BUFFER, vertices, gldrawtype);
+
+		// Create and bind the EBO (Element Buffer Object) for indices
+		int eboID = GL15.glGenBuffers();
+		GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, eboID);
+		GL15.glBufferData(GL15.GL_ELEMENT_ARRAY_BUFFER, indices, gldrawtype);
+		GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, 0);
+
+		for (Iterator iterator = attributeList.iterator(); iterator.hasNext();) {
+			AttributeInfo ai = (AttributeInfo) iterator.next();
+
+			GL40.glVertexAttribPointer(ai.getLoc(), ai.size, ai.type, false, ai.stride, ai.offset);
+			GL40.glEnableVertexAttribArray(ai.getLoc());
+		}
+
+		GL30.glBindVertexArray(0);
+		return new Vector2i(vboID, vaoID);
 	}
 
 	private void buildVAO(float[] vertices) {

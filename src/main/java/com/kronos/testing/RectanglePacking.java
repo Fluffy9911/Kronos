@@ -45,7 +45,7 @@ public class RectanglePacking {
 
 		for (int i = 0; i < rectangles.size(); i++) {
 			Rectangle rect = rectangles.get(i);
-			g.setColor(Colors.randColor().asJWTColor());
+			g.setColor(Colors.randColor().asCol());
 			g.fillRect(rect.x + 32, rect.y + 32, rect.width, rect.height);
 		}
 

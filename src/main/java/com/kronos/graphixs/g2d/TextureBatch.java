@@ -13,6 +13,11 @@ public class TextureBatch {
 	HashMap<TexturedMesh, Matrix4f> mesh;
 	Abstract2DGraphixs g;
 
+	int vboid = 0;
+	int vaoid = 0;
+
+	int texs = 0;
+
 	public TextureBatch() {
 		super();
 
@@ -22,6 +27,7 @@ public class TextureBatch {
 
 	public void begin(Abstract2DGraphixs g) {
 		this.g = g;
+
 	}
 
 	public void render() {

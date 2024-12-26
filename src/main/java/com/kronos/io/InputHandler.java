@@ -13,8 +13,8 @@ import org.lwjgl.glfw.GLFWMouseButtonCallback;
 import org.lwjgl.glfw.GLFWMouseButtonCallbackI;
 
 import com.kronos.Kronos;
-import com.kronos.core.res.DataField;
-import com.kronos.core.res.ResourceKey;
+
+import main.json.io.DataField;
 
 public class InputHandler {
 	private static boolean[] keys = new boolean[GLFW.GLFW_KEY_LAST];
@@ -89,7 +89,7 @@ public class InputHandler {
 
 	public static void handleKeyMappings() {
 		DataField<Map<String, Number>> df = new DataField<>(key_mapping,
-				ResourceKey.kronos_base.childPath("key_mappings", "Keys"));
+				Kronos.location.childPath("key_mappings", "Keys"));
 		key_mapping = df.get().getObj();
 		Kronos.debug.getLogger().debug("Registered Keys: {}", key_mapping.toString());
 

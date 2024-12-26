@@ -90,6 +90,7 @@ public abstract class BaseShader implements Resource, ShaderUniform {
 
 	@Override
 	public void addUniform(String id, int value) {
+		System.out.println("ID: " + id);
 		int location = GL20.glGetUniformLocation(programId, id);
 		if (location != -1) {
 			GL20.glUniform1i(location, value);

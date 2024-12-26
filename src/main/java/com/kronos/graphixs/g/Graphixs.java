@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.logging.log4j.Logger;
+import org.joml.Random;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
@@ -41,13 +42,11 @@ import com.kronos.graphixs.rendering.RenderTarget.TargetConfig;
 import com.kronos.graphixs.resources.Resource;
 import com.kronos.graphixs.resources.ResourceManager;
 import com.kronos.graphixs.shaders.BaseShader;
-import com.kronos.graphixs.shaders.builtin.Shader3D;
 import com.kronos.graphixs.shaders.render.RenderShader;
 import com.kronos.graphixs.shaders.render.ShaderProgram;
 import com.kronos.graphixs.shaders.render.ShaderUniform;
 import com.kronos.graphixs.texture.AssetLoader;
 import com.kronos.graphixs.texture.Texture;
-import com.kronos.graphixs.texture.TextureProgram;
 
 import de.javagl.obj.Obj;
 import de.javagl.obj.ObjReader;
@@ -185,22 +184,24 @@ public class Graphixs {
 			buffers.put("graphixs2d_pane", new FrameBuffer(config.width(), config.height(), true));
 			post_process_quad = Builtin.screenQuad();
 			// asl.addBasePath("src/main/resources");
-			createShader("texture", new TextureProgram(asl.readAll("src/main/resources/shaders/texture.vs"),
-					asl.readAll("src/main/resources/shaders/texture.fs")));
+//			createShader("texture", new TextureProgram(asl.readAll("src/main/resources/shaders/texture.vs"),
+//					asl.readAll("src/main/resources/shaders/texture.fs")));
+			createShader("sbtext", new ShaderProgram(asl.readAll("src/main/resources/shaders/sbatchv.glsl"),
+					asl.readAll("src/main/resources/shaders/sbatchf.glsl")));
 //			createShader("highlight", new HighlightProgram(Kronos.loader.tryLoad("shaders\\texture.vs"),
 //					Kronos.loader.tryLoad("shaders\\highlight.fs")));
 //			createShader("highlight_g", new HighlightProgram(Kronos.loader.tryLoad("shaders\\texture.vs"),
 //					Kronos.loader.tryLoad("shaders\\highlighted_g.fs")));
 //			createShader("pp_tex", new ShaderProgram(Kronos.loader.tryLoad("shaders\\vertex.vs"),
 //					Kronos.loader.tryLoad("shaders\\fragment.fs")));
-			createShader("3d", new Shader3D(asl.readAll("src/main/resources/shaders/threed.vs"),
-					asl.readAll("src/main/resources/shaders/basiccolor.fs"), null));
+//			createShader("3d", new Shader3D(asl.readAll("src/main/resources/shaders/threed.vs"),
+//					asl.readAll("src/main/resources/shaders/basiccolor.fs"), null));
 //			createShader("rtcp",
 //					new RTCompute(Kronos.loader.tryLoad("shaders/rtcompute.cp"), new Vector3i(400, 400, 1), 400, 400));
 
 //			fs = Kronos.loader.tryLoad("shaders/texture.fs");
 //			vs = Kronos.loader.tryLoad("shaders/fragment.fs");
-			shaders.get("texture").compileShader();
+			shaders.get("sbtext").compileShader();
 		}
 		g2d = new Graphixs2D(buffers.get("graphixs2d_pane"), new ScreenProvider(config),
 				(ShaderProgram) shaders.get("texture"));
@@ -520,5 +521,23 @@ public class Graphixs {
 		GL43C.glEnable(GL43.GL_CULL_FACE);
 		GL43C.glCullFace(type);
 		GL43C.glFrontFace(GL40.GL_CW);
+	}
+
+	/**
+	 * @return
+	 */
+	public Texture getTextureRandom() {
+		Random r = new Random();
+		int times = r.nextInt(10) + 1;
+		int i = 0;
+		for (Map.Entry<String, Texture> entry : textures.entrySet()) {
+			String key = entry.getKey();
+			Texture val = entry.getValue();
+			if (i == times) {
+				return val;
+			}
+			i++;
+		}
+		return textures.values().iterator().next();
 	}
 }

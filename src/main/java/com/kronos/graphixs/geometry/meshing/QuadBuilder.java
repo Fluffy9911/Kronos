@@ -5,6 +5,38 @@ import java.util.List;
 
 public class QuadBuilder {
 
+	public static MeshBuilder createQuadTexture() {
+		MeshBuilder mb = new MeshBuilder();
+
+		// Create position and UV attributes
+		mb.createPosition().createUV();
+
+		// Add data for a quad (two triangles forming a rectangle)
+		// Vertex positions (x, y) and UV coordinates (u, v)
+		mb.addData(-1.0f, -1.0f, 0.0f, 0.0f); // Bottom-left corner
+		mb.addData(1.0f, -1.0f, 1.0f, 0.0f); // Bottom-right corner
+		mb.addData(1.0f, 1.0f, 1.0f, 1.0f); // Top-right corner
+		mb.addData(-1.0f, 1.0f, 0.0f, 1.0f); // Top-left corner
+
+		return mb;
+	}
+
+	public static MeshBuilder createQuadNoTexture() {
+		MeshBuilder mb = new MeshBuilder();
+
+		// Create position and UV attributes
+		mb.createPosition();
+
+		// Add data for a quad (two triangles forming a rectangle)
+		// Vertex positions (x, y) and UV coordinates (u, v)
+		mb.addData(-1.0f, -1.0f); // Bottom-left corner
+		mb.addData(1.0f, -1.0f); // Bottom-right corner
+		mb.addData(1.0f, 1.0f); // Top-right corner
+		mb.addData(-1.0f, 1.0f); // Top-left corner
+
+		return mb;
+	}
+
 	public static int[] out() {
 		int[] i = new int[8];
 		i[0] = 0;

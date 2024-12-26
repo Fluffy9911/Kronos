@@ -80,17 +80,25 @@ public class PluginLoader {
 
 	private void loadToClassPath(ArrayList<File> files) throws Exception {
 		ArrayList<URL> los = new ArrayList<>();
-		for (Iterator iterator = files.iterator(); iterator.hasNext();) {
-			File jarFile = (File) iterator.next();
 
+		// Collect all the URLs for the JAR files
+		for (File jarFile : files) {
 			los.add(jarFile.toURI().toURL());
 		}
-		URLClassLoader ucl = new URLClassLoader(los.toArray(new URL[los.size()]));
-		for (Iterator iterator = los.iterator(); iterator.hasNext();) {
-			URL url = (URL) iterator.next();
+
+		// Use the current class loader (the one that loaded the rest of the
+		// application)
+		ClassLoader currentClassLoader = this.getClass().getClassLoader();
+
+		// Create a new URLClassLoader using the current class loader
+		URLClassLoader ucl = new URLClassLoader(los.toArray(new URL[0]), currentClassLoader);
+
+		// Load the classes and methods from the JAR files
+		for (URL url : los) {
 			loadClassesAndMethods(new File(url.getFile()), ucl);
 		}
 
+		// Log how many plugins were loaded
 		l.debug("Loaded: {} Plugins", files.size());
 	}
 
@@ -130,7 +138,8 @@ public class PluginLoader {
 					l.debug("Loaded Class: {}", string);
 				// executeAll(gatherMethods(c));
 			} catch (NoClassDefFoundError e) {
-				l.debug("Skipping Class {}, unable to load", string);
+				if (showloaded)
+					l.debug("Skipping Class {}, unable to load", string);
 				continue;
 			} catch (SecurityException e) {
 				// TODO Auto-generated catch block

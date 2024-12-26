@@ -9,7 +9,6 @@ import java.util.Map;
 
 import com.kronos.core.CoreConfig;
 import com.kronos.core.event.EngineListener;
-import com.kronos.core.res.ResourceField;
 import com.kronos.debug.Debugger;
 import com.kronos.graphixs.Loop;
 import com.kronos.graphixs.display.ScreenConfig;
@@ -19,6 +18,9 @@ import com.kronos.io.FileLoader;
 import com.kronos.io.ResourceIdentifier;
 import com.kronos.io.assets.InternalAssetLoader;
 import com.kronos.plugin.PluginLoader;
+
+import main.json.io.DataField;
+import main.json.io.ResourceKey;
 
 public class Kronos {
 	public static String[] args;
@@ -37,7 +39,7 @@ public class Kronos {
 	public static int max_threads = 2;
 
 	public static boolean plugins = false;
-	public static boolean show_shader_errors = ResourceField.serializableField("shaders_throw_errors", true);
+	public static boolean show_shader_errors = DataField.serializableField("shaders_throw_errors", true);
 	// resources
 	public static String config_loc = "configs/main";
 	public static String kronos_id = "kronos";
@@ -85,6 +87,7 @@ public class Kronos {
 	 * not available until startup
 	 */
 	public static CoreConfig config;
+	public static ResourceKey location = new ResourceKey("kronos", "kronos/data");
 
 	/**
 	 * Starts Kronos default startup making config and listeners

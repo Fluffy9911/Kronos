@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import com.kronos.core.res.ResourceKey;
+import main.json.io.ResourceKey;
 
 /**
  * 

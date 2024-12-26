@@ -49,12 +49,7 @@ public class Abstract2DGraphixs implements SListener {
 
 			tm.getDraw().use();
 			tm.getDraw().addUniform("proj", provider.collectTransform());
-<<<<<<< Updated upstream
-			// tm.getDraw().addUniform("transform", val);
-=======
-			tm.getDraw().addUniform("transform", val);
-			tm.getDraw().addUniform("view", provider.cam.getView());
->>>>>>> Stashed changes
+
 			tm.render();
 			rendered_textures++;
 			tm.getTexture().unbind();

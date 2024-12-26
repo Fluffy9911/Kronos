@@ -25,6 +25,11 @@
 				<artifactId>obj</artifactId>
 				<version>0.4.0</version>
 			</dependency>
+			<dependency>
+    <groupId>com.github.oshi</groupId>
+    <artifactId>oshi-core</artifactId>
+    <version>6.4.2</version>
+</dependency>
 		<!--
 		https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core -->
 		<dependency>
@@ -183,5 +188,10 @@
     <version>0.10.2</version>
 </dependency>
 
+		<dependency>
+			<groupId>JSL</groupId>
+			<artifactId>JSL</artifactId>
+			<version>1.0.0</version>
+		</dependency>
 	</dependencies>
 </project>

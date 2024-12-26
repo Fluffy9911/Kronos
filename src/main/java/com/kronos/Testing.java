@@ -1,32 +1,23 @@
 package com.kronos;
 
+import java.io.File;
 import java.net.MalformedURLException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import org.joml.Vector3f;
-import org.lwjgl.opengl.GL40;
-
-import com.kronos.core.event.EngineListener;
+import com.kronos.core.SystemInfoUtil;
 import com.kronos.graphixs.color.Color;
 import com.kronos.graphixs.color.Colors;
 import com.kronos.graphixs.display.ScreenConfig;
-import com.kronos.graphixs.display.camera.PerspectiveCamera;
 import com.kronos.graphixs.g.Graphixs;
 import com.kronos.graphixs.g2d.Graphixs2D;
-import com.kronos.graphixs.g2d.TextureBatch;
-import com.kronos.graphixs.g2d.builder.ShapeRenderer;
+import com.kronos.graphixs.g2d.SpriteBatch;
 import com.kronos.graphixs.g2d.fonts.FontRenderer;
-import com.kronos.graphixs.g2d.pixelcanvas.Canvas2D;
 import com.kronos.graphixs.geometry.Mesh;
 import com.kronos.graphixs.geometry.meshing.BasicMeshBuilder;
-import com.kronos.graphixs.geometry.meshing.Builtin;
 import com.kronos.graphixs.internal.Cube;
-import com.kronos.graphixs.scene.Scene3D;
 import com.kronos.graphixs.shaders.render.ShaderProgram;
-import com.kronos.io.Config;
 import com.kronos.io.InputHandler;
 
 public class Testing {
@@ -34,6 +25,7 @@ public class Testing {
 
 	public static void main(String[] args) throws MalformedURLException {
 		Kronos.args = args;
+		Kronos.enablePlugins(new File("plugins"));
 		Kronos.startInDev(new ScreenConfig() {
 
 			@Override
@@ -57,7 +49,7 @@ public class Testing {
 			@Override
 			public Color getClearColor() {
 				// TODO Auto-generated method stub
-				return Colors.Black;
+				return Colors.White;
 			}
 
 			@Override
@@ -73,84 +65,30 @@ public class Testing {
 			}
 
 		});
-
+		// System.out.println(Kronos.hello());
+		System.exit(0);
 		Graphixs g = Kronos.graphixs;
-
+		ShaderProgram sp = g.getShader("sbtext");
 		Graphixs2D g2d = g.g2d;
-
-//		ComponentHandler ch = new ComponentHandler(g2d);
-//		Panel p = new Panel(BasePosition.single(40, 40, 300, 400, g2d.getProvider()), false, true, "test_panel");
-//		ch.put("test_panel", p);
-//		IncrementNumber ic = new IncrementNumber(BasePosition.single(95, 95, 120, 40, g2d.getProvider()), false, false,
-//				false, "test_increment");
-//		ch.put("test_increment", ic);
-//
-//		ch.createComps();
-//		ch.load();
-
-		Canvas2D c = new Canvas2D(400, 400);
-		c.clear(Colors.White.rgb());
-		c.noiseShort();
-		TextureBatch tb = g2d.createBatch(g2d);
-		ShapeRenderer sr = g.shapeRenderer;
-		// sr.loadIn("test_shape",
-		// Kronos.loader.tryLoadImage("texture/test_shape.png"));
-
-		Cube cube = new Cube(0, 0, 0, 10, Colors.Salmon);
-//		BasicMeshBuilder builder = new BasicMeshBuilder();
-//		addRand(builder, 10);
-//		builder.addAll(BasicMeshBuilder.getAttribs());
-		List<Mesh> mms = new ArrayList<Mesh>();
-		addRand(mms, 20);
-		ShaderProgram draw = g.getShader("3d");
-		PerspectiveCamera pc = new PerspectiveCamera(new Vector3f(0, 0, 0), new Vector3f(0, 1, 0),
-				new Vector3f(1, 1, 1));
-		pc.calculatePositioning(900, 900);
-
-		Kronos.registerListener(new EngineListener() {
-
-			@Override
-			public void engineStart() {
-				// ch.load();
-
-			}
-
-			@Override
-			public void engineEnd() {
-				// ch.write();
-			}
-
-			@Override
-			public void configChange(Config c) {
-				// TODO Auto-generated method stub
-
-			}
-		});
-		Mesh quad = Builtin.screenQuad();
+		SpriteBatch sbat = new SpriteBatch(sp);
+		sp.use();
+		// sp.addUniform("spriteTexture", 0);
 		FontRenderer fr = FontRenderer.createDefault();
-
-		Scene3D scene = new Scene3D(draw, pc);
-		scene.setMeshes(mms);
-		// scene.scenePTest();
-		GL40.glEnable(GL40.GL_DEPTH_TEST);
-
+		Random r = new Random();
 		Kronos.startDrawing((a) -> {
+			sbat.begin();
+			sp.addUniform("projection", g2d.getProvider().collectTransform());
 
-			pc.update();
+			sbat.draw(g.getTexture("slider"), 0, 0, 100, 100);
+			sbat.draw(g.getTexture("slider"), 0, 0, 100, 100);
+			sbat.draw(g.getTexture("slider"), 0, 0, 100, 100);
+			sbat.draw(g.getTexture("slider"), 0, 0, 100, 100);
+			sbat.draw(g.getTexture("slider"), 0, 0, 100, 100);
+			sbat.draw(g.getTexture("slider"), 0, 0, 100, 100);
+			sbat.draw(g.getTexture("slider"), 0, 0, 100, 100);
 
-			scene.prepare();
-			scene.render();
-			scene.handleInputs();
-			//
-			fr.renderText("Cam Position: " + pc.getPosition().toString() + " Camera Look: " + pc.getLookat().toString(),
-					0, 0, fr.useDefaultFont().deriveFont(20.5f), java.awt.Color.WHITE, tb);
-			fr.renderText(scene.getDisplay() + " FPS: " + a.getFps() + "/" + a.target() + " Delta: " + a.getDeltaTime(),
-					0, 20, fr.useDefaultFont().deriveFont(20.5f), java.awt.Color.WHITE, tb);
-			fr.renderText(scene.getOpr(), 0, 35, fr.useDefaultFont().deriveFont(20.5f), java.awt.Color.WHITE, tb);
-			// tb.drawTexture(0, 0, 200, 200, c.toTexture());
-			tb.render();
-			tb.end();
-
+			sbat.end();
+			System.out.println(SystemInfoUtil.getGPUVramInfo() + ": " + SystemInfoUtil.getCPUUsage());
 			g.glErrors();
 			InputHandler.nextFrame();
 		});
