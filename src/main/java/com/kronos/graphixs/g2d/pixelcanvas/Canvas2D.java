@@ -7,7 +7,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import com.kronos.graphixs.color.Color;
-import com.kronos.graphixs.display.Texture;
+import com.kronos.graphixs.texture.Texture;
 
 public class Canvas2D {
 	int[][] canvas;

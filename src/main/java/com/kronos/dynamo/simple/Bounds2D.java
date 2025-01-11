@@ -9,12 +9,16 @@ public class Bounds2D {
 	float factor = 0.5f;
 	Vector2f velocity = new Vector2f(0, 0);
 	float friction = 0.25f;
+	protected Vector2f target = new Vector2f();
+	float previousX = 0, previousY = 0;
+	Rectangle r;
 
 	public Bounds2D(float x, float y, float width, float height) {
 		this.x = x;
 		this.y = y;
 		this.width = width;
 		this.height = height;
+
 	}
 
 	public Vector2f getCenter() {
@@ -29,18 +33,24 @@ public class Bounds2D {
 
 	public void applyForce(Vector2f v) {
 		velocity.add(v);
+
 	}
 
 	public void resolveForce() {
-		velocity.mul(friction);
-		MathLerp.lerpSmooth((velocity.x + x), x, factor);
-		MathLerp.lerpSmooth((velocity.y + y), y, factor);
+		this.translateBox2D(velocity.x, velocity.y);
+		this.velocity = new Vector2f();
 	}
+
+//	public void resolveForce() {
+//		velocity.mul(friction);
+//		MathLerp.lerpSmooth((velocity.x + x), x, factor);
+//		MathLerp.lerpSmooth((velocity.y + y), y, factor);
+//	}
 
 	public float futureX(Vector2f v) {
 		float fx = x;
 
-		v.mul(friction);
+		// v.mul(friction);
 		MathLerp.lerpSmooth((v.x + fx), fx, factor);
 		return fx;
 	}
@@ -48,7 +58,7 @@ public class Bounds2D {
 	public float futureY(Vector2f v) {
 		float fy = y;
 
-		v.mul(friction);
+		// v.mul(friction);
 		MathLerp.lerpSmooth((v.y + fy), fy, factor);
 		return fy;
 	}
@@ -107,46 +117,85 @@ public class Bounds2D {
 	}
 
 	public Rectangle toRect() {
-		return new Rectangle((int) x, (int) y, (int) width, (int) height);
-	}
-
-	public void resolveCollision(Bounds2D b) {
-		Rectangle th = this.toRect();
-		Rectangle ot = b.toRect();
-		Rectangle projected_rect = projectedRectangle(velocity);
-
-		Vector2f direction = velocity;
-		float xo = 0;
-		float yo = 0;
-		// adds/subs for pixel perfect
-		if (projected_rect.intersects(ot)) {
-			if (projected_rect.intersects(ot)) {
-				if (direction.x > 0) {
-					// right
-					float x = ot.x;
-					xo = ((th.x + th.width) - x);
-				} else if (direction.x < 0) {
-					// left
-					float x = (ot.x + ot.width);
-					xo = (th.x - x);
-				}
-
-				if (direction.y > 0) {
-					// down
-					float y = ot.y;
-					yo = (y - (th.y + th.height));
-				} else if (direction.y < 0) {
-					// up
-					yo = ((ot.y + ot.height) - th.y);
-				}
-
-				translateBox2D(xo, yo);
-			}
-
+		if (r == null) {
+			r = new Rectangle((int) x, (int) y, (int) width, (int) height);
 		} else {
-			return;
+			r.setBounds((int) x, (int) y, (int) width, (int) height);
 		}
 
+		return r;
+	}
+
+	public void resolveCollisionSolid(Bounds2D b) {
+
+		Rectangle ot = b.toRect();
+
+		// Calculate motion vector
+		float dx = x - previousX;
+		float dy = y - previousY;
+
+		// Create swept AABB representing object's path
+		Rectangle sweptRect = new Rectangle((int) Math.min(x, previousX), (int) Math.min(y, previousY),
+				(int) (Math.abs(dx) + width), (int) (Math.abs(dy) + height));
+
+		// Check for collisions along the path
+		if (sweptRect.intersects(ot)) {
+			float overlapX = Math.min(sweptRect.x + sweptRect.width, ot.x + ot.width) - Math.max(sweptRect.x, ot.x);
+			float overlapY = Math.min(sweptRect.y + sweptRect.height, ot.y + ot.height) - Math.max(sweptRect.y, ot.y);
+
+			if (overlapX < overlapY) { // Resolve horizontally first
+				if (x < ot.x) { // Move to the left
+					x -= overlapX;
+				} else { // Move to the right
+					x += overlapX;
+				}
+			} else { // Resolve vertically first
+				if (y < ot.y) { // Move upwards
+					y -= overlapY;
+				} else { // Move downwards
+					y += overlapY;
+				}
+			}
+		}
+
+		// Update previous position for next frame
+		previousX = x;
+		previousY = y;
+	}
+
+	/**
+	 * @return the target
+	 */
+	public Vector2f getTarget() {
+		return target;
+	}
+
+	public void resolveCollisionsNonSolid(Bounds2D b) {
+		Rectangle th = this.toRect();
+		Rectangle ot = b.toRect();
+
+		if (th.intersects(ot)) {
+			float overlapX = Math.min(x + width, b.x + b.width) - Math.max(x, b.x);
+			float overlapY = Math.min(y + height, b.y + b.height) - Math.max(y, b.y);
+
+			if (overlapX < overlapY) {
+				if (x < b.x) {
+					x -= overlapX / 2;
+					b.x += overlapX / 2;
+				} else {
+					x += overlapX / 2;
+					b.x -= overlapX / 2;
+				}
+			} else {
+				if (y < b.y) {
+					y -= overlapY / 2;
+					b.y += overlapY / 2;
+				} else {
+					y += overlapY / 2;
+					b.y -= overlapY / 2;
+				}
+			}
+		}
 	}
 
 	public void translateBox2D(float xo, float yo) {
@@ -156,8 +205,7 @@ public class Bounds2D {
 
 	public Rectangle projectedRectangle(Vector2f target) {
 
-		Rectangle projected_rect = new Rectangle((int) futureX(target), (int) futureY(target), (int) width,
-				(int) height);
+		Rectangle projected_rect = new Rectangle((int) (target.x + x), (int) (target.y + y), (int) width, (int) height);
 
 		return projected_rect;
 	}
@@ -166,6 +214,11 @@ public class Bounds2D {
 	public String toString() {
 		return "Bounds2D [x=" + x + ", y=" + y + ", width=" + width + ", height=" + height + ", factor=" + factor
 				+ ", velocity=" + velocity + ", friction=" + friction + "]";
+	}
+
+	public boolean canMove(Bounds2D b) {
+
+		return !this.projectedRectangle(target).intersects(b.toRect());
 	}
 
 }

@@ -10,7 +10,7 @@ import org.joml.Vector4f;
 import com.kronos.gameFramework.templates.Transform;
 import com.kronos.graphixs.geometry.Mesh;
 import com.kronos.graphixs.geometry.material.Material;
-import com.kronos.graphixs.shaders.ShaderProgram;
+import com.kronos.graphixs.shaders.render.ShaderProgram;
 
 /**
  * 

@@ -3,8 +3,11 @@ package com.kronos.graphixs.g2d;
 import java.awt.Rectangle;
 
 import org.joml.Matrix4f;
+import org.joml.Vector2f;
 import org.joml.Vector4f;
 
+import com.kronos.graphixs.g2d.ui.transform.PositionX;
+import com.kronos.graphixs.g2d.ui.transform.PositionY;
 import com.kronos.io.Config;
 
 public class ScreenCord {
@@ -104,6 +107,52 @@ public class ScreenCord {
 
 	public void setH(float h) {
 		this.h = h;
+	}
+
+	public Vector2f getPercentWH(float xper, float yper) {
+		return new Vector2f(w * xper, h * yper);
+	}
+
+	public Vector2f getPercentPosition(float xper, float yper) {
+		return getPercentWH(xper, yper).add(x, y);
+	}
+
+	/**
+	 * @return
+	 */
+	public Rectangle getBounds() {
+		// TODO Auto-generated method stub
+		return new Rectangle((int) x, (int) y, (int) w, (int) h);
+	}
+
+	/**
+	 * @param pos
+	 * @param px
+	 * @param py
+	 */
+	public void setToCenterOf(ScreenCord pos, PositionX px, PositionY py) {
+		if (px == PositionX.LEFT) {
+			this.x = pos.x - (w / 2);
+		} else if (px == PositionX.RIGHT) {
+			this.x = pos.x + (pos.w / 2);
+		}
+		if (py == PositionY.UP) {
+			this.y = pos.y;
+		} else if (py == PositionY.DOWN) {
+			this.y = pos.h - (this.h / 2);
+		}
+
+	}
+
+	/**
+	 * @param pos
+	 */
+	public void set(ScreenCord pos) {
+		this.x = pos.x;
+		this.y = pos.y;
+		this.w = pos.w;
+		this.h = pos.h;
+
 	}
 
 }

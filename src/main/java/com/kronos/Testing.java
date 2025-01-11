@@ -1,5 +1,6 @@
 package com.kronos;
 
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -9,12 +10,11 @@ import org.joml.Vector3f;
 import org.lwjgl.opengl.GL40;
 
 import com.kronos.core.event.EngineListener;
-import com.kronos.debug.DebugInputFields;
 import com.kronos.graphixs.color.Color;
 import com.kronos.graphixs.color.Colors;
-import com.kronos.graphixs.display.Graphixs;
 import com.kronos.graphixs.display.ScreenConfig;
 import com.kronos.graphixs.display.camera.PerspectiveCamera;
+import com.kronos.graphixs.g.Graphixs;
 import com.kronos.graphixs.g2d.Graphixs2D;
 import com.kronos.graphixs.g2d.TextureBatch;
 import com.kronos.graphixs.g2d.builder.ShapeRenderer;
@@ -25,16 +25,16 @@ import com.kronos.graphixs.geometry.meshing.BasicMeshBuilder;
 import com.kronos.graphixs.geometry.meshing.Builtin;
 import com.kronos.graphixs.internal.Cube;
 import com.kronos.graphixs.scene.Scene3D;
-import com.kronos.graphixs.shaders.ShaderProgram;
+import com.kronos.graphixs.shaders.render.ShaderProgram;
 import com.kronos.io.Config;
 import com.kronos.io.InputHandler;
 
 public class Testing {
 	public static int i = 200;
 
-	public static void main(String[] args) {
-
-		Kronos.start(new ScreenConfig() {
+	public static void main(String[] args) throws MalformedURLException {
+		Kronos.args = args;
+		Kronos.startInDev(new ScreenConfig() {
 
 			@Override
 			public int width() {
@@ -75,7 +75,6 @@ public class Testing {
 		});
 
 		Graphixs g = Kronos.graphixs;
-		DebugInputFields dbgif = new DebugInputFields();
 
 		Graphixs2D g2d = g.g2d;
 
@@ -92,9 +91,10 @@ public class Testing {
 		Canvas2D c = new Canvas2D(400, 400);
 		c.clear(Colors.White.rgb());
 		c.noiseShort();
-		TextureBatch tb = g2d.createBatch();
+		TextureBatch tb = g2d.createBatch(g2d);
 		ShapeRenderer sr = g.shapeRenderer;
-		sr.loadIn("test_shape", Kronos.loader.tryLoadImage("texture/test_shape.png"));
+		// sr.loadIn("test_shape",
+		// Kronos.loader.tryLoadImage("texture/test_shape.png"));
 
 		Cube cube = new Cube(0, 0, 0, 10, Colors.Salmon);
 //		BasicMeshBuilder builder = new BasicMeshBuilder();
@@ -132,8 +132,9 @@ public class Testing {
 		Scene3D scene = new Scene3D(draw, pc);
 		scene.setMeshes(mms);
 		// scene.scenePTest();
+		GL40.glEnable(GL40.GL_DEPTH_TEST);
+
 		Kronos.startDrawing((a) -> {
-			GL40.glEnable(GL40.GL_DEPTH_TEST);
 
 			pc.update();
 

@@ -38,4 +38,8 @@ public interface ScreenConfig {
 				+ "]}";
 	}
 
+	public default boolean resizeable() {
+		return false;
+	}
+
 }

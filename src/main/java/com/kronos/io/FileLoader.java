@@ -12,6 +12,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -32,20 +34,44 @@ public class FileLoader {
 		this.rid = rid;
 	}
 
+	/***
+	 * @return
+	 * 
+	 *         the rid
+	 */
+
+	public ResourceIdentifier getRid() {
+		return rid;
+	}
+
+	/***
+	 * 
+	 * @param rid the rid to set
+	 */
+
+	public void setRid(ResourceIdentifier rid) {
+		this.rid = rid;
+	}
+
 	public String tryLoad(String path) {
-		File f = new File(rid.getBasePath() + "/" + path);
-		if (!f.isFile()) {
+		URL f = FileLoader.class.getClassLoader().getResource(rid.getBasePath() + "\\" + path);
+
+		if (f == null) {
 			Kronos.debug.getLogger().error("File Path {} is null using resource identifier {} ",
-					rid.getBasePath() + "/" + path, rid.getNameid());
+					rid.getBasePath() + "\\" + path, rid.getNameid());
 		}
 
 		try {
-			Path p = Paths.get(f.toURI());
-			byte[] bytes = Files.readAllBytes(p);
-			return new String(bytes, StandardCharsets.UTF_8);
-
+			if (f != null) {
+				Path p = Paths.get(f.toURI());
+				byte[] bytes = Files.readAllBytes(p);
+				return new String(bytes, StandardCharsets.UTF_8);
+			}
 		} catch (IOException e) {
 			Kronos.debug.getLogger().fatal("ERROR {} ", e.getMessage());
+			e.printStackTrace();
+		} catch (URISyntaxException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -53,7 +79,7 @@ public class FileLoader {
 	}
 
 	public boolean tryWrite(String path, String content) {
-		File file = new File(rid.getBasePath() + "/" + path);
+		File file = new File(rid.getBasePath() + "\\" + path);
 
 		try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
 			writer.write(content);
@@ -67,12 +93,12 @@ public class FileLoader {
 	}
 
 	public BufferedImage tryLoadImage(String path) {
-		File imageFile = new File(rid.getBasePath() + "/" + path);
+		URL imageFile = FileLoader.class.getClassLoader().getResource(path);
 
 		try {
-			if (!imageFile.isFile()) {
+			if (imageFile == null) {
 				Kronos.debug.getLogger().error("Image file path {} is null using resource identifier {} ",
-						rid.getBasePath() + "/" + path, rid.getNameid());
+						rid.getBasePath() + "\\" + path, rid.getNameid());
 				return null;
 			}
 
@@ -86,13 +112,13 @@ public class FileLoader {
 	}
 
 	public String tryLoad(String path, ResourceIdentifier rid) {
-		File f = new File(rid.getBasePath() + "/" + path);
+		File f = new File(rid.getBasePath() + "\\" + path);
 		if (!f.isFile()) {
 			Kronos.debug.getLogger().error("File Path {} is null using resource identifier {} ",
-					rid.getBasePath() + "/" + path, rid.getNameid());
+					rid.getBasePath() + "\\" + path, rid.getNameid());
 		}
 
-		try (BufferedReader br = new BufferedReader(new FileReader(rid.getBasePath() + "/" + path))) {
+		try (BufferedReader br = new BufferedReader(new FileReader(rid.getBasePath() + "\\" + path))) {
 			String line;
 			String out = "";
 			while ((line = br.readLine()) != null) {
@@ -113,7 +139,7 @@ public class FileLoader {
 	}
 
 	public boolean tryWrite(String path, String content, ResourceIdentifier rid) {
-		File file = new File(rid.getBasePath() + "/" + path);
+		File file = new File(rid.getBasePath() + "\\" + path);
 
 		try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
 			writer.write(content);
@@ -127,7 +153,7 @@ public class FileLoader {
 	}
 
 	public boolean tryWriteNamed(String name, String content, ResourceIdentifier rid) {
-		File file = new File(rid.getBasePath() + "/" + name);
+		File file = new File(rid.getBasePath() + "\\" + name);
 
 		try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
 			writer.write(content);
@@ -141,7 +167,7 @@ public class FileLoader {
 	}
 
 	public boolean tryWriteNamed(String name, String content) {
-		File file = new File(rid.getBasePath() + "/" + name);
+		File file = new File(rid.getBasePath() + "\\" + name);
 
 		try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
 			writer.write(content);
@@ -155,12 +181,12 @@ public class FileLoader {
 	}
 
 	public BufferedImage tryLoadImage(String path, ResourceIdentifier rid) {
-		File imageFile = new File(rid.getBasePath() + "/" + path);
+		File imageFile = new File(rid.getBasePath() + "\\" + path);
 
 		try {
 			if (!imageFile.isFile()) {
 				Kronos.debug.getLogger().error("Image file path {} is null using resource identifier {} ",
-						rid.getBasePath() + "/" + path, rid.getNameid());
+						rid.getBasePath() + "\\" + path, rid.getNameid());
 				return null;
 			}
 
@@ -174,9 +200,9 @@ public class FileLoader {
 	}
 
 	public void createAt(String path, String file, ResourceIdentifier rid) {
-		File f = new File(rid.getBasePath() + "/" + path);
+		File f = new File(rid.getBasePath() + "\\" + path);
 		f.mkdirs();
-		f = new File(rid.getBasePath() + "/" + path + "/" + file);
+		f = new File(rid.getBasePath() + "\\" + path + "\\" + file);
 		try {
 			f.createNewFile();
 		} catch (IOException e) {
@@ -188,20 +214,20 @@ public class FileLoader {
 	public void createAt(String file, ResourceIdentifier rid) {
 		File fd = new File(rid.getBasePath());
 		fd.mkdirs();
-		File f = new File(rid.getBasePath() + "/" + file);
+		File f = new File(rid.getBasePath() + "\\" + file);
 		try {
 			f.createNewFile();
 		} catch (IOException e) {
 			Kronos.debug.getLogger().error("Error creating file: {} Full Path: {}", e.getMessage(),
-					rid.getBasePath() + "/" + file);
+					rid.getBasePath() + "\\" + file);
 			e.printStackTrace();
 		}
 	}
 
 	public void createAt(String path, String file) {
-		File f = new File(rid.getBasePath() + "/" + path);
+		File f = new File(rid.getBasePath() + "\\" + path);
 		f.mkdirs();
-		f = new File(rid.getBasePath() + "/" + path + "/" + file);
+		f = new File(rid.getBasePath() + "\\" + path + "\\" + file);
 		try {
 			f.createNewFile();
 		} catch (IOException e) {
@@ -212,7 +238,7 @@ public class FileLoader {
 
 	public void createAt(String file) {
 
-		File f = new File(rid.getBasePath() + "/" + file);
+		File f = new File(rid.getBasePath() + "\\" + file);
 		try {
 			f.createNewFile();
 		} catch (IOException e) {
@@ -224,11 +250,11 @@ public class FileLoader {
 	public void create(ResourceIdentifier kronos_out) {
 		File f = new File(kronos_out.getBasePath());
 		if (f.exists()) {
-			Kronos.debug.getLogger().info("Path Already Exists: {} Skipping", "/" + kronos_out.getBasePath());
+			Kronos.debug.getLogger().info("Path Already Exists: {} Skipping", "\\" + kronos_out.getBasePath());
 			return;
 		}
 		f.mkdirs();
-		Kronos.debug.getLogger().info("Created Path at: {}", "/" + kronos_out.getBasePath());
+		Kronos.debug.getLogger().info("Created Path at: {}", "\\" + kronos_out.getBasePath());
 	}
 
 	public void createAndWrite(ResourceIdentifier rid, String file, String text) {
@@ -238,22 +264,24 @@ public class FileLoader {
 	}
 
 	public String createFilePath(String path, String name) {
-		return rid.getBasePath() + "/" + path + "/" + name;
+		return rid.getBasePath() + "\\" + path + "\\" + name;
 	}
 
 	public void writeConfig(Config c, String name, String path) {
-		Kronos.debug.getLogger().debug("Path: {} \n {}", path + "/" + name, c.writeOut());
+		Kronos.debug.getLogger().debug("Path: {} \n {}", path + "\\" + name, c.writeOut());
 		createAt(path, name);
 		tryWriteNamed(name, c.writeOut());
 	}
 
 	public void writeConfig(Config c, String name, String path, ResourceIdentifier rd) {
+		Kronos.debug.getLogger().debug("Writing config: {}", name);
 		createAt(path, name, rd);
-		tryWriteNamed(path + "/" + name, c.writeOut(), rd);
+		tryWriteNamed(path + "\\" + name, c.writeOut(), rd);
 	}
 
 	public Config tryRead(String name, String path) {
-		String d = tryLoad(path + "/" + name);
+		Kronos.debug.getLogger().debug("Reading config: {}", name);
+		String d = tryLoad(path + "\\" + name);
 		Gson g = new Gson();
 		return g.fromJson(d, Config.class);
 	}
@@ -263,8 +291,8 @@ public class FileLoader {
 		try {
 			c = tryRead(name, path);
 		} catch (Exception e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		if (c == null) {
 			System.out.println("created");
@@ -279,7 +307,7 @@ public class FileLoader {
 		String d = "";
 		Gson g = new Gson();
 		try {
-			d = tryLoad(path + "/" + name, rd);
+			d = tryLoad(path + "\\" + name, rd);
 			if (d == null) {
 				d = "";
 			}

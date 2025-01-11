@@ -4,14 +4,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.kronos.graphixs.display.Texture;
-import com.kronos.graphixs.g2d.Graphixs2D;
+import com.kronos.graphixs.g2d.Abstract2DGraphixs;
+import com.kronos.graphixs.g2d.ScreenProvider;
 import com.kronos.graphixs.g2d.TextureBatch;
 import com.kronos.graphixs.g2d.fonts.FontRenderer;
 import com.kronos.graphixs.g2d.ui.components.Drawable;
 import com.kronos.graphixs.g2d.ui.components.Persistant;
 import com.kronos.graphixs.g2d.ui.transform.DragNDrop;
 import com.kronos.graphixs.g2d.ui.transform.KeepInBox;
+import com.kronos.graphixs.texture.Texture;
 import com.kronos.io.Config;
 import com.kronos.io.config.ConfigFile;
 
@@ -22,13 +23,14 @@ public class BaseComponent implements Comp, Drawable, Persistant {
 	protected BasePosition bp;
 	protected HashMap<String, BaseComponent> children;
 	boolean cdren, moveable, update;
-	protected boolean hidden, updateListeners = false;
+	protected boolean hidden, updateListeners = false, hovering = false, listenHover = false;
 	protected States state;
 	protected ComponentHandler ch;
-	private KeepInBox kib = new KeepInBox();
+	protected KeepInBox kib = new KeepInBox();
 	private BaseComponent parent;
 	String id;
 	DragNDrop dnd;
+	protected int frame = 0;
 
 	public BaseComponent(BasePosition bp, boolean cdren, boolean moveable, boolean hidden, String id) {
 		super();
@@ -45,7 +47,13 @@ public class BaseComponent implements Comp, Drawable, Persistant {
 
 	}
 
+	public void setListenHover(boolean listenHover) {
+		this.listenHover = listenHover;
+	}
+
 	public void createListeners() {
+		if (listenHover)
+			listeners.add(new HoverListener());
 
 	}
 
@@ -59,7 +67,8 @@ public class BaseComponent implements Comp, Drawable, Persistant {
 	public void update() {
 		updateChildren();
 		if (!hidden) {
-			render(ch.getBatcher(), ch.getFr(), ch.getG());
+			if (ch != null)
+				render(ch.getBatcher(), ch.getFr(), ch.getG());
 		}
 		if (update) {
 			recalculatePosition();
@@ -73,7 +82,9 @@ public class BaseComponent implements Comp, Drawable, Persistant {
 		if (moveable) {
 			dnd.reposition(this.bp.getProvider(), bp, null);
 		}
-
+		if (frame > 0) {
+			frame--;
+		}
 	}
 
 	@Override
@@ -152,6 +163,8 @@ public class BaseComponent implements Comp, Drawable, Persistant {
 	}
 
 	public void move(float f, float g, float h, float i) {
+		this.getPosition().pos().translate(f, g);
+		this.getPosition().pos().translateSize(h, i);
 		for (Map.Entry<String, BaseComponent> entry : children.entrySet()) {
 			String key = entry.getKey();
 			BaseComponent val = entry.getValue();
@@ -204,13 +217,14 @@ public class BaseComponent implements Comp, Drawable, Persistant {
 		this.ch = ch;
 		this.register(this, ch);
 		config = this.ch.getOrCreatePersistance(id);
+		System.out.println("created:" + id);
 		forEachChild((c, k) -> {
 			c.onCreation(ch);
 		});
 	}
 
 	@Override
-	public void render(TextureBatch batch, FontRenderer fr, Graphixs2D g) {
+	public void render(TextureBatch batch, FontRenderer fr, Abstract2DGraphixs g) {
 
 		forEachChild((c, h) -> {
 			c.render(batch, fr, g);
@@ -264,12 +278,42 @@ public class BaseComponent implements Comp, Drawable, Persistant {
 	}
 
 	public void drawHere(TextureBatch batch, Texture t) {
-		batch.drawTexture((int) this.bp.pos().getX(), (int) this.bp.pos().getY(), (int) this.bp.pos().getW(),
-				(int) this.bp.pos().getH(), t);
+		if (t != null)
+			batch.drawTexture((int) this.bp.pos().getX(), (int) this.bp.pos().getY(), (int) this.bp.pos().getW(),
+					(int) this.bp.pos().getH(), t);
 	}
 
 	public void setUpdateListeners(boolean updateListeners) {
 		this.updateListeners = updateListeners;
 	}
 
+	public void enterHover(int x, int y) {
+	}
+
+	public void leaveHover(int x, int y) {
+
+	}
+
+	public void hover(int x, int y) {
+
+	}
+
+	/**
+	 * @return
+	 */
+	public boolean canRegisterClicks() {
+		// TODO Auto-generated method stub
+		return frame == 0;
+	}
+
+	public void resetClicks(int i) {
+		frame = i;
+	}
+
+	/**
+	 * @return
+	 */
+	public ScreenProvider getLocalProvider() {
+		return ((BasePosition) this.getPosition()).getProvider();
+	}
 }

@@ -3,7 +3,7 @@ package com.kronos.io.shader;
 import java.io.File;
 
 import com.kronos.Kronos;
-import com.kronos.graphixs.shaders.ShaderProgram;
+import com.kronos.graphixs.shaders.render.ShaderProgram;
 import com.kronos.io.FileLoader;
 import com.kronos.io.ResourceIdentifier;
 

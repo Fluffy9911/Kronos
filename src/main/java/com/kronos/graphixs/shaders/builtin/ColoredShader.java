@@ -1,7 +1,7 @@
 package com.kronos.graphixs.shaders.builtin;
 
 import com.kronos.Kronos;
-import com.kronos.graphixs.shaders.ShaderProgram;
+import com.kronos.graphixs.shaders.render.ShaderProgram;
 
 public class ColoredShader extends ShaderProgram {
 

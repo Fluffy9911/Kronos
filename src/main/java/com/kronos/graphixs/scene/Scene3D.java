@@ -3,6 +3,7 @@
  */
 package com.kronos.graphixs.scene;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -16,38 +17,42 @@ import com.kronos.Testing;
 import com.kronos.graphixs.Light;
 import com.kronos.graphixs.color.Color;
 import com.kronos.graphixs.color.Colors;
-import com.kronos.graphixs.display.Texture;
 import com.kronos.graphixs.display.camera.PerspectiveCamera;
 import com.kronos.graphixs.geometry.Mesh;
 import com.kronos.graphixs.geometry.meshing.BasicMeshBuilder;
+import com.kronos.graphixs.geometry.meshing.MeshBinder;
 import com.kronos.graphixs.internal.Cube;
 import com.kronos.graphixs.rendering.RenderTarget;
 import com.kronos.graphixs.rendering.RenderTarget.TargetConfig;
 import com.kronos.graphixs.rendering.buffers.MeshBuffer;
-import com.kronos.graphixs.shaders.Shader3D;
-import com.kronos.graphixs.shaders.ShaderProgram;
+import com.kronos.graphixs.shaders.builtin.Shader3D;
+import com.kronos.graphixs.shaders.render.ShaderProgram;
+import com.kronos.graphixs.texture.Texture;
 import com.kronos.io.InputHandler;
 import com.kronos.io.Keys;
+import com.kronos.io.streamedlists.StreamedDynamicList;
 
 /**
  * 
  */
 public class Scene3D {
-	List<Light> lights;
-	List<Mesh> meshes;
-	Shader3D draw;
-	PerspectiveCamera pc;
-	Vector2i li;
-	String[] displays;
-	String[] op;
-	int val = 0;
-	String display = "Hit N";
-	String opr = "Hit M";
-	int mmax = 20;
-	int lmax = 5;
-	int v = 0;
-	RenderTarget tt;
-	int uq = 1;
+	public List<Light> lights;
+	public List<Mesh> meshes;
+	public Shader3D draw;
+	public PerspectiveCamera pc;
+	public Vector2i li;
+	public String[] displays;
+	public String[] op;
+	public int val = 0;
+	public String display = "Hit N";
+	public String opr = "Hit M";
+	public int mmax = 20;
+	public int lmax = 5;
+	public int v = 0;
+	public RenderTarget tt;
+	public int uq = 1;
+	public MeshBinder mb;
+	public Mesh d;
 
 	public Scene3D(ShaderProgram draw, PerspectiveCamera pc) {
 		super();
@@ -81,6 +86,7 @@ public class Scene3D {
 
 		});
 		tt.setMeshes(new MeshBuffer<Mesh>((ArrayList<Mesh>) meshes));
+		pc.setFar(20000);
 	}
 
 	public void handleInputs() {
@@ -110,6 +116,13 @@ public class Scene3D {
 				v = 0;
 			}
 			display = displays[v];
+		}
+		if (InputHandler.isKeyReleased(Keys.P)) {
+			StreamedDynamicList<Mesh> l = new StreamedDynamicList<>(
+					new File("C:\\Users\\big_r\\OneDrive\\Desktop\\sdl\\testdl"));
+			l.setChunkSize(100);
+			l.writeFromMemory(meshes);
+			System.out.println("Written");
 		}
 		if (InputHandler.isKeyReleased(Keys.B)) {
 			if (val == 0) {
@@ -240,10 +253,11 @@ public class Scene3D {
 
 	public void prepare() {
 //cam uniforms
+		// mb = new MeshBinder(meshes.toArray(new Mesh[0]));
 		draw.setAttribs();
 
 		li = draw.bindLightsSSBO(lights);
-
+		// d = mb.build(BasicMeshBuilder.getAttribs());
 	}
 
 	/**
@@ -262,6 +276,7 @@ public class Scene3D {
 			m.drawBuffer();
 		});
 		Kronos.graphixs.clearScreen(Colors.Black);
+
 		for (Iterator iterator = meshes.iterator(); iterator.hasNext();) {
 			Mesh mesh = (Mesh) iterator.next();
 

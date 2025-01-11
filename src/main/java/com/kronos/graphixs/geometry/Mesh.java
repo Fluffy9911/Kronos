@@ -1,5 +1,6 @@
 package com.kronos.graphixs.geometry;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -11,9 +12,13 @@ import org.lwjgl.opengl.GL30;
 import org.lwjgl.opengl.GL40;
 
 import com.kronos.graphixs.FrameBuffer;
-import com.kronos.graphixs.shaders.Shader;
+import com.kronos.graphixs.shaders.render.RenderShader;
 
-public class Mesh {
+public class Mesh implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private int vaoID;
 	private int vboID;
 	private int eboID;
@@ -102,9 +107,9 @@ public class Mesh {
 
 	}
 
-	public void render(Shader shader) {
+	public void render(RenderShader shader) {
 		// Bind the VAO and draw the mesh
-		GL40.glUseProgram(shader.getProgram_id());
+		GL40.glUseProgram(shader.getShaderProgramID());
 		GL30.glBindVertexArray(vaoID);
 		GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, eboID);
 		GL11.glDrawElements(GL11.GL_TRIANGLES, indexCount, GL11.GL_UNSIGNED_INT, 0);
@@ -113,9 +118,20 @@ public class Mesh {
 		GL40.glUseProgram(0);
 	}
 
-	public void renderNoInds(Shader shader) {
+	public void render() {
 		// Bind the VAO and draw the mesh
-		GL40.glUseProgram(shader.getProgram_id());
+
+		GL30.glBindVertexArray(vaoID);
+		GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, eboID);
+		GL11.glDrawElements(GL11.GL_TRIANGLES, indexCount, GL11.GL_UNSIGNED_INT, 0);
+		GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, 0);
+		GL30.glBindVertexArray(0);
+		GL40.glUseProgram(0);
+	}
+
+	public void renderNoInds(RenderShader shader) {
+		// Bind the VAO and draw the mesh
+		GL40.glUseProgram(shader.getShaderProgramID());
 		GL30.glBindVertexArray(vaoID);
 
 		GL30.glDrawArrays(GL30.GL_TRIANGLES, 0, getVertCount());
@@ -123,9 +139,9 @@ public class Mesh {
 		GL40.glUseProgram(0);
 	}
 
-	public void renderPPO(Shader shader, FrameBuffer fb) {
+	public void renderPPO(RenderShader shader, FrameBuffer fb) {
 		// Bind the VAO and draw the mesh
-		GL40.glUseProgram(shader.getProgram_id());
+		GL40.glUseProgram(shader.getShaderProgramID());
 		fb.bindTexture();
 		shader.addUniform("tex", 0);
 		GL30.glBindVertexArray(vaoID);
@@ -162,7 +178,11 @@ public class Mesh {
 		return indexCount;
 	}
 
-	public static class AttributeInfo {
+	public static class AttributeInfo implements Serializable {
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
 		String name;
 		int size;
 		int type;
@@ -221,6 +241,20 @@ public class Mesh {
 			return loc;
 		}
 
+	}
+
+	/**
+	 * @return the v
+	 */
+	public float[] getV() {
+		return v;
+	}
+
+	/**
+	 * @return the i
+	 */
+	public int[] getI() {
+		return i;
 	}
 
 }

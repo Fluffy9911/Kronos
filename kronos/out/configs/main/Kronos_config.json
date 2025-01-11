@@ -5,7 +5,6 @@
     "log_debug": "false",
     "max_usable_threads": "2",
     "use_debug": "false",
-    "kronos_id": "Kronos",
-    "graphixs.2d.ui.panel_base_border_weight": "1"
+    "kronos_id": "Kronos"
   }
 }

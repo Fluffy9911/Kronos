@@ -4,9 +4,9 @@ import java.awt.image.BufferedImage;
 import java.util.HashMap;
 
 import com.kronos.graphixs.color.Color;
-import com.kronos.graphixs.display.Texture;
 import com.kronos.graphixs.g2d.TextureBatch;
 import com.kronos.graphixs.geometry.shape.Shape;
+import com.kronos.graphixs.texture.Texture;
 
 public class ShapeRenderer {
 	public static HashMap<String, Shape> shapes;
@@ -30,6 +30,20 @@ public class ShapeRenderer {
 		Texture draw = s.buildTextureForRender(c.rgb());
 
 		tb.drawTexture(x, y, width, height, draw);
+	}
+
+	/**
+	 * @return the shapes
+	 */
+	public static HashMap<String, Shape> getShapes() {
+		return shapes;
+	}
+
+	/**
+	 * @param shapes the shapes to set
+	 */
+	public static void setShapes(HashMap<String, Shape> shapes) {
+		ShapeRenderer.shapes = shapes;
 	}
 
 }

@@ -6,7 +6,7 @@ import java.util.Map;
 
 import org.apache.logging.log4j.Logger;
 
-import com.kronos.graphixs.display.Texture;
+import com.kronos.graphixs.texture.Texture;
 
 public class InternalAssetLoader {
 	Logger l;
@@ -71,6 +71,34 @@ public class InternalAssetLoader {
 	private File asFile(String val) {
 		// TODO Auto-generated method stub
 		return new File(val);
+	}
+
+	/**
+	 * @return the loaded
+	 */
+	public HashMap<String, Texture> getLoaded() {
+		return loaded;
+	}
+
+	/**
+	 * @param loaded the loaded to set
+	 */
+	public void setLoaded(HashMap<String, Texture> loaded) {
+		this.loaded = loaded;
+	}
+
+	/**
+	 * @return the current
+	 */
+	public String getCurrent() {
+		return current;
+	}
+
+	/**
+	 * @param current the current to set
+	 */
+	public void setCurrent(String current) {
+		this.current = current;
 	}
 
 }
