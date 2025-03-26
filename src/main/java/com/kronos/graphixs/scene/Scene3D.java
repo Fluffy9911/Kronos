@@ -13,7 +13,6 @@ import org.joml.Vector2i;
 import org.joml.Vector3f;
 
 import com.kronos.Kronos;
-import com.kronos.Testing;
 import com.kronos.graphixs.Light;
 import com.kronos.graphixs.color.Color;
 import com.kronos.graphixs.color.Colors;
@@ -127,12 +126,12 @@ public class Scene3D {
 		if (InputHandler.isKeyReleased(Keys.B)) {
 			if (val == 0) {
 				mmax += 10;
-				Testing.addRand(meshes, mmax);
+//				Testing.addRand(meshes, mmax);
 				tt.setMeshes(new MeshBuffer<Mesh>((ArrayList<Mesh>) meshes));
 			}
 			if (val == 1) {
 				mmax -= 10;
-				Testing.addRand(meshes, mmax);
+//				Testing.addRand(meshes, mmax);
 				tt.setMeshes(new MeshBuffer<Mesh>((ArrayList<Mesh>) meshes));
 			}
 			if (val == 2) {
@@ -365,7 +364,7 @@ public class Scene3D {
 	}
 
 	public void scenePTest() {
-		Testing.addRand(meshes, 10000);
+//		Testing.addRand(meshes, 10000);
 		lmax = 5;
 		redoLights(new Random());
 	}

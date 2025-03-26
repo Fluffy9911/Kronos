@@ -188,10 +188,6 @@
     <version>0.10.2</version>
 </dependency>
 
-		<dependency>
-			<groupId>JSL</groupId>
-			<artifactId>JSL</artifactId>
-			<version>1.0.0</version>
-		</dependency>
+		
 	</dependencies>
 </project>

@@ -45,7 +45,6 @@ import com.kronos.graphixs.shaders.BaseShader;
 import com.kronos.graphixs.shaders.render.RenderShader;
 import com.kronos.graphixs.shaders.render.ShaderProgram;
 import com.kronos.graphixs.shaders.render.ShaderUniform;
-import com.kronos.graphixs.texture.AssetLoader;
 import com.kronos.graphixs.texture.Texture;
 
 import de.javagl.obj.Obj;
@@ -58,7 +57,7 @@ public class Graphixs {
 	 * whether graphics system has been initialized
 	 */
 	public boolean g_lock = true;
-	public boolean dev = true;
+	public boolean dev = false;
 
 	private ScreenConfig config;
 	private Screen screen;
@@ -177,32 +176,7 @@ public class Graphixs {
 		manager.add(screen);
 		screen.load();
 		buffers.put("graphixs2d_pane", new FrameBuffer(config.width(), config.height(), true));
-		if (dev) {
-			AssetLoader asl = new AssetLoader();
-			buffers.put("edge_detection", new FrameBuffer(config.width(), config.height(), true));
-			buffers.put("post_proccess", new FrameBuffer(config.width(), config.height(), true));
-			buffers.put("graphixs2d_pane", new FrameBuffer(config.width(), config.height(), true));
-			post_process_quad = Builtin.screenQuad();
-			// asl.addBasePath("src/main/resources");
-//			createShader("texture", new TextureProgram(asl.readAll("src/main/resources/shaders/texture.vs"),
-//					asl.readAll("src/main/resources/shaders/texture.fs")));
-			createShader("sbtext", new ShaderProgram(asl.readAll("src/main/resources/shaders/sbatchv.glsl"),
-					asl.readAll("src/main/resources/shaders/sbatchf.glsl")));
-//			createShader("highlight", new HighlightProgram(Kronos.loader.tryLoad("shaders\\texture.vs"),
-//					Kronos.loader.tryLoad("shaders\\highlight.fs")));
-//			createShader("highlight_g", new HighlightProgram(Kronos.loader.tryLoad("shaders\\texture.vs"),
-//					Kronos.loader.tryLoad("shaders\\highlighted_g.fs")));
-//			createShader("pp_tex", new ShaderProgram(Kronos.loader.tryLoad("shaders\\vertex.vs"),
-//					Kronos.loader.tryLoad("shaders\\fragment.fs")));
-//			createShader("3d", new Shader3D(asl.readAll("src/main/resources/shaders/threed.vs"),
-//					asl.readAll("src/main/resources/shaders/basiccolor.fs"), null));
-//			createShader("rtcp",
-//					new RTCompute(Kronos.loader.tryLoad("shaders/rtcompute.cp"), new Vector3i(400, 400, 1), 400, 400));
 
-//			fs = Kronos.loader.tryLoad("shaders/texture.fs");
-//			vs = Kronos.loader.tryLoad("shaders/fragment.fs");
-			shaders.get("sbtext").compileShader();
-		}
 		g2d = new Graphixs2D(buffers.get("graphixs2d_pane"), new ScreenProvider(config),
 				(ShaderProgram) shaders.get("texture"));
 
@@ -213,18 +187,7 @@ public class Graphixs {
 			l.debug("RenderShader: {}, status? {}", key, val.getShaderCompilationStatus());
 		}
 		l.debug("Loading textures");
-		if (dev) {
-			textures.put("test_shape", new Texture(Kronos.loader.tryLoadImage("texture/test_shape.png")));
-			textures.put("button_base", new Texture(Kronos.loader.tryLoadImage("texture/button.png")));
-			textures.put("down", new Texture(Kronos.loader.tryLoadImage("texture/down.png")));
-			textures.put("slider_left", new Texture(Kronos.loader.tryLoadImage("texture/slider_left.png")));
-			textures.put("slider_right", new Texture(Kronos.loader.tryLoadImage("texture/slider_right.png")));
-			textures.put("slider", new Texture(Kronos.loader.tryLoadImage("texture/slider_middle.png")));
-			textures.put("toggle_off", new Texture(Kronos.loader.tryLoadImage("texture/bg.png")));
-			textures.put("toggle_on", new Texture(Kronos.loader.tryLoadImage("texture/bg.png")));
-			textures.put("top", new Texture(Kronos.loader.tryLoadImage("texture/top.png")));
-			textures.put("up", new Texture(Kronos.loader.tryLoadImage("texture/up.png")));
-		}
+
 		for (Map.Entry<String, Texture> entry : textures.entrySet()) {
 			String key = entry.getKey();
 			Texture val = entry.getValue();

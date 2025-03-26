@@ -35,7 +35,7 @@ public class Kronos {
 	// config values
 	public static boolean debg = false;
 	public static boolean logdebug = false;
-	public static boolean extensivedebug = false;
+	public static boolean extensivedebug = true;
 	public static int max_threads = 2;
 
 	public static boolean plugins = false;
