@@ -70,8 +70,8 @@ public class Screen implements Resource {
 
 		closeCallback(id);
 		memory(id);
-		if (Kronos.extensivedebug)
-			GLUtil.setupDebugMessageCallback();
+
+		GLUtil.setupDebugMessageCallback();
 
 		this.id = id;
 		return id;

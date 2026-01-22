@@ -145,6 +145,9 @@ public abstract class BaseShader implements Resource, ShaderUniform {
 
 	@Override
 	public void addUniform(String id, Matrix4f mat4) {
+		if (mat4 == null) {
+			return;
+		}
 		int location = GL20.glGetUniformLocation(programId, id);
 		if (location != -1) {
 			float[] matrixData = new float[16];

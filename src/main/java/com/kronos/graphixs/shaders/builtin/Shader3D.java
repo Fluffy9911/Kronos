@@ -22,8 +22,8 @@ public class Shader3D extends ShaderProgram {
 		this.addUniform("proj", pc.getProjection());
 		this.addUniform("view", pc.getView());
 		this.addUniform("model", pc.getModel());
-		this.addUniform("omodel", pc.getModel());
-		this.addUniform("viewPos", pc.getLookat());
+		// this.addUniform("omodel", pc.getModel());
+		// this.addUniform("viewPos", pc.getLookat());
 	}
 
 	public Camera getCamera() {

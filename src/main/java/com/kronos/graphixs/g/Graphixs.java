@@ -41,10 +41,13 @@ import com.kronos.graphixs.rendering.RenderTarget.TargetConfig;
 import com.kronos.graphixs.resources.Resource;
 import com.kronos.graphixs.resources.ResourceManager;
 import com.kronos.graphixs.shaders.BaseShader;
+import com.kronos.graphixs.shaders.builtin.Shader3D;
 import com.kronos.graphixs.shaders.render.RenderShader;
 import com.kronos.graphixs.shaders.render.ShaderProgram;
 import com.kronos.graphixs.shaders.render.ShaderUniform;
+import com.kronos.graphixs.texture.AssetLoader;
 import com.kronos.graphixs.texture.Texture;
+import com.kronos.graphixs.texture.TextureProgram;
 
 import de.javagl.obj.Obj;
 import de.javagl.obj.ObjReader;
@@ -83,7 +86,7 @@ public class Graphixs {
 
 	public void createShader(String id, BaseShader s) {
 		test(l);
-		s.compileShader();
+		// s.compileShader();
 		l.info("Compiled and registered shaderid: {}", id);
 		shaders.put(id, s);
 	}
@@ -174,15 +177,36 @@ public class Graphixs {
 		window_id = screen.init(config);
 		manager.add(screen);
 		screen.load();
+		buffers.put("graphixs2d_pane", new FrameBuffer(config.width(), config.height(), true));
+		if (dev) {
+			AssetLoader asl = new AssetLoader();
+			buffers.put("edge_detection", new FrameBuffer(config.width(), config.height(), true));
+			buffers.put("post_proccess", new FrameBuffer(config.width(), config.height(), true));
+			buffers.put("graphixs2d_pane", new FrameBuffer(config.width(), config.height(), true));
+			post_process_quad = Builtin.screenQuad();
+			// asl.addBasePath("src/main/resources");
+			createShader("texture", new TextureProgram(asl.readAll("src/main/resources/shaders/texture.vs"),
+					asl.readAll("src/main/resources/shaders/texture.fs")));
+//			createShader("highlight", new HighlightProgram(Kronos.loader.tryLoad("shaders\\texture.vs"),
+//					Kronos.loader.tryLoad("shaders\\highlight.fs")));
+//			createShader("highlight_g", new HighlightProgram(Kronos.loader.tryLoad("shaders\\texture.vs"),
+//					Kronos.loader.tryLoad("shaders\\highlighted_g.fs")));
+//			createShader("pp_tex", new ShaderProgram(Kronos.loader.tryLoad("shaders\\vertex.vs"),
+//					Kronos.loader.tryLoad("shaders\\fragment.fs")));
+			createShader("3d", new Shader3D(asl.readAll("src/main/resources/shaders/threed.vs"),
+					asl.readAll("src/main/resources/shaders/basiccolor.fs"), null));
+//			createShader("rtcp",
+//					new RTCompute(Kronos.loader.tryLoad("shaders/rtcompute.cp"), new Vector3i(400, 400, 1), 400, 400));
 
-		shaders.get("texture").compileShader();
+//			fs = Kronos.loader.tryLoad("shaders/texture.fs");
+//			vs = Kronos.loader.tryLoad("shaders/fragment.fs");
+			shaders.get("texture").compileShader();
+		}
 		g2d = new Graphixs2D(buffers.get("graphixs2d_pane"), new ScreenProvider(config),
 				(ShaderProgram) shaders.get("texture"));
 
 		l.debug("Shaders Loaded:");
-		for (
-
-		Map.Entry<String, BaseShader> entry : shaders.entrySet()) {
+		for (Map.Entry<String, BaseShader> entry : shaders.entrySet()) {
 			String key = entry.getKey();
 			BaseShader val = entry.getValue();
 			l.debug("RenderShader: {}, status? {}", key, val.getShaderCompilationStatus());

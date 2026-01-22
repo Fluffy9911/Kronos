@@ -63,7 +63,9 @@ public class Scene3D {
 
 		Random r = new Random();
 		redoLights(r);
+		pc.update();
 		((Shader3D) draw).setCamera(pc);
+		draw.compileShader();
 		tt = new RenderTarget((Shader3D) draw, "test_buffer", new TargetConfig() {
 
 			@Override

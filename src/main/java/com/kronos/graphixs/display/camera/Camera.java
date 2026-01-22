@@ -28,9 +28,9 @@ public class Camera extends Transform {
 	protected float far;
 	protected int screen_width = Kronos.config.getCurrent().width();
 	protected int screen_height = Kronos.config.getCurrent().height();
-	protected Matrix4f view;
-	protected Matrix4f projection;
-	protected Matrix4f model;
+	protected Matrix4f view = new Matrix4f();
+	protected Matrix4f projection = new Matrix4f();
+	protected Matrix4f model = new Matrix4f();
 	protected boolean usemouspos = true;
 	protected boolean mlock = false;
 	protected boolean move = false;

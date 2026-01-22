@@ -1,10 +1,10 @@
 {
   "data": {
     "text_caching_extensive_debug": "false",
-    "extensive_logging": "false",
-    "log_debug": "false",
+    "extensive_logging": "true",
+    "log_debug": "true",
     "max_usable_threads": "2",
-    "use_debug": "false",
+    "use_debug": "true",
     "kronos_id": "Kronos"
   }
 }

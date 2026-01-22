@@ -16,4 +16,12 @@ public class Graphixs2D extends Abstract2DGraphixs implements SListener {
 		this.createDefaultLogger();
 	}
 
+	/**
+	 * @return
+	 */
+	public TextureBatch createBatch() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
